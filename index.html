@@ -26,9 +26,46 @@ body {
 }
 
 .stars { 
-  position:fixed; inset:0; z-index:0; pointer-events:none; 
-  background: transparent url('https://i.ibb.co.com/0jZxKzY/stars.png') repeat; 
-  opacity: 0.15; 
+  position: fixed; 
+  inset: 0; 
+  z-index: 0; 
+  pointer-events: none; 
+  background: #0A0A14;
+  overflow: hidden;
+}
+
+/* نجوم CSS نقية (بدون صور خارجية) */
+.stars::before,
+.stars::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  animation: twinkle 8s infinite alternate;
+}
+
+.stars::before {
+  background-image: 
+    radial-gradient(white 1px, transparent 1px),
+    radial-gradient(white 1px, transparent 1px);
+  background-position: 0 0, 50px 50px;
+  background-size: 80px 80px;
+  opacity: 0.15;
+}
+
+.stars::after {
+  background-image: 
+    radial-gradient(white 1px, transparent 1px),
+    radial-gradient(white 1px, transparent 1px);
+  background-position: 30px 30px, 80px 80px;
+  background-size: 100px 100px;
+  opacity: 0.1;
+  animation-delay: 3s;
+}
+
+@keyframes twinkle {
+  0% { opacity: 0.08; }
+  100% { opacity: 0.25; }
 }
 
 .container { 
