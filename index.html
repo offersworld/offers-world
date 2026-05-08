@@ -4,51 +4,415 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>عالم العروض — احجز باقتك</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --dark:#0D0D1A; --mid:#13132B; --card:#1A1A35; --border:#2A2A50;
-  --accent:#E94560; --gold:#F5A623; --purple:#7B2FBE; --text:#E8E8F0;
+  --dark:#0D0D1A;
+  --mid:#13132B;
+  --card:#1A1A35;
+  --border:#2A2A50;
+  --accent:#E94560;
+  --gold:#F5A623;
+  --purple:#7B2FBE;
+  --cyan:#00D4FF;
+  --green:#00E676;
+  --text:#E8E8F0;
+  --muted:#888AAA;
 }
-* { margin:0; padding:0; box-sizing:border-box; }
-body { background:var(--dark); color:var(--text); font-family:'Cairo',sans-serif; min-height:100vh; }
-.container { max-width:700px; margin:auto; padding:20px 16px; }
-.header { text-align:center; padding:40px 0 30px; }
-.logo-ring { width:90px; height:90px; margin:auto; border-radius:50%; background:linear-gradient(135deg,#E94560,#7B2FBE); display:flex; align-items:center; justify-content:center; font-size:40px; box-shadow:0 0 30px rgba(233,69,96,.4); }
-h1 { font-size:2.3rem; font-weight:900; background:linear-gradient(135deg,#F5A623,#E94560); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-.form-section { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:24px; margin-bottom:16px; }
-.section-title { font-size:1.1rem; font-weight:700; color:var(--gold); margin-bottom:16px; }
-.companies-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
-.company-card { background:var(--mid); border:2px solid var(--border); border-radius:16px; padding:18px; text-align:center; cursor:pointer; transition:0.3s; }
-.company-card:hover { transform:translateY(-3px); }
-.company-card.selected { border-color:var(--gold); box-shadow:0 0 15px rgba(245,166,35,.3); }
-.packages-list { display:flex; flex-direction:column; gap:10px; min-height:100px; }
-.pkg-item { background:var(--mid); border:1.5px solid var(--border); border-radius:12px; padding:14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:0.2s; }
-.pkg-item:hover { background:#2a2a50; }
-.pkg-item.selected { border-color:var(--gold); background:rgba(245,166,35,.1); }
-.pkg-price { font-weight:900; color:var(--accent); font-size:1.1rem; }
-.loading { text-align:center; color:#f59e0b; padding:20px; }
-input, textarea { width:100%; background:var(--mid); border:1.5px solid var(--border); border-radius:12px; padding:13px; color:white; margin-top:8px; }
-.submit-btn { width:100%; background:linear-gradient(135deg,var(--accent),var(--purple)); border:none; border-radius:16px; padding:18px; font-size:1.1rem; font-weight:800; color:white; margin-top:15px; cursor:pointer; }
-.toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#1e2937; padding:12px 24px; border-radius:12px; display:none; z-index:1000; border:1px solid #f59e0b; }
-.toast.show { display:block; }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+body{
+  background:var(--dark);
+  color:var(--text);
+  font-family:'Cairo',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(123,47,190,.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(233,69,96,.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(0,212,255,.06) 0%, transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
+.stars{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  z-index:0;
+  pointer-events:none;
+}
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  border-radius:50%;
+  animation:twinkle var(--d,3s) var(--delay,0s) ease-in-out infinite alternate;
+  opacity:.4;
+}
+@keyframes twinkle{
+  to{
+    opacity:1;
+    transform:scale(1.5);
+  }
+}
+.container{
+  position:relative;
+  z-index:1;
+  max-width:700px;
+  margin:auto;
+  padding:20px 16px 60px;
+}
+.header{
+  text-align:center;
+  padding:40px 0 30px;
+}
+.logo-ring{
+  width:90px;
+  height:90px;
+  margin:auto auto 16px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--purple));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+  box-shadow:0 0 30px rgba(233,69,96,.4);
+}
+.header h1{
+  font-size:2.3rem;
+  font-weight:900;
+  background:linear-gradient(135deg,var(--gold),var(--accent));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:8px;
+}
+.header p{
+  color:var(--muted);
+  font-size:.95rem;
+}
+.contact-strip{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:20px 0 30px;
+}
+.chip{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:6px 14px;
+  font-size:.82rem;
+}
+.chip span{
+  color:white;
+  font-weight:700;
+}
+.form-section{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:24px;
+  margin-bottom:16px;
+}
+.section-title{
+  font-size:1rem;
+  font-weight:700;
+  color:var(--gold);
+  margin-bottom:16px;
+}
+.companies-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+.company-card{
+  background:var(--mid);
+  border:2px solid var(--border);
+  border-radius:16px;
+  padding:18px 14px;
+  text-align:center;
+  cursor:pointer;
+  transition:.25s;
+}
+.company-card:hover{
+  transform:translateY(-3px);
+}
+.company-card.selected{
+  border-color:var(--gold);
+  box-shadow:0 0 20px rgba(245,166,35,.25);
+}
+.company-emoji{
+  font-size:2rem;
+  display:block;
+  margin-bottom:8px;
+}
+.company-name{
+  font-size:1rem;
+  font-weight:700;
+}
+.company-sub{
+  font-size:.75rem;
+  color:var(--muted);
+  margin-top:4px;
+}
+.packages-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.pkg-item{
+  background:var(--mid);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:14px 16px;
+  cursor:pointer;
+  transition:.2s;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+.pkg-item.selected{
+  border-color:var(--gold);
+  background:rgba(245,166,35,.06);
+}
+.pkg-dot{
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  border:2px solid var(--border);
+}
+.pkg-item.selected .pkg-dot{
+  border-color:var(--gold);
+  background:var(--gold);
+}
+.pkg-info{
+  flex:1;
+}
+.pkg-name{
+  font-size:.92rem;
+  font-weight:600;
+}
+.pkg-detail{
+  font-size:.78rem;
+  color:var(--muted);
+  margin-top:2px;
+}
+.pkg-price{
+  font-size:1.1rem;
+  font-weight:900;
+  color:var(--accent);
+}
+input,textarea{
+  width:100%;
+  background:var(--mid);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:13px 16px;
+  color:white;
+  font-family:'Cairo',sans-serif;
+  margin-top:8px;
+  outline:none;
+}
+input:focus,textarea:focus{
+  border-color:var(--gold);
+}
+textarea{
+  resize:vertical;
+  min-height:80px;
+}
+.payment-options{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.pay-card{
+  background:var(--mid);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  text-align:center;
+  cursor:pointer;
+  transition:.2s;
+}
+.pay-card.selected{
+  border-color:var(--cyan);
+}
+.pay-icon{
+  font-size:1.4rem;
+  display:block;
+  margin-bottom:5px;
+}
+.pay-name{
+  font-size:.82rem;
+  font-weight:700;
+}
+.pay-num{
+  font-size:.72rem;
+  color:var(--muted);
+  direction:ltr;
+}
+.upload-zone{
+  border:2px dashed var(--border);
+  border-radius:14px;
+  padding:28px;
+  text-align:center;
+  cursor:pointer;
+  position:relative;
+}
+.upload-zone input[type=file]{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  cursor:pointer;
+}
+.upload-preview{
+  margin-top:12px;
+  background:var(--mid);
+  border-radius:10px;
+  padding:10px 14px;
+  font-size:.82rem;
+  color:var(--green);
+  display:none;
+}
+.summary-card{
+  background:linear-gradient(135deg,var(--mid),rgba(245,166,35,.06));
+  border:1px solid rgba(245,166,35,.3);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:16px;
+  display:none;
+}
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+.submit-btn{
+  width:100%;
+  background:linear-gradient(135deg,var(--accent),var(--purple));
+  border:none;
+  border-radius:16px;
+  padding:18px;
+  font-family:'Cairo',sans-serif;
+  font-size:1.1rem;
+  font-weight:800;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 8px 30px rgba(233,69,96,.3);
+  transition:.25s;
+}
+.submit-btn:hover{
+  transform:translateY(-2px);
+}
+.submit-btn:disabled{
+  opacity:.7;
+  cursor:not-allowed;
+}
+.toast{
+  position:fixed;
+  bottom:24px;
+  left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 24px;
+  transition:.3s;
+  z-index:999;
+}
+.toast.show{
+  transform:translateX(-50%) translateY(0);
+}
+.success-screen{
+  display:none;
+  text-align:center;
+  padding:50px 20px;
+}
+.success-screen.visible{
+  display:block;
+}
+.success-ring{
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--green),#00A060);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:3rem;
+  margin:0 auto 24px;
+}
+.order-id-box{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+  margin:20px 0;
+  font-size:1rem;
+  font-weight:700;
+  color:var(--gold);
+}
+.new-order-btn{
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:13px 28px;
+  color:white;
+  cursor:pointer;
+}
 </style>
 </head>
 <body>
+<div class="stars" id="stars"></div>
 <div class="container">
   <div class="header">
     <div class="logo-ring">🌟</div>
     <h1>عالم العروض</h1>
+    <p>احجز باقتك بسهولة — تفعيل سريع وخدمة محترمة</p>
+  </div>
+  <div class="contact-strip">
+    <div class="chip">📲 رجب: <span>01208666900</span></div>
+    <div class="chip">💬 رحمة: <span>01555435556</span></div>
+    <div class="chip">💳 إنستا باي: <span>01284277707</span></div>
   </div>
 
   <div id="mainForm">
     <div class="form-section">
       <div class="section-title">📡 اختار شركتك</div>
       <div class="companies-grid">
-        <div class="company-card" onclick="selectCompany('أورانج', this)">🟠 أورانج</div>
-        <div class="company-card" onclick="selectCompany('وي', this)">🟣 وي</div>
-        <div class="company-card" onclick="selectCompany('اتصالات', this)">🟢 اتصالات</div>
-        <div class="company-card" onclick="selectCompany('فودافون', this)">🔴 فودافون</div>
+        <label class="company-card" onclick="selectCompany('orange', this)">
+          <span class="company-emoji">🟠</span>
+          <div class="company-name">أورانج</div>
+          <div class="company-sub">باقات متنوعة</div>
+        </label>
+        <label class="company-card" onclick="selectCompany('vodafone', this)">
+          <span class="company-emoji">🔴</span>
+          <div class="company-name">فودافون</div>
+          <div class="company-sub">عروض خاصة</div>
+        </label>
+        <label class="company-card" onclick="selectCompany('etisalat', this)">
+          <span class="company-emoji">🟢</span>
+          <div class="company-name">اتصالات</div>
+          <div class="company-sub">أنظمة متعددة</div>
+        </label>
+        <label class="company-card" onclick="selectCompany('we', this)">
+          <span class="company-emoji">🟣</span>
+          <div class="company-name">وي</div>
+          <div class="company-sub">باقات قوية</div>
+        </label>
       </div>
     </div>
 
@@ -59,123 +423,274 @@ input, textarea { width:100%; background:var(--mid); border:1.5px solid var(--bo
 
     <div class="form-section section-hidden" id="sectionInfo">
       <div class="section-title">👤 بياناتك</div>
-      <input type="text" id="customerName" placeholder="الاسم الكامل" oninput="updateSummary()">
-      <input type="tel" id="phoneNumber" placeholder="رقم الموبايل">
-      
-      <div class="section-title" style="margin:20px 0 10px;">💳 طريقة الدفع</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <div class="pay-card" onclick="selectPay(this)" style="padding:12px;border:1px solid #555;border-radius:12px;text-align:center;cursor:pointer;">
-          إنستا باي<br><small>01284277707</small>
-        </div>
-        <div class="pay-card" onclick="selectPay(this)" style="padding:12px;border:1px solid #555;border-radius:12px;text-align:center;cursor:pointer;">
-          كاش<br><small>01120228568</small>
+      <div class="input-group">
+        <div class="input-label">الاسم</div>
+        <input type="text" id="customerName">
+      </div>
+      <div class="input-group">
+        <div class="input-label">رقم الموبايل</div>
+        <input type="tel" id="phoneNumber">
+      </div>
+      <div class="input-group">
+        <div class="input-label">طريقة الدفع</div>
+        <div class="payment-options">
+          <label class="pay-card" onclick="selectPay(this)">
+            <input type="radio" hidden value="instapay">
+            <span class="pay-icon">🏧</span>
+            <div class="pay-name">إنستا باي</div>
+            <div class="pay-num">01284277707</div>
+          </label>
+          <label class="pay-card" onclick="selectPay(this)">
+            <input type="radio" hidden value="cash">
+            <span class="pay-icon">💵</span>
+            <div class="pay-name">كاش</div>
+            <div class="pay-num">01120228568</div>
+          </label>
         </div>
       </div>
-
-      <input type="text" id="transferRef" placeholder="رقم العملية (اختياري)" style="margin-top:15px;">
-      <input type="file" id="proofFile" accept="image/*" onchange="handleFile(this)" style="margin-top:15px;">
-      <textarea id="notes" placeholder="ملاحظات" rows="3"></textarea>
+      <div class="input-group">
+        <div class="input-label">إثبات الدفع</div>
+        <input type="text" id="transferRef" placeholder="رقم العملية">
+        <div class="upload-zone">
+          <input type="file" accept="image/*" id="proofFile" onchange="handleFile(this)">
+          <div>📎 ارفع صورة الإيصال</div>
+        </div>
+        <div class="upload-preview" id="uploadPreview">
+          ✅ <span id="fileName"></span>
+        </div>
+      </div>
+      <div class="input-group">
+        <div class="input-label">ملاحظات</div>
+        <textarea id="notes"></textarea>
+      </div>
     </div>
 
-    <div class="summary-card" id="summaryCard" style="display:none;background:#1e2937;padding:15px;border-radius:12px;margin:15px 0;">
-      <strong>ملخص الطلب:</strong><br><br>
-      <span id="s-name"></span> - <span id="s-company"></span><br>
-      <span id="s-package"></span> - <span id="s-price"></span>
+    <div class="summary-card" id="summaryCard">
+      <div class="section-title">📋 ملخص الطلب</div>
+      <div class="summary-row">
+        <span>الاسم</span>
+        <span id="s-name">—</span>
+      </div>
+      <div class="summary-row">
+        <span>الشركة</span>
+        <span id="s-company">—</span>
+      </div>
+      <div class="summary-row">
+        <span>الباقة</span>
+        <span id="s-package">—</span>
+      </div>
+      <div class="summary-row">
+        <span>المبلغ</span>
+        <span id="s-price">—</span>
+      </div>
     </div>
 
-    <button class="submit-btn section-hidden" id="submitBtn" onclick="submitOrder()">🚀 أرسل الطلب</button>
+    <button class="submit-btn section-hidden" id="submitBtn" onclick="submitOrder()">
+      🚀 أرسل الطلب
+    </button>
   </div>
 
-  <div id="successScreen" style="display:none;text-align:center;padding:60px 20px;">
-    <h2>✅ تم إرسال الطلب بنجاح</h2>
-    <p id="orderIdBox" style="font-size:1.2rem;margin:15px 0;"></p>
-    <button onclick="location.reload()" style="padding:12px 30px;background:#E94560;border:none;border-radius:12px;color:white;">طلب جديد</button>
+  <div class="success-screen" id="successScreen">
+    <div class="success-ring">✅</div>
+    <h2>تم إرسال الطلب!</h2>
+    <p>هنتواصل معاك قريب جدًا 🚀</p>
+    <div class="order-id-box" id="orderIdBox">
+      ORD-000000
+    </div>
+    <button class="new-order-btn" onclick="resetForm()">
+      + طلب جديد
+    </button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBpivEWidx2O7n0zirAEgCTXGvFE98Sda6WD-FLNzBECmfrUw7wSYI1p_HWsndLqwE/exec';
+// Stars Effect
+(function(){
+  const s=document.getElementById('stars');
+  for(let i=0;i<80;i++){
+    const d=document.createElement('div');
+    d.className='star';
+    d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*5}s`;
+    s.appendChild(d);
+  }
+})();
 
-let state = { company: '', package: '', price: 0 };
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzWJml9WwlVcRTLkXyH7f34JpkWGSMqJDD60GM3YY9_7yVBm5n5Vpe6gN6KjICV2BqG/exec';
 
-async function loadPackages(companyName) {
-  const container = document.getElementById('packagesList');
-  container.innerHTML = `<p style="text-align:center;color:#f59e0b;padding:20px;">جاري تحميل باقات ${companyName}...</p>`;
+let allPackages = [];
+let state = {
+  company:'',
+  package:'',
+  price:0,
+  payment:''
+};
 
+const companyNames = {
+  orange:'أورانج 🟠',
+  vodafone:'فودافون 🔴',
+  etisalat:'اتصالات 🟢',
+  we:'وي 🟣'
+};
+
+// تحميل كل الباقات مرة واحدة
+async function loadAllPackages() {
   try {
-    // إضافة cache busting بسيط لتجنب التكرار
-    const res = await fetch(`${SCRIPT_URL}?action=packages&company=${encodeURIComponent(companyName)}&t=${Date.now()}`);
-    const packages = await res.json();
-
-    container.innerHTML = '';
-
-    if (packages.length === 0) {
-      container.innerHTML = `<p style="color:#f59e0b;text-align:center;">لا توجد باقات متاحة حالياً</p>`;
-      return;
-    }
-
-    packages.forEach(pkg => {
-      const div = document.createElement('div');
-      div.className = 'pkg-item';
-      div.innerHTML = `
-        <div><strong>${pkg.name}</strong><br><small>${pkg.type || ''}</small></div>
-        <div class="pkg-price">${pkg.price} ج</div>
-      `;
-      div.onclick = () => selectPkg(pkg.name, pkg.price, div);
-      container.appendChild(div);
-    });
-  } catch (err) {
-    console.error(err);
-    container.innerHTML = `<p style="color:red;text-align:center;">حدث خطأ في تحميل الباقات</p>`;
+    const res = await fetch(`${SCRIPT_URL}?action=packages`);
+    allPackages = await res.json();
+  } catch (e) {
+    console.error(e);
   }
 }
 
-function selectCompany(companyName, el) {
-  document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
+function selectCompany(companyKey, el){
+  document.querySelectorAll('.company-card').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
 
-  state.company = companyName;
-  document.getElementById('sectionPackage').classList.remove('section-hidden');
-  loadPackages(companyName);
+  state.company = companyKey;
+  document.getElementById('sectionPackage').classList.add('visible');
+
+  const filtered = allPackages.filter(pkg => 
+    pkg.company.toLowerCase().includes(companyKey)
+  );
+
+  const container = document.getElementById('packagesList');
+  container.innerHTML = '';
+
+  filtered.forEach(pkg => {
+    const label = document.createElement('label');
+    label.className = 'pkg-item';
+    label.innerHTML = `
+      <div class="pkg-dot"></div>
+      <div class="pkg-info">
+        <div class="pkg-name">${pkg.name}</div>
+        <div class="pkg-detail">${pkg.type || ''}</div>
+      </div>
+      <div class="pkg-price">${pkg.price} ج</div>
+    `;
+    label.onclick = () => selectPkg(label, pkg.name, pkg.price);
+    container.appendChild(label);
+  });
 }
 
-function selectPkg(name, price, el) {
-  document.querySelectorAll('.pkg-item').forEach(item => item.classList.remove('selected'));
+function selectPkg(el, name, price){
+  document.querySelectorAll('.pkg-item').forEach(p=>p.classList.remove('selected'));
   el.classList.add('selected');
-  
   state.package = name;
   state.price = price;
-  
-  document.getElementById('sectionInfo').classList.remove('section-hidden');
-  document.getElementById('summaryCard').style.display = 'block';
-  document.getElementById('submitBtn').classList.remove('section-hidden');
-
-  document.getElementById('s-name').textContent = document.getElementById('customerName').value || '-';
-  document.getElementById('s-company').textContent = state.company;
-  document.getElementById('s-package').textContent = name;
-  document.getElementById('s-price').textContent = price + ' جنيه';
+  document.getElementById('sectionInfo').classList.add('visible');
+  updateSummary();
 }
 
-function selectPay(el) {
-  document.querySelectorAll('.pay-card').forEach(c => c.style.borderColor = '#555');
-  el.style.borderColor = '#00D4FF';
+function selectPay(el){
+  document.querySelectorAll('.pay-card').forEach(p=>p.classList.remove('selected'));
+  el.classList.add('selected');
+  state.payment = el.querySelector('input').value;
+  updateSummary();
 }
 
-function handleFile(inp) {
-  if (inp.files[0]) console.log('تم رفع:', inp.files[0].name);
+function handleFile(inp){
+  if(inp.files && inp.files[0]){
+    document.getElementById('fileName').textContent = inp.files[0].name;
+    document.getElementById('uploadPreview').style.display='block';
+  }
 }
 
-async function submitOrder() {
-  // يمكنك لاحقاً استبدال هذا بالكود الكامل للإرسال
-  const orderId = 'ORD-' + Date.now().toString().slice(-8);
-  document.getElementById('orderIdBox').innerHTML = `رقم الطلب: <strong>${orderId}</strong>`;
-  document.getElementById('mainForm').style.display = 'none';
-  document.getElementById('successScreen').style.display = 'block';
+function updateSummary(){
+  document.getElementById('summaryCard').style.display='block';
+  document.getElementById('submitBtn').classList.add('visible');
+  document.getElementById('s-name').textContent = document.getElementById('customerName').value || '—';
+  document.getElementById('s-company').textContent = companyNames[state.company] || '—';
+  document.getElementById('s-package').textContent = state.package || '—';
+  document.getElementById('s-price').textContent = state.price ? state.price + ' جنيه' : '—';
 }
 
-console.log('%c✅ index.html جاهز ومحسن', 'color:#22c55e;font-size:16px');
+async function submitOrder(){
+  const name = document.getElementById('customerName').value.trim();
+  const phone = document.getElementById('phoneNumber').value.trim();
+  const notes = document.getElementById('notes').value.trim();
+  const transferRef = document.getElementById('transferRef').value.trim();
+  const proofFile = document.getElementById('proofFile').files[0];
+
+  if(!name || !phone || !state.company || !state.package){
+    showToast('⚠️ يرجى ملء جميع الحقول المطلوبة','error');
+    return;
+  }
+
+  let proofBase64 = '';
+  if(proofFile){
+    proofBase64 = await fileToBase64(proofFile);
+  }
+
+  const payload = {
+    customerName:name,
+    phone,
+    company:companyNames[state.company],
+    package:state.package,
+    price:state.price,
+    payment:state.payment,
+    transferRef,
+    notes,
+    proofBase64
+  };
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ جاري الإرسال...';
+
+  fetch(SCRIPT_URL, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify(payload)
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    if(res.success){
+      document.getElementById('orderIdBox').textContent = res.orderId;
+      showSuccessScreen();
+    } else {
+      showToast('❌ حصل خطأ','error');
+    }
+  })
+  .catch(err=>{
+    console.error(err);
+    showToast('❌ مشكلة في الاتصال','error');
+  })
+  .finally(()=>{
+    btn.disabled = false;
+    btn.textContent = '🚀 أرسل الطلب';
+  });
+}
+
+function fileToBase64(file){
+  return new Promise((resolve,reject)=>{
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = error => reject(error);
+  });
+}
+
+function showSuccessScreen(){
+  document.getElementById('mainForm').style.display='none';
+  document.getElementById('successScreen').classList.add('visible');
+  showToast('✅ تم إرسال الطلب','success');
+}
+
+function resetForm(){
+  location.reload();
+}
+
+function showToast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show '+type;
+  setTimeout(()=>{ t.className='toast'; },3000);
+}
+
+// تحميل كل الباقات مرة واحدة
+window.onload = loadAllPackages;
 </script>
 </body>
 </html>
