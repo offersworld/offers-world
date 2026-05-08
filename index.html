@@ -22,23 +22,33 @@ body {
   color: var(--text);
   font-family: 'Cairo', sans-serif;
   min-height: 100vh;
-  padding-bottom: 100px;
+  padding-bottom: 80px;
 }
 
-.stars { position:fixed; inset:0; z-index:0; pointer-events:none; opacity: 0.15; }
+.stars { 
+  position:fixed; inset:0; z-index:0; pointer-events:none; 
+  background: transparent url('https://i.ibb.co.com/0jZxKzY/stars.png') repeat; 
+  opacity: 0.15; 
+}
 
-.container { position:relative; z-index:1; max-width:480px; margin:0 auto; padding:20px 16px; }
+.container { 
+  position:relative; z-index:1; max-width:480px; margin:0 auto; padding:20px 16px; 
+}
 
 .logo {
-  width:100px; height:100px; margin:30px auto 10px;
+  width:110px; height:110px; margin:30px auto 10px;
   background: linear-gradient(135deg, var(--accent), var(--orange));
   border-radius:50%; display:flex; align-items:center; justify-content:center;
-  font-size:48px; box-shadow:0 0 50px rgba(123,47,190,0.6);
+  font-size:52px; box-shadow:0 0 60px rgba(123,47,190,0.7);
   animation: float 3s ease-in-out infinite;
 }
-@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
 
-h1 { text-align:center; font-size:2.1rem; margin-bottom:6px; background: linear-gradient(90deg, #fff, #c4b5fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+h1 { 
+  text-align:center; font-size:2.2rem; margin-bottom:6px; 
+  background: linear-gradient(90deg, #fff, #c4b5fd); 
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; 
+}
 .subtitle { text-align:center; color:var(--muted); margin-bottom:35px; font-size:1.1rem; }
 
 .card {
@@ -52,7 +62,7 @@ h1 { text-align:center; font-size:2.1rem; margin-bottom:6px; background: linear-
 
 .section-title {
   color:#ddd;
-  font-size:1.05rem;
+  font-size:1.1rem;
   margin-bottom:16px;
   display:flex;
   align-items:center;
@@ -69,32 +79,31 @@ h1 { text-align:center; font-size:2.1rem; margin-bottom:6px; background: linear-
   background:#1A1A2E;
   border:2px solid #333;
   border-radius:20px;
-  padding:20px 12px;
+  padding:22px 12px;
   text-align:center;
   cursor:pointer;
   transition:0.4s;
   font-weight:600;
+  font-size:1.1rem;
 }
 .company-card:hover { border-color:var(--orange); transform:scale(1.05); }
 .company-card.selected {
   border-color:var(--orange);
-  background:rgba(255,107,0,0.1);
+  background:rgba(255,107,0,0.12);
   box-shadow:0 0 30px rgba(255,107,0,0.4);
 }
 
 .filter-tabs {
-  display:flex;
-  gap:8px;
-  margin-bottom:16px;
-  flex-wrap:wrap;
+  display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap;
 }
 .filter-tab {
-  padding:8px 16px;
+  padding:9px 18px;
   background:#1A1A2E;
   border:1px solid #444;
   border-radius:30px;
   cursor:pointer;
   font-size:0.95rem;
+  transition:0.3s;
 }
 .filter-tab.active {
   background:var(--accent);
@@ -146,18 +155,22 @@ input, select, textarea {
   border:none;
   border-radius:16px;
   cursor:pointer;
-  margin-top:10px;
+  margin-top:12px;
   transition:0.3s;
 }
 .btn-primary { background: linear-gradient(90deg, var(--accent), #A855F7); color:white; }
 .btn-success { background: linear-gradient(90deg, #22C55E, #86EFAC); color:black; }
 
+.loading { text-align:center; padding:50px 20px; color:var(--muted); font-size:1.1rem; }
 .step { display:none; }
 .step.active { display:block; animation: fadeIn 0.5s; }
 @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 
-.success-screen { text-align:center; padding:40px 20px; background:var(--card); border-radius:24px; }
-.success-screen h2 { color:var(--green); margin:20px 0; }
+.success-screen { 
+  text-align:center; padding:50px 20px; background:var(--card); 
+  border-radius:24px; 
+}
+.success-screen h2 { color:var(--green); margin:20px 0; font-size:1.8rem; }
 </style>
 </head>
 <body>
@@ -167,15 +180,18 @@ input, select, textarea {
 
   <div class="logo">🌟</div>
   <h1>عالم العروض</h1>
-  <p class="subtitle">احجز باقتك بضغطة زرار</p>
+  <p class="subtitle">احجز باقتك بسهولة وسرعة</p>
 
-  <!-- Step 1: الشركات -->
-  <div id="step1" class="step active card">
+  <!-- Loading -->
+  <div id="loading" class="loading">جاري تحميل الباقات...</div>
+
+  <!-- Step 1: اختيار الشركة -->
+  <div id="step1" class="step card">
     <div class="section-title">اختر الشركة</div>
     <div class="company-grid" id="companyGrid"></div>
   </div>
 
-  <!-- Step 2: الباقات + فلتر -->
+  <!-- Step 2: اختيار الباقة -->
   <div id="step2" class="step card">
     <div class="section-title">اختر الباقة</div>
     
@@ -184,19 +200,18 @@ input, select, textarea {
       <div class="filter-tab" data-filter="جيجا">جيجا</div>
       <div class="filter-tab" data-filter="دقايق">دقايق</div>
       <div class="filter-tab" data-filter="ميكس">ميكس</div>
-      <div class="filter-tab" data-filter="خاص">خاص</div>
     </div>
 
     <div class="packages-list" id="packagesList"></div>
     <button class="btn" onclick="backToCompanies()">← رجوع للشركات</button>
   </div>
 
-  <!-- Step 3: بيانات + رفع إيصال -->
+  <!-- Step 3: بيانات الحجز + رفع إيصال -->
   <div id="step3" class="step card">
     <div class="section-title">بيانات الحجز</div>
-    <input type="text" id="customerName" placeholder="اسمك الكامل" required>
-    <input type="tel" id="phone" placeholder="رقم الواتساب" required>
-    
+    <input type="text" id="customerName" placeholder="اسمك الكامل">
+    <input type="tel" id="phone" placeholder="رقم الواتساب">
+
     <select id="paymentMethod">
       <option value="">طريقة الدفع</option>
       <option value="فودافون كاش">فودافون كاش</option>
@@ -208,7 +223,7 @@ input, select, textarea {
     <input type="text" id="transferRef" placeholder="رقم التحويل أو المرجع">
     <textarea id="notes" rows="2" placeholder="ملاحظات (اختياري)"></textarea>
 
-    <div class="section-title">ارفع إيصال الدفع (مطلوب)</div>
+    <div class="section-title">ارفع إيصال الدفع</div>
     <input type="file" id="proofUpload" accept="image/*" onchange="previewImage(event)">
     <div class="preview-container">
       <img id="imagePreview" alt="معاينة الإيصال">
@@ -217,18 +232,19 @@ input, select, textarea {
     <button class="btn btn-primary" onclick="submitOrder()">تأكيد وإرسال الطلب</button>
   </div>
 
-  <!-- Success -->
+  <!-- Success Screen -->
   <div id="successScreen" class="step success-screen">
     <h2>✅ تم استلام طلبك بنجاح!</h2>
-    <p id="orderIdDisplay" style="font-size:1.4rem; margin:15px 0; color:var(--green); font-weight:bold;"></p>
-    <p>سيتم تفعيل الباقة خلال دقائق</p>
+    <p id="orderIdDisplay" style="font-size:1.5rem; color:var(--green); margin:15px 0;"></p>
+    <p>سيتم مراجعة وتفعيل طلبك خلال دقائق</p>
     <button class="btn btn-success" onclick="restart()">طلب باقة جديدة</button>
   </div>
 
 </div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx6QnVqXdDzASl3zZVw6V2jEZIbDTjOeRDadglm2zRaGNfsqQKgXNTwM8xhblKlXhz2/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxkKqqWdy5mRM4Vf48kbJFvAeWsaWpp2wXXYCWfAS18_9zBB1zJ90-Zr9ANvH829rc/exec'; 
+// ← غير الرابط ده بالرابط الجديد بعد إعادة النشر
 
 let allPackages = [];
 let selectedCompany = '';
@@ -239,7 +255,13 @@ async function loadPackages() {
   try {
     const res = await fetch(`${SCRIPT_URL}?action=packages`);
     allPackages = await res.json();
-  } catch(e) { console.error(e); }
+    
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('step1').style.display = 'block';
+    createCompanyCards();
+  } catch(e) {
+    document.getElementById('loading').innerHTML = '❌ خطأ في الاتصال<br><button onclick="location.reload()">إعادة المحاولة</button>';
+  }
 }
 
 function createCompanyCards() {
@@ -265,7 +287,6 @@ function selectCompany(company, el) {
   filterPackages('all');
 }
 
-// فلترة الباقات
 function filterPackages(type) {
   document.querySelectorAll('.filter-tab').forEach(tab => {
     tab.classList.toggle('active', tab.dataset.filter === type);
@@ -274,17 +295,14 @@ function filterPackages(type) {
   const container = document.getElementById('packagesList');
   container.innerHTML = '';
 
-  let filtered = allPackages.filter(p => 
-    p.company.includes(selectedCompany)
-  );
+  let filtered = allPackages.filter(p => p.company.includes(selectedCompany));
 
   if (type !== 'all') {
     filtered = filtered.filter(p => {
-      const name = (p.name + ' ' + p.type).toLowerCase();
-      if (type === 'جيجا') return name.includes('جيجا');
-      if (type === 'دقايق') return name.includes('دقيقة') || name.includes('دقايق');
-      if (type === 'ميكس') return name.includes('ميكس');
-      if (type === 'خاص') return name.includes('خاص') || name.includes('حسب');
+      const text = (p.name + ' ' + (p.type || '')).toLowerCase();
+      if (type === 'جيجا') return text.includes('جيجا');
+      if (type === 'دقايق') return text.includes('دقيقة') || text.includes('دقايق');
+      if (type === 'ميكس') return text.includes('ميكس');
       return true;
     });
   }
@@ -300,7 +318,7 @@ function filterPackages(type) {
     div.innerHTML = `
       <strong>${pkg.name}</strong><br>
       <small>${pkg.type || ''}</small>
-      <div style="margin-top:10px;color:var(--green);font-size:1.35rem;font-weight:700;">${pkg.price} جنيه</div>
+      <div style="margin-top:10px;color:var(--green);font-size:1.4rem;font-weight:700;">${pkg.price} جنيه</div>
     `;
     div.onclick = () => {
       document.querySelectorAll('.pkg-item').forEach(i => i.classList.remove('selected'));
@@ -321,11 +339,9 @@ function backToCompanies() {
   showStep(1);
 }
 
-// معاينة الصورة + تحويل لـ Base64
 function previewImage(e) {
   const file = e.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
   reader.onload = function(ev) {
     proofBase64 = ev.target.result;
@@ -341,11 +357,8 @@ async function submitOrder() {
   const phone = document.getElementById('phone').value.trim();
 
   if (!name || !phone || !selectedPackage) {
-    alert("❌ برجاء ملء الاسم ورقم التليفون واختيار باقة");
+    alert("❌ برجاء إدخال الاسم ورقم التليفون واختيار باقة");
     return;
-  }
-  if (!proofBase64) {
-    if (!confirm("لم تقم برفع إيصال الدفع. هل تريد الاستمرار؟")) return;
   }
 
   const formData = {
@@ -363,18 +376,21 @@ async function submitOrder() {
   try {
     const res = await fetch(SCRIPT_URL, {
       method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
     });
+
     const result = await res.json();
 
     if (result.success) {
       document.getElementById('orderIdDisplay').textContent = `رقم الطلب: ${result.orderId}`;
       showStep(4);
     } else {
-      alert("حدث خطأ أثناء إرسال الطلب");
+      alert("حدث خطأ: " + (result.error || 'حاول مرة أخرى'));
     }
   } catch(e) {
-    alert("خطأ في الاتصال بالسيرفر");
+    console.error(e);
+    alert("❌ خطأ في الاتصال بالسيرفر\nتأكد من نشر الـ Web App بشكل صحيح (Anyone)");
   }
 }
 
@@ -382,14 +398,14 @@ function restart() {
   location.reload();
 }
 
-window.onload = () => {
-  loadPackages().then(() => createCompanyCards());
-  
-  // تفعيل الفلاتر
+// تفعيل الفلاتر
+document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.filter-tab').forEach(tab => {
     tab.addEventListener('click', () => filterPackages(tab.dataset.filter));
   });
-};
+});
+
+window.onload = loadPackages;
 </script>
 </body>
 </html>
