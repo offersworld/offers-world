@@ -102,10 +102,11 @@ let state = { company: '', package: '', price: 0 };
 
 async function loadPackages(companyName) {
   const container = document.getElementById('packagesList');
-  container.innerHTML = `<p class="loading">جاري تحميل باقات ${companyName}...</p>`;
+  container.innerHTML = `<p style="text-align:center;color:#f59e0b;padding:20px;">جاري تحميل باقات ${companyName}...</p>`;
 
   try {
-    const res = await fetch(`${SCRIPT_URL}?action=packages&company=${encodeURIComponent(companyName)}`);
+    // إضافة cache busting بسيط لتجنب التكرار
+    const res = await fetch(`${SCRIPT_URL}?action=packages&company=${encodeURIComponent(companyName)}&t=${Date.now()}`);
     const packages = await res.json();
 
     container.innerHTML = '';
@@ -127,7 +128,7 @@ async function loadPackages(companyName) {
     });
   } catch (err) {
     console.error(err);
-    container.innerHTML = `<p style="color:red;text-align:center;">خطأ في تحميل الباقات</p>`;
+    container.innerHTML = `<p style="color:red;text-align:center;">حدث خطأ في تحميل الباقات</p>`;
   }
 }
 
