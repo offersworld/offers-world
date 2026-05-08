@@ -4,1032 +4,1030 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>عالم العروض — احجز باقتك</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+
 <style>
-  :root {
-    --dark:    #0D0D1A;
-    --mid:     #13132B;
-    --card:    #1A1A35;
-    --border:  #2A2A50;
-    --accent:  #E94560;
-    --gold:    #F5A623;
-    --purple:  #7B2FBE;
-    --cyan:    #00D4FF;
-    --green:   #00E676;
-    --text:    #E8E8F0;
-    --muted:   #888AAA;
-    --white:   #FFFFFF;
-  }
+:root{
+  --dark:#0D0D1A;
+  --mid:#13132B;
+  --card:#1A1A35;
+  --border:#2A2A50;
+  --accent:#E94560;
+  --gold:#F5A623;
+  --purple:#7B2FBE;
+  --cyan:#00D4FF;
+  --green:#00E676;
+  --text:#E8E8F0;
+  --muted:#888AAA;
+}
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-  body {
-    background: var(--dark);
-    color: var(--text);
-    font-family: 'Cairo', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
+body{
+  background:var(--dark);
+  color:var(--text);
+  font-family:'Cairo',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
 
-  /* Stars background */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse at 20% 20%, rgba(123,47,190,.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(233,69,96,.12) 0%, transparent 50%),
-      radial-gradient(ellipse at 50% 50%, rgba(0,212,255,.06) 0%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-  }
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse at 20% 20%, rgba(123,47,190,.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(233,69,96,.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 50%, rgba(0,212,255,.06) 0%, transparent 70%);
+  pointer-events:none;
+  z-index:0;
+}
 
-  .stars {
-    position: fixed;
-    inset: 0;
-    overflow: hidden;
-    z-index: 0;
-    pointer-events: none;
-  }
-  .star {
-    position: absolute;
-    width: 2px; height: 2px;
-    background: white;
-    border-radius: 50%;
-    animation: twinkle var(--d,3s) var(--delay,0s) ease-in-out infinite alternate;
-    opacity: .4;
-  }
-  @keyframes twinkle { to { opacity: 1; transform: scale(1.5); } }
+.stars{
+  position:fixed;
+  inset:0;
+  overflow:hidden;
+  z-index:0;
+  pointer-events:none;
+}
 
-  .container {
-    position: relative;
-    z-index: 1;
-    max-width: 680px;
-    margin: 0 auto;
-    padding: 20px 16px 60px;
-  }
+.star{
+  position:absolute;
+  width:2px;
+  height:2px;
+  background:white;
+  border-radius:50%;
+  animation:twinkle var(--d,3s) var(--delay,0s) ease-in-out infinite alternate;
+  opacity:.4;
+}
 
-  /* ===== HEADER ===== */
-  .header {
-    text-align: center;
-    padding: 40px 0 30px;
-    position: relative;
+@keyframes twinkle{
+  to{
+    opacity:1;
+    transform:scale(1.5);
   }
-  .logo-ring {
-    width: 90px; height: 90px;
-    margin: 0 auto 16px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent), var(--purple));
-    display: flex; align-items: center; justify-content: center;
-    font-size: 40px;
-    box-shadow: 0 0 30px rgba(233,69,96,.4), 0 0 60px rgba(123,47,190,.2);
-    animation: pulse-ring 3s ease-in-out infinite;
-  }
-  @keyframes pulse-ring {
-    0%,100% { box-shadow: 0 0 30px rgba(233,69,96,.4), 0 0 60px rgba(123,47,190,.2); }
-    50% { box-shadow: 0 0 50px rgba(233,69,96,.6), 0 0 90px rgba(123,47,190,.35); }
-  }
-  .header h1 {
-    font-size: 2.4rem;
-    font-weight: 900;
-    background: linear-gradient(135deg, var(--gold), var(--accent));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    line-height: 1.2;
-    margin-bottom: 8px;
-  }
-  .header p {
-    color: var(--muted);
-    font-size: .95rem;
-    font-family: 'Tajawal', sans-serif;
-  }
+}
 
-  /* ===== CONTACT CHIPS ===== */
-  .contact-strip {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin: 16px 0 30px;
-  }
-  .chip {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 24px;
-    padding: 6px 14px;
-    font-size: .82rem;
-    color: var(--muted);
-    display: flex; align-items: center; gap: 6px;
-  }
-  .chip span { color: var(--text); font-weight: 600; }
+.container{
+  position:relative;
+  z-index:1;
+  max-width:700px;
+  margin:auto;
+  padding:20px 16px 60px;
+}
 
-  /* ===== DIVIDER ===== */
-  .divider {
-    display: flex; align-items: center; gap: 12px;
-    margin: 24px 0 20px;
-    color: var(--muted); font-size: .82rem;
-  }
-  .divider::before, .divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(to var(--dir, right), transparent, var(--border));
-  }
-  .divider::after { --dir: left; }
+.header{
+  text-align:center;
+  padding:40px 0 30px;
+}
 
-  /* ===== COMPANY CARDS ===== */
-  .companies-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-  .company-card {
-    background: var(--card);
-    border: 2px solid var(--border);
-    border-radius: 16px;
-    padding: 18px 14px;
-    cursor: pointer;
-    transition: all .25s ease;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .company-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    opacity: 0;
-    transition: opacity .25s;
-    border-radius: 14px;
-  }
-  .company-card.orange::before { background: linear-gradient(135deg, rgba(255,107,53,.1), transparent); }
-  .company-card.vodafone::before { background: linear-gradient(135deg, rgba(233,69,96,.1), transparent); }
-  .company-card.we::before { background: linear-gradient(135deg, rgba(123,47,190,.1), transparent); }
-  .company-card.etisalat::before { background: linear-gradient(135deg, rgba(0,230,118,.1), transparent); }
+.logo-ring{
+  width:90px;
+  height:90px;
+  margin:auto auto 16px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--purple));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+  box-shadow:0 0 30px rgba(233,69,96,.4);
+}
 
-  .company-card:hover::before, .company-card.selected::before { opacity: 1; }
-  .company-card:hover { transform: translateY(-3px); }
-  .company-card.selected { border-color: var(--gold); box-shadow: 0 0 20px rgba(245,166,35,.25); }
+.header h1{
+  font-size:2.3rem;
+  font-weight:900;
+  background:linear-gradient(135deg,var(--gold),var(--accent));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  margin-bottom:8px;
+}
 
-  .company-card.orange.selected  { border-color: #FF6B35; box-shadow: 0 0 20px rgba(255,107,53,.3); }
-  .company-card.vodafone.selected { border-color: var(--accent); box-shadow: 0 0 20px rgba(233,69,96,.3); }
-  .company-card.we.selected      { border-color: var(--purple); box-shadow: 0 0 20px rgba(123,47,190,.3); }
-  .company-card.etisalat.selected { border-color: var(--green); box-shadow: 0 0 20px rgba(0,230,118,.3); }
+.header p{
+  color:var(--muted);
+  font-size:.95rem;
+}
 
-  .company-emoji { font-size: 2rem; display: block; margin-bottom: 8px; }
-  .company-name { font-size: 1rem; font-weight: 700; }
-  .company-sub { font-size: .75rem; color: var(--muted); margin-top: 3px; font-family: 'Tajawal', sans-serif; }
-  .check-badge {
-    position: absolute;
-    top: 10px; left: 10px;
-    width: 22px; height: 22px;
-    border-radius: 50%;
-    background: var(--gold);
-    display: none;
-    align-items: center; justify-content: center;
-    font-size: .7rem;
-    color: #000;
-    font-weight: 700;
-  }
-  .company-card.selected .check-badge { display: flex; }
+.contact-strip{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin:20px 0 30px;
+}
 
-  /* ===== FORM SECTIONS ===== */
-  .form-section {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 24px;
-    margin-bottom: 16px;
-    transition: all .3s;
-  }
-  .section-title {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--gold);
-    margin-bottom: 16px;
-    display: flex; align-items: center; gap: 8px;
-  }
+.chip{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:6px 14px;
+  font-size:.82rem;
+}
 
-  /* Packages list */
-  .packages-list { display: flex; flex-direction: column; gap: 10px; }
-  .pkg-item {
-    background: var(--mid);
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    padding: 14px 16px;
-    cursor: pointer;
-    transition: all .2s;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  .pkg-item:hover { border-color: var(--muted); transform: translateX(-3px); }
-  .pkg-item.selected { border-color: var(--gold); background: rgba(245,166,35,.06); }
-  .pkg-item input[type=radio] { display: none; }
-  .pkg-info { flex: 1; }
-  .pkg-name { font-size: .92rem; font-weight: 600; }
-  .pkg-detail { font-size: .78rem; color: var(--muted); margin-top: 2px; font-family: 'Tajawal', sans-serif; }
-  .pkg-price {
-    font-size: 1.1rem;
-    font-weight: 900;
-    color: var(--accent);
-    white-space: nowrap;
-    min-width: 70px;
-    text-align: left;
-  }
-  .pkg-dot {
-    width: 16px; height: 16px;
-    border-radius: 50%;
-    border: 2px solid var(--border);
-    flex-shrink: 0;
-    transition: all .2s;
-    background: transparent;
-  }
-  .pkg-item.selected .pkg-dot { border-color: var(--gold); background: var(--gold); }
+.chip span{
+  color:white;
+  font-weight:700;
+}
 
-  /* Vodafone special */
-  .voda-note {
-    background: rgba(233,69,96,.08);
-    border: 1px solid rgba(233,69,96,.3);
-    border-radius: 12px;
-    padding: 16px;
-    font-size: .88rem;
-    color: var(--text);
-    font-family: 'Tajawal', sans-serif;
-    line-height: 1.7;
-    margin-bottom: 14px;
-  }
+.form-section{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:24px;
+  margin-bottom:16px;
+}
 
-  /* Inputs */
-  .input-group { margin-bottom: 16px; }
-  .input-label {
-    display: block;
-    font-size: .85rem;
-    color: var(--muted);
-    margin-bottom: 7px;
-    font-family: 'Tajawal', sans-serif;
-  }
-  .input-label strong { color: var(--text); font-weight: 600; }
-  input[type=text], input[type=tel], select, textarea {
-    width: 100%;
-    background: var(--mid);
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    padding: 13px 16px;
-    color: var(--text);
-    font-family: 'Cairo', sans-serif;
-    font-size: .95rem;
-    outline: none;
-    transition: border-color .2s, box-shadow .2s;
-    -webkit-appearance: none;
-  }
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--gold);
-    box-shadow: 0 0 0 3px rgba(245,166,35,.1);
-  }
-  select option { background: var(--card); }
-  textarea { resize: vertical; min-height: 80px; }
+.section-title{
+  font-size:1rem;
+  font-weight:700;
+  color:var(--gold);
+  margin-bottom:16px;
+}
 
-  /* Payment methods */
-  .payment-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-  }
-  .pay-card {
-    background: var(--mid);
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    padding: 12px;
-    cursor: pointer;
-    transition: all .2s;
-    text-align: center;
-  }
-  .pay-card:hover { border-color: var(--muted); }
-  .pay-card.selected { border-color: var(--cyan); background: rgba(0,212,255,.05); }
-  .pay-card input[type=radio] { display: none; }
-  .pay-icon { font-size: 1.5rem; display: block; margin-bottom: 5px; }
-  .pay-name { font-size: .82rem; font-weight: 600; }
-  .pay-num { font-size: .72rem; color: var(--muted); direction: ltr; margin-top: 2px; font-family: 'Tajawal', sans-serif; }
+.companies-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
 
-  /* File upload */
-  .upload-zone {
-    border: 2px dashed var(--border);
-    border-radius: 14px;
-    padding: 28px;
-    text-align: center;
-    cursor: pointer;
-    transition: all .2s;
-    position: relative;
-  }
-  .upload-zone:hover, .upload-zone.dragover { border-color: var(--cyan); background: rgba(0,212,255,.04); }
-  .upload-zone input[type=file] {
-    position: absolute; inset: 0;
-    opacity: 0; cursor: pointer;
-    width: 100%; height: 100%;
-    border-radius: 0;
-    border: none;
-    background: transparent;
-    padding: 0;
-  }
-  .upload-icon { font-size: 2.2rem; display: block; margin-bottom: 8px; }
-  .upload-text { font-size: .88rem; color: var(--muted); font-family: 'Tajawal', sans-serif; }
-  .upload-preview {
-    margin-top: 12px;
-    background: var(--mid);
-    border-radius: 10px;
-    padding: 10px 14px;
-    font-size: .82rem;
-    color: var(--green);
-    display: none;
-    align-items: center; gap: 8px;
-  }
+.company-card{
+  background:var(--mid);
+  border:2px solid var(--border);
+  border-radius:16px;
+  padding:18px 14px;
+  text-align:center;
+  cursor:pointer;
+  transition:.25s;
+}
 
-  /* Summary card */
-  .summary-card {
-    background: linear-gradient(135deg, var(--mid), rgba(245,166,35,.06));
-    border: 1px solid rgba(245,166,35,.3);
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 16px;
-    display: none;
-  }
-  .summary-card.visible { display: block; }
-  .summary-row {
-    display: flex; justify-content: space-between;
-    padding: 8px 0;
-    font-size: .9rem;
-    border-bottom: 1px solid rgba(255,255,255,.06);
-  }
-  .summary-row:last-child { border: none; }
-  .summary-row .s-label { color: var(--muted); }
-  .summary-row .s-val { font-weight: 700; }
-  .total-row { margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--border) !important; }
-  .total-row .s-val { font-size: 1.3rem; color: var(--gold); }
+.company-card:hover{
+  transform:translateY(-3px);
+}
 
-  /* Submit button */
-  .submit-btn {
-    width: 100%;
-    background: linear-gradient(135deg, var(--accent), var(--purple));
-    border: none;
-    border-radius: 16px;
-    padding: 18px;
-    font-family: 'Cairo', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: white;
-    cursor: pointer;
-    transition: all .25s;
-    box-shadow: 0 8px 30px rgba(233,69,96,.3);
-    position: relative;
-    overflow: hidden;
-  }
-  .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(233,69,96,.45); }
-  .submit-btn:active { transform: translateY(0); }
-  .submit-btn::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,.1));
-    pointer-events: none;
-  }
+.company-card.selected{
+  border-color:var(--gold);
+  box-shadow:0 0 20px rgba(245,166,35,.25);
+}
 
-  /* Success screen */
-  .success-screen {
-    display: none;
-    text-align: center;
-    padding: 50px 20px;
-    animation: fadeIn .5s ease;
-  }
-  @keyframes fadeIn { from { opacity:0; transform: translateY(20px); } to { opacity:1; transform: none; } }
-  .success-screen.visible { display: block; }
-  .success-ring {
-    width: 100px; height: 100px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--green), #00A060);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 3rem;
-    margin: 0 auto 24px;
-    box-shadow: 0 0 50px rgba(0,230,118,.4);
-    animation: bounce .5s .3s ease both;
-  }
-  @keyframes bounce { 0%{transform:scale(0)} 70%{transform:scale(1.15)} 100%{transform:scale(1)} }
-  .success-screen h2 { font-size: 1.8rem; font-weight: 900; margin-bottom: 10px; color: var(--green); }
-  .success-screen p { color: var(--muted); font-size: .95rem; font-family: 'Tajawal', sans-serif; line-height: 1.7; }
-  .order-id-box {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px;
-    margin: 20px 0;
-    font-size: 1rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-    color: var(--gold);
-  }
-  .new-order-btn {
-    background: transparent;
-    border: 1.5px solid var(--border);
-    border-radius: 12px;
-    padding: 13px 28px;
-    font-family: 'Cairo', sans-serif;
-    font-size: .95rem;
-    font-weight: 600;
-    color: var(--text);
-    cursor: pointer;
-    transition: all .2s;
-    margin-top: 8px;
-  }
-  .new-order-btn:hover { border-color: var(--gold); color: var(--gold); }
+.company-emoji{
+  font-size:2rem;
+  display:block;
+  margin-bottom:8px;
+}
 
-  /* Hidden sections */
-  .section-hidden { display: none; }
-  .section-hidden.visible { display: block; }
+.company-name{
+  font-size:1rem;
+  font-weight:700;
+}
 
-  /* Toast */
-  .toast {
-    position: fixed;
-    bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 12px 24px;
-    font-size: .88rem;
-    transition: transform .3s ease;
-    z-index: 999;
-    white-space: nowrap;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-  .toast.error { border-color: var(--accent); color: var(--accent); }
-  .toast.success { border-color: var(--green); color: var(--green); }
+.company-sub{
+  font-size:.75rem;
+  color:var(--muted);
+  margin-top:4px;
+}
 
-  @media (max-width: 420px) {
-    .header h1 { font-size: 1.9rem; }
-    .companies-grid { grid-template-columns: repeat(2,1fr); }
+.packages-list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.pkg-item{
+  background:var(--mid);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:14px 16px;
+  cursor:pointer;
+  transition:.2s;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.pkg-item.selected{
+  border-color:var(--gold);
+  background:rgba(245,166,35,.06);
+}
+
+.pkg-dot{
+  width:16px;
+  height:16px;
+  border-radius:50%;
+  border:2px solid var(--border);
+}
+
+.pkg-item.selected .pkg-dot{
+  border-color:var(--gold);
+  background:var(--gold);
+}
+
+.pkg-info{
+  flex:1;
+}
+
+.pkg-name{
+  font-size:.92rem;
+  font-weight:600;
+}
+
+.pkg-detail{
+  font-size:.78rem;
+  color:var(--muted);
+  margin-top:2px;
+}
+
+.pkg-price{
+  font-size:1.1rem;
+  font-weight:900;
+  color:var(--accent);
+}
+
+input,
+textarea{
+  width:100%;
+  background:var(--mid);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:13px 16px;
+  color:white;
+  font-family:'Cairo',sans-serif;
+  margin-top:8px;
+  outline:none;
+}
+
+input:focus,
+textarea:focus{
+  border-color:var(--gold);
+}
+
+textarea{
+  resize:vertical;
+  min-height:80px;
+}
+
+.input-group{
+  margin-bottom:16px;
+}
+
+.input-label{
+  color:var(--muted);
+  font-size:.85rem;
+}
+
+.payment-options{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.pay-card{
+  background:var(--mid);
+  border:1.5px solid var(--border);
+  border-radius:12px;
+  padding:12px;
+  text-align:center;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.pay-card.selected{
+  border-color:var(--cyan);
+}
+
+.pay-icon{
+  font-size:1.4rem;
+  display:block;
+  margin-bottom:5px;
+}
+
+.pay-name{
+  font-size:.82rem;
+  font-weight:700;
+}
+
+.pay-num{
+  font-size:.72rem;
+  color:var(--muted);
+  direction:ltr;
+}
+
+.upload-zone{
+  border:2px dashed var(--border);
+  border-radius:14px;
+  padding:28px;
+  text-align:center;
+  cursor:pointer;
+  position:relative;
+}
+
+.upload-zone input[type=file]{
+  position:absolute;
+  inset:0;
+  opacity:0;
+  cursor:pointer;
+}
+
+.upload-preview{
+  margin-top:12px;
+  background:var(--mid);
+  border-radius:10px;
+  padding:10px 14px;
+  font-size:.82rem;
+  color:var(--green);
+  display:none;
+}
+
+.summary-card{
+  background:linear-gradient(135deg,var(--mid),rgba(245,166,35,.06));
+  border:1px solid rgba(245,166,35,.3);
+  border-radius:16px;
+  padding:20px;
+  margin-bottom:16px;
+  display:none;
+}
+
+.summary-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.submit-btn{
+  width:100%;
+  background:linear-gradient(135deg,var(--accent),var(--purple));
+  border:none;
+  border-radius:16px;
+  padding:18px;
+  font-family:'Cairo',sans-serif;
+  font-size:1.1rem;
+  font-weight:800;
+  color:white;
+  cursor:pointer;
+  box-shadow:0 8px 30px rgba(233,69,96,.3);
+  transition:.25s;
+}
+
+.submit-btn:hover{
+  transform:translateY(-2px);
+}
+
+.submit-btn:disabled{
+  opacity:.7;
+  cursor:not-allowed;
+}
+
+.toast{
+  position:fixed;
+  bottom:24px;
+  left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:12px 24px;
+  transition:.3s;
+  z-index:999;
+}
+
+.toast.show{
+  transform:translateX(-50%) translateY(0);
+}
+
+.toast.error{
+  border-color:var(--accent);
+  color:var(--accent);
+}
+
+.toast.success{
+  border-color:var(--green);
+  color:var(--green);
+}
+
+.section-hidden{
+  display:none;
+}
+
+.section-hidden.visible{
+  display:block;
+}
+
+.success-screen{
+  display:none;
+  text-align:center;
+  padding:50px 20px;
+}
+
+.success-screen.visible{
+  display:block;
+}
+
+.success-ring{
+  width:100px;
+  height:100px;
+  border-radius:50%;
+  background:linear-gradient(135deg,var(--green),#00A060);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:3rem;
+  margin:0 auto 24px;
+}
+
+.order-id-box{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:14px;
+  margin:20px 0;
+  font-size:1rem;
+  font-weight:700;
+  color:var(--gold);
+}
+
+.new-order-btn{
+  background:transparent;
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:13px 28px;
+  color:white;
+  cursor:pointer;
+}
+
+@media(max-width:420px){
+  .header h1{
+    font-size:1.9rem;
   }
+}
 </style>
 </head>
+
 <body>
 
-<!-- Stars -->
 <div class="stars" id="stars"></div>
 
 <div class="container">
 
-  <!-- Header -->
   <div class="header">
     <div class="logo-ring">🌟</div>
     <h1>عالم العروض</h1>
     <p>احجز باقتك بسهولة — تفعيل سريع وخدمة محترمة</p>
   </div>
 
-  <!-- Contact chips -->
   <div class="contact-strip">
     <div class="chip">📲 رجب: <span>01208666900</span></div>
     <div class="chip">💬 رحمة: <span>01555435556</span></div>
     <div class="chip">💳 إنستا باي: <span>01284277707</span></div>
   </div>
 
-  <!-- Main form -->
   <div id="mainForm">
 
-    <!-- Step 1: Company -->
     <div class="form-section">
+
       <div class="section-title">📡 اختار شركتك</div>
+
       <div class="companies-grid">
-        <label class="company-card orange" onclick="selectCompany('orange', this)">
-          <input type="radio" name="company" value="orange">
-          <div class="check-badge">✓</div>
+
+        <label class="company-card" onclick="selectCompany('orange', this)">
           <span class="company-emoji">🟠</span>
           <div class="company-name">أورانج</div>
-          <div class="company-sub">6 باقات متاحة</div>
+          <div class="company-sub">باقات متنوعة</div>
         </label>
-        <label class="company-card vodafone" onclick="selectCompany('vodafone', this)">
-          <input type="radio" name="company" value="vodafone">
-          <div class="check-badge">✓</div>
+
+        <label class="company-card" onclick="selectCompany('vodafone', this)">
           <span class="company-emoji">🔴</span>
           <div class="company-name">فودافون</div>
-          <div class="company-sub">عروض على حسب الخط</div>
+          <div class="company-sub">عروض خاصة</div>
         </label>
-        <label class="company-card etisalat" onclick="selectCompany('etisalat', this)">
-          <input type="radio" name="company" value="etisalat">
-          <div class="check-badge">✓</div>
+
+        <label class="company-card" onclick="selectCompany('etisalat', this)">
           <span class="company-emoji">🟢</span>
           <div class="company-name">اتصالات</div>
-          <div class="company-sub">حكاية / &e ميكس / اميرالد</div>
+          <div class="company-sub">أنظمة متعددة</div>
         </label>
-        <label class="company-card we" onclick="selectCompany('we', this)">
-          <input type="radio" name="company" value="we">
-          <div class="check-badge">✓</div>
+
+        <label class="company-card" onclick="selectCompany('we', this)">
           <span class="company-emoji">🟣</span>
           <div class="company-name">وي</div>
-          <div class="company-sub">7 باقات متاحة</div>
+          <div class="company-sub">باقات قوية</div>
         </label>
+
       </div>
+
     </div>
 
-    <!-- Step 2: Package (dynamic) -->
     <div class="form-section section-hidden" id="sectionPackage">
 
-      <!-- Orange packages -->
-      <div id="pkgs-orange">
-        <div class="section-title">📦 اختار الباقة — أورانج</div>
-        <div class="packages-list">
-          <label class="pkg-item" onclick="selectPkg(this, '10 جيجا + 2000 دقيقة', 250)">
-            <input type="radio" name="package">
-            <div class="pkg-dot"></div>
-            <div class="pkg-info">
-              <div class="pkg-name">10 جيجا + 2000 دقيقة</div>
-              <div class="pkg-detail">صالح شهر كامل • الدقيقة بدقيقة لأي شبكة</div>
-            </div>
-            <div class="pkg-price">250 ج</div>
-          </label>
-          <label class="pkg-item" onclick="selectPkg(this, '14 جيجا + 2000 دقيقة', 300)">
-            <input type="radio" name="package">
-            <div class="pkg-dot"></div>
-            <div class="pkg-info">
-              <div class="pkg-name">14 جيجا + 2000 دقيقة</div>
-              <div class="pkg-detail">صالح شهر كامل • الدقيقة بدقيقة لأي شبكة</div>
-            </div>
-            <div class="pkg-price">300 ج</div>
-          </label>
-          <label class="pkg-item" onclick="selectPkg(this, '20 جيجا + 2000 دقيقة', 370)">
-            <input type="radio" name="package">
-            <div class="pkg-dot"></div>
-            <div class="pkg-info">
-              <div class="pkg-name">20 جيجا + 2000 دقيقة</div>
-              <div class="pkg-detail">صالح شهر كامل • الدقيقة بدقيقة لأي شبكة</div>
-            </div>
-            <div class="pkg-price">370 ج</div>
-          </label>
-          <label class="pkg-item" onclick="selectPkg(this, '30 جيجا + 2000 دقيقة', 500)">
-            <input type="radio" name="package">
-            <div class="pkg-dot"></div>
-            <div class="pkg-info">
-              <div class="pkg-name">30 جيجا + 2000 دقيقة</div>
-              <div class="pkg-detail">صالح شهر كامل • الدقيقة بدقيقة لأي شبكة</div>
-            </div>
-            <div class="pkg-price">500 ج</div>
-          </label>
-          <label class="pkg-item" onclick="selectPkg(this, '2000 دقيقة فقط', 140)">
-            <input type="radio" name="package">
-            <div class="pkg-dot"></div>
-            <div class="pkg-info">
-              <div class="pkg-name">2000 دقيقة فقط</div>
-              <div class="pkg-detail">بدون انترنت • الدقيقة بدقيقة لأي شبكة</div>
-            </div>
-            <div class="pkg-price">140 ج</div>
-          </label>
-          <label class="pkg-item" onclick="selectPkg(this, '3000 دقيقة فقط', 180)">
-            <input type="radio" name="package">
-            <div class="pkg-dot"></div>
-            <div class="pkg-info">
-              <div class="pkg-name">3000 دقيقة فقط</div>
-              <div class="pkg-detail">بدون انترنت • الدقيقة بدقيقة لأي شبكة</div>
-            </div>
-            <div class="pkg-price">180 ج</div>
-          </label>
-        </div>
-      </div>
+      <div class="section-title">📦 اختار الباقة</div>
 
-      <!-- WE packages -->
-      <div id="pkgs-we" style="display:none">
-        <div class="section-title">📦 اختار الباقة — وي</div>
-        <div class="packages-list">
-          <label class="pkg-item" onclick="selectPkg(this, '10,000 ميجا + 1000 دقيقة', 210)">
-            <input type="radio" name="package">
-            <div class="pkg-dot"></div>
-            <div class="pkg-info"><div class="pkg-name">10,000 ميجا + 1000 دقيقة</div><div class="pkg-detail">التفعيل يوم 1 أو 16 من الشهر</div></div>
-            <div class="pkg-price">210 ج</div>
-          </label>
-          <label class="pkg-item" onclick="selectPkg(this, '20,000 ميجا + 1000 دقيقة', 270)">
-            <input type="radio" name="package">
-            <div class="pkg-dot"></div>
-            <div class="pkg-info"><div class="pkg-name">20,000 ميجا + 1000 دقيقة</div><div class="pkg-detail">التفعيل يوم 1 أو 16 من الشهر</div></div>
-            <div class="pkg-price">270 ج</div>
-          </label>
-          <label class="pkg-item" onclick="selectPkg(this, '30,000 ميجا + 1000 دقيقة', 320)">
-            <input type="radio" name="package">
-            <div class="pkg-dot"></div>
-            <div class="pkg-info"><div class="pkg-name">30,000 ميجا + 1000 دقيقة</div><div class="pkg-detail">التفعيل يوم 1 أو 16 من الشهر</div></div>
-            <div class="pkg-price">320 ج</div>
-          </label>
-          <label class="pkg-item" onclick="selectPkg(this, '40,000 ميجا + 1500 دقيقة', 400)">
-            <input type="radio" name="package">
-            <div class="pkg-dot"></div>
-            <div class="pkg-info"><div class="pkg-name">40,000 ميجا + 1500 دقيقة</div><div class="pkg-detail">التفعيل يوم 1 أو 16 من الشهر</div></div>
-            <div class="pkg-price">400 ج</div>
-          </label>
-          <label class="pkg-item" onclick="selectPkg(this, '50,000 ميجا + 1500 دقيقة', 530)">
-            <input type="radio" name="package">
-            <div class="pkg-dot"></div>
-            <div class="pkg-info"><div class="pkg-name">50,000 ميجا + 1500 دقيقة</div><div class="pkg-detail">التفعيل يوم 1 أو 16 من الشهر</div></div>
-            <div class="pkg-price">530 ج</div>
-          </label>
-          <label class="pkg-item" onclick="selectPkg(this, '60,000 ميجا + 1500 دقيقة', 670)">
-            <input type="radio" name="package">
-            <div class="pkg-dot"></div>
-            <div class="pkg-info"><div class="pkg-name">60,000 ميجا + 1500 دقيقة</div><div class="pkg-detail">التفعيل يوم 1 أو 16 من الشهر</div></div>
-            <div class="pkg-price">670 ج</div>
-          </label>
-          <label class="pkg-item" onclick="selectPkg(this, '70,000 ميجا + 1500 دقيقة', 750)">
-            <input type="radio" name="package">
-            <div class="pkg-dot"></div>
-            <div class="pkg-info"><div class="pkg-name">70,000 ميجا + 1500 دقيقة</div><div class="pkg-detail">التفعيل يوم 1 أو 16 من الشهر</div></div>
-            <div class="pkg-price">750 ج</div>
-          </label>
-        </div>
-      </div>
+      <div class="packages-list">
 
-      <!-- Etisalat sub-type -->
-      <div id="pkgs-etisalat" style="display:none">
-        <div class="section-title">📦 اختار نوع باقات اتصالات</div>
-        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px">
-          <button class="pkg-type-btn active" onclick="showEtType('hayah',this)">🔥 حكاية</button>
-          <button class="pkg-type-btn" onclick="showEtType('emix',this)">🎯 &e ميكس</button>
-          <button class="pkg-type-btn" onclick="showEtType('emerald',this)">💎 اميرالد</button>
-        </div>
-
-        <div id="et-hayah">
-          <div class="packages-list">
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات حكاية — 9.5 جيجا', 150)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">9.5 جيجا + 600 وحدة هدية</div><div class="pkg-detail">تتقسم الضعف أسبوع + يكمل الشهر</div></div><div class="pkg-price">150 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات حكاية — 13.5 جيجا', 190)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">13.5 جيجا + 600 وحدة هدية</div><div class="pkg-detail">تتقسم الضعف أسبوع + يكمل الشهر</div></div><div class="pkg-price">190 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات حكاية — 17.5 جيجا', 240)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">17.5 جيجا + 600 وحدة هدية</div><div class="pkg-detail">تتقسم الضعف أسبوع + يكمل الشهر</div></div><div class="pkg-price">240 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات حكاية — 23 جيجا', 300)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">23 جيجا + 600 وحدة هدية</div><div class="pkg-detail">تتقسم الضعف أسبوع + يكمل الشهر</div></div><div class="pkg-price">300 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات حكاية — 30 جيجا', 395)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">30 جيجا + 600 وحدة هدية</div><div class="pkg-detail">تتقسم الضعف أسبوع + يكمل الشهر</div></div><div class="pkg-price">395 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات حكاية — 40 جيجا', 495)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">40 جيجا + 600 وحدة هدية</div><div class="pkg-detail">تتقسم الضعف أسبوع + يكمل الشهر</div></div><div class="pkg-price">495 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات حكاية — 50 جيجا', 600)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">50 جيجا + 600 وحدة هدية</div><div class="pkg-detail">تتقسم الضعف أسبوع + يكمل الشهر</div></div><div class="pkg-price">600 ج</div></label>
+        <label class="pkg-item" onclick="selectPkg(this,'10 جيجا + 2000 دقيقة',250)">
+          <div class="pkg-dot"></div>
+          <div class="pkg-info">
+            <div class="pkg-name">10 جيجا + 2000 دقيقة</div>
+            <div class="pkg-detail">صالح شهر كامل</div>
           </div>
-        </div>
-        <div id="et-emix" style="display:none">
-          <div class="packages-list">
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات &e ميكس — 3400 ميكس', 90)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">3400 ميكس</div><div class="pkg-detail">الضعف أسبوع والباقي يكمل الشهر</div></div><div class="pkg-price">90 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات &e ميكس — 5200 ميكس', 115)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">5200 ميكس</div><div class="pkg-detail">الضعف أسبوع والباقي يكمل الشهر</div></div><div class="pkg-price">115 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات &e ميكس — 7500 ميكس', 140)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">7500 ميكس</div><div class="pkg-detail">الضعف أسبوع والباقي يكمل الشهر</div></div><div class="pkg-price">140 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات &e ميكس — 10750 ميكس', 180)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">10750 ميكس</div><div class="pkg-detail">الضعف أسبوع والباقي يكمل الشهر</div></div><div class="pkg-price">180 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات &e ميكس — 18700 ميكس', 260)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">18700 ميكس</div><div class="pkg-detail">الضعف أسبوع والباقي يكمل الشهر</div></div><div class="pkg-price">260 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات &e ميكس — 30800 ميكس', 395)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">30800 ميكس</div><div class="pkg-detail">الضعف أسبوع والباقي يكمل الشهر</div></div><div class="pkg-price">395 ج</div></label>
-          </div>
-        </div>
-        <div id="et-emerald" style="display:none">
-          <div class="voda-note">⚠️ باقات اميرالد نظام ثابت — هناك شروط: الدفع قبل يوم 25، ضريبة شهرية 14 ج، والخروج من الفرع فقط.</div>
-          <div class="packages-list">
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات اميرالد — 20 جيجا + 1700 دقيقة', 320)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">20 جيجا + 1700 دقيقة</div><div class="pkg-detail">نظام ثابت • الخط باسمك</div></div><div class="pkg-price">320 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات اميرالد — 30 جيجا + 1700 دقيقة', 340)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">30 جيجا + 1700 دقيقة</div><div class="pkg-detail">نظام ثابت • الخط باسمك</div></div><div class="pkg-price">340 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات اميرالد — 35 جيجا + 1700 دقيقة', 380)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">35 جيجا + 1700 دقيقة</div><div class="pkg-detail">نظام ثابت • الخط باسمك</div></div><div class="pkg-price">380 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات اميرالد — 40 جيجا + 1700 دقيقة', 420)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">40 جيجا + 1700 دقيقة</div><div class="pkg-detail">نظام ثابت • الخط باسمك</div></div><div class="pkg-price">420 ج</div></label>
-            <label class="pkg-item" onclick="selectPkg(this, 'اتصالات اميرالد — 50 جيجا + 1700 دقيقة', 520)"><input type="radio" name="package"><div class="pkg-dot"></div><div class="pkg-info"><div class="pkg-name">50 جيجا + 1700 دقيقة</div><div class="pkg-detail">نظام ثابت • الخط باسمك</div></div><div class="pkg-price">520 ج</div></label>
-          </div>
-        </div>
-      </div>
+          <div class="pkg-price">250 ج</div>
+        </label>
 
-      <!-- Vodafone -->
-      <div id="pkgs-vodafone" style="display:none">
-        <div class="section-title">📦 طلب عرض فودافون</div>
-        <div class="voda-note">
-          🔴 عروض فودافون بتكون على حسب نظام خطك الشخصي.<br>
-          علشان نعرف الباقات المتاحة ليك، هنحتاج تبعتلنا:<br>
-          ✅ رقم الخط + باسورد تطبيق "أنا فودافون"<br>
-          ⚡ هنبعتلك العروض المتاحة في أقرب وقت
-        </div>
-        <div class="input-group">
-          <label class="input-label"><strong>اكتب طلبك / استفسارك</strong></label>
-          <textarea placeholder="مثلاً: عايز باقة جيجا + دقايق، ميزانيتي 300 جنيه..." id="vodaRequest"></textarea>
-        </div>
+        <label class="pkg-item" onclick="selectPkg(this,'20 جيجا + 2000 دقيقة',370)">
+          <div class="pkg-dot"></div>
+          <div class="pkg-info">
+            <div class="pkg-name">20 جيجا + 2000 دقيقة</div>
+            <div class="pkg-detail">صالح شهر كامل</div>
+          </div>
+          <div class="pkg-price">370 ج</div>
+        </label>
+
       </div>
 
     </div>
 
-    <!-- Step 3: Customer info -->
     <div class="form-section section-hidden" id="sectionInfo">
+
       <div class="section-title">👤 بياناتك</div>
+
       <div class="input-group">
-        <label class="input-label"><strong>اسمك</strong> الكريم <span style="color:var(--accent)">*</span></label>
-        <input type="text" id="customerName" placeholder="اكتب اسمك هنا..." maxlength="50">
+        <div class="input-label">الاسم</div>
+        <input type="text" id="customerName">
       </div>
+
       <div class="input-group">
-        <label class="input-label"><strong>رقم موبايلك</strong> المطلوب تفعيل الباقة عليه <span style="color:var(--accent)">*</span></label>
-        <input type="tel" id="phoneNumber" placeholder="01XXXXXXXXX" maxlength="11">
+        <div class="input-label">رقم الموبايل</div>
+        <input type="tel" id="phoneNumber">
       </div>
+
       <div class="input-group">
-        <label class="input-label"><strong>طريقة الدفع</strong></label>
+        <div class="input-label">طريقة الدفع</div>
+
         <div class="payment-options">
+
           <label class="pay-card" onclick="selectPay(this)">
-            <input type="radio" name="payment" value="instapay">
+            <input type="radio" hidden value="instapay">
             <span class="pay-icon">🏧</span>
             <div class="pay-name">إنستا باي</div>
             <div class="pay-num">01284277707</div>
           </label>
+
           <label class="pay-card" onclick="selectPay(this)">
-            <input type="radio" name="payment" value="cash">
+            <input type="radio" hidden value="cash">
             <span class="pay-icon">💵</span>
             <div class="pay-name">كاش</div>
-            <div class="pay-num">01284277707</div>
-          </label>
-          <label class="pay-card" onclick="selectPay(this)">
-            <input type="radio" name="payment" value="cash2">
-            <span class="pay-icon">💰</span>
-            <div class="pay-name">كاش (رقم 2)</div>
             <div class="pay-num">01120228568</div>
           </label>
-          <label class="pay-card" onclick="selectPay(this)">
-            <input type="radio" name="payment" value="whatsapp">
-            <span class="pay-icon">💬</span>
-            <div class="pay-name">مفيش عندي</div>
-            <div class="pay-num">هتبعت على الواتس</div>
-          </label>
-        </div>
-      </div>
 
-      <div class="input-group" id="proofSection">
-        <label class="input-label"><strong>إثبات الدفع</strong> — صورة الإيصال أو رقم العملية</label>
-        <input type="text" id="transferRef" placeholder="رقم العملية / التحويل (اختياري)" style="margin-bottom:10px">
-        <div class="upload-zone" id="uploadZone">
-          <input type="file" accept="image/*" id="proofFile" onchange="handleFile(this)">
-          <span class="upload-icon">📎</span>
-          <div class="upload-text">اضغط لرفع صورة الإيصال أو اسحبها هنا</div>
-        </div>
-        <div class="upload-preview" id="uploadPreview">
-          ✅ <span id="fileName"></span>
         </div>
       </div>
 
       <div class="input-group">
-        <label class="input-label"><strong>ملاحظات</strong> إضافية (اختياري)</label>
-        <textarea id="notes" placeholder="أي تفاصيل أو طلبات إضافية..." style="min-height:60px"></textarea>
+
+        <div class="input-label">إثبات الدفع</div>
+
+        <input type="text" id="transferRef" placeholder="رقم العملية">
+
+        <div class="upload-zone">
+
+          <input type="file" accept="image/*" id="proofFile" onchange="handleFile(this)">
+
+          <div>📎 ارفع صورة الإيصال</div>
+
+        </div>
+
+        <div class="upload-preview" id="uploadPreview">
+          ✅ <span id="fileName"></span>
+        </div>
+
       </div>
+
+      <div class="input-group">
+        <div class="input-label">ملاحظات</div>
+        <textarea id="notes"></textarea>
+      </div>
+
     </div>
 
-    <!-- Summary -->
     <div class="summary-card" id="summaryCard">
-      <div class="section-title" style="margin-bottom:12px">📋 ملخص طلبك</div>
-      <div class="summary-row"><span class="s-label">الاسم</span><span class="s-val" id="s-name">—</span></div>
-      <div class="summary-row"><span class="s-label">الشركة</span><span class="s-val" id="s-company">—</span></div>
-      <div class="summary-row"><span class="s-label">الباقة</span><span class="s-val" id="s-package">—</span></div>
-      <div class="summary-row"><span class="s-label">رقم الموبايل</span><span class="s-val" id="s-phone">—</span></div>
-      <div class="summary-row"><span class="s-label">طريقة الدفع</span><span class="s-val" id="s-pay">—</span></div>
-      <div class="summary-row total-row"><span class="s-label">المبلغ</span><span class="s-val" id="s-price">—</span></div>
+
+      <div class="section-title">📋 ملخص الطلب</div>
+
+      <div class="summary-row">
+        <span>الاسم</span>
+        <span id="s-name">—</span>
+      </div>
+
+      <div class="summary-row">
+        <span>الشركة</span>
+        <span id="s-company">—</span>
+      </div>
+
+      <div class="summary-row">
+        <span>الباقة</span>
+        <span id="s-package">—</span>
+      </div>
+
+      <div class="summary-row">
+        <span>المبلغ</span>
+        <span id="s-price">—</span>
+      </div>
+
     </div>
 
-    <!-- Submit -->
     <button class="submit-btn section-hidden" id="submitBtn" onclick="submitOrder()">
-      🚀 أرسل الطلب الآن
+      🚀 أرسل الطلب
     </button>
 
   </div>
 
-  <!-- Success screen -->
   <div class="success-screen" id="successScreen">
+
     <div class="success-ring">✅</div>
-    <h2>تم إرسال طلبك!</h2>
-    <p>طلبك وصلنا وهنتواصل معاك في أقرب وقت.<br>التفعيل سريع وآمن 🚀</p>
-    <div class="order-id-box" id="orderIdBox">ORD-000000</div>
-    <p style="font-size:.82rem">احتفظ بالرقم ده للمتابعة 📌</p>
-    <br>
-    <button class="new-order-btn" onclick="resetForm()">+ طلب جديد</button>
+
+    <h2>تم إرسال الطلب!</h2>
+
+    <p>هنتواصل معاك قريب جدًا 🚀</p>
+
+    <div class="order-id-box" id="orderIdBox">
+      ORD-000000
+    </div>
+
+    <button class="new-order-btn" onclick="resetForm()">
+      + طلب جديد
+    </button>
+
   </div>
 
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<style>
-.pkg-type-btn {
-  background: var(--mid);
-  border: 1.5px solid var(--border);
-  border-radius: 10px;
-  padding: 8px 16px;
-  font-family: 'Cairo', sans-serif;
-  font-size: .85rem;
-  font-weight: 600;
-  color: var(--muted);
-  cursor: pointer;
-  transition: all .2s;
-}
-.pkg-type-btn:hover, .pkg-type-btn.active {
-  border-color: var(--gold);
-  color: var(--gold);
-  background: rgba(245,166,35,.07);
-}
-</style>
-
 <script>
-// Generate stars
-(function() {
-  const s = document.getElementById('stars');
+
+// ⭐ Stars
+(function(){
+  const s=document.getElementById('stars');
+
   for(let i=0;i<80;i++){
+
     const d=document.createElement('div');
+
     d.className='star';
-    d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${2+Math.random()*4}s;--delay:${Math.random()*5}s;opacity:${0.2+Math.random()*0.5}`;
+
+    d.style.cssText=
+      `left:${Math.random()*100}%;
+      top:${Math.random()*100}%;
+      --d:${2+Math.random()*4}s;
+      --delay:${Math.random()*5}s`;
+
     s.appendChild(d);
   }
+
 })();
 
-let state = { company:'', package:'', price:0, phone:'', customerName:'', payment:'', notes:'' };
 
-const companyNames = { orange:'أورانج 🟠', vodafone:'فودافون 🔴', etisalat:'اتصالات 🟢', we:'وي 🟣' };
-const payNames = { instapay:'إنستا باي 🏧', cash:'كاش 💵', cash2:'كاش (رقم 2) 💰', whatsapp:'واتساب 💬' };
+// ⚙️ ضع رابط Apps Script هنا
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIS3oOHYx7JqxOYZXwkEbTovws1fmxEZdMTfg_DfFs4pqGQjUj8pwbHk-5gPoRkYVP/exec';
 
-function selectCompany(co, el) {
-  document.querySelectorAll('.company-card').forEach(c=>c.classList.remove('selected'));
+
+let state = {
+  company:'',
+  package:'',
+  price:0,
+  payment:''
+};
+
+const companyNames = {
+  orange:'أورانج 🟠',
+  vodafone:'فودافون 🔴',
+  etisalat:'اتصالات 🟢',
+  we:'وي 🟣'
+};
+
+const payNames = {
+  instapay:'إنستا باي',
+  cash:'كاش'
+};
+
+
+function selectCompany(company, el){
+
+  document.querySelectorAll('.company-card')
+    .forEach(c=>c.classList.remove('selected'));
+
   el.classList.add('selected');
-  state.company = co;
 
-  // Show package section
-  document.getElementById('sectionPackage').classList.add('visible');
-  ['orange','we','etisalat','vodafone'].forEach(c => {
-    document.getElementById('pkgs-'+c).style.display = (c===co)?'block':'none';
-  });
+  state.company = company;
 
-  // Reset package
-  state.package = ''; state.price = 0;
-  document.querySelectorAll('.pkg-item').forEach(p=>p.classList.remove('selected'));
-  document.getElementById('sectionInfo').classList.remove('visible');
-  document.getElementById('summaryCard').classList.remove('visible');
-  document.getElementById('submitBtn').classList.remove('visible');
-
-  // For vodafone, show info section directly
-  if(co === 'vodafone') {
-    document.getElementById('sectionInfo').classList.add('visible');
-    updateSummary();
-  }
-  scrollTo('sectionPackage');
+  document.getElementById('sectionPackage')
+    .classList.add('visible');
 }
 
-function selectPkg(el, name, price) {
-  document.querySelectorAll('.pkg-item').forEach(p=>p.classList.remove('selected'));
+
+function selectPkg(el, name, price){
+
+  document.querySelectorAll('.pkg-item')
+    .forEach(p=>p.classList.remove('selected'));
+
   el.classList.add('selected');
+
   state.package = name;
-  state.price = price;
-  document.getElementById('sectionInfo').classList.add('visible');
+  state.price   = price;
+
+  document.getElementById('sectionInfo')
+    .classList.add('visible');
+
   updateSummary();
-  scrollTo('sectionInfo');
 }
 
-function selectPay(el) {
-  document.querySelectorAll('.pay-card').forEach(p=>p.classList.remove('selected'));
+
+function selectPay(el){
+
+  document.querySelectorAll('.pay-card')
+    .forEach(p=>p.classList.remove('selected'));
+
   el.classList.add('selected');
-  state.payment = el.querySelector('input').value;
+
+  state.payment =
+    el.querySelector('input').value;
+
   updateSummary();
 }
 
-function showEtType(type, btn) {
-  ['hayah','emix','emerald'].forEach(t => {
-    document.getElementById('et-'+t).style.display = (t===type)?'block':'none';
+
+function handleFile(inp){
+
+  if(inp.files && inp.files[0]){
+
+    document.getElementById('fileName')
+      .textContent = inp.files[0].name;
+
+    document.getElementById('uploadPreview')
+      .style.display='block';
+  }
+}
+
+
+function updateSummary(){
+
+  document.getElementById('summaryCard')
+    .style.display='block';
+
+  document.getElementById('submitBtn')
+    .classList.add('visible');
+
+  document.getElementById('s-name')
+    .textContent =
+      document.getElementById('customerName').value || '—';
+
+  document.getElementById('s-company')
+    .textContent =
+      companyNames[state.company] || '—';
+
+  document.getElementById('s-package')
+    .textContent =
+      state.package || '—';
+
+  document.getElementById('s-price')
+    .textContent =
+      state.price ? state.price + ' جنيه' : '—';
+}
+
+
+document.getElementById('customerName')
+  .addEventListener('input', updateSummary);
+
+
+function fileToBase64(file){
+
+  return new Promise((resolve,reject)=>{
+
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.onload = () => resolve(reader.result);
+
+    reader.onerror = error => reject(error);
+
   });
-  document.querySelectorAll('.pkg-type-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  state.package=''; state.price=0;
-  document.querySelectorAll('.pkg-item').forEach(p=>p.classList.remove('selected'));
 }
 
-function handleFile(inp) {
-  if(inp.files && inp.files[0]) {
-    document.getElementById('fileName').textContent = inp.files[0].name;
-    document.getElementById('uploadPreview').style.display='flex';
-  }
-}
 
-function updateSummary() {
-  const phone = document.getElementById('phoneNumber')?.value || '';
-  const name  = document.getElementById('customerName')?.value || '';
-  document.getElementById('s-name').textContent    = name    || '—';
-  document.getElementById('s-company').textContent = companyNames[state.company] || '—';
-  document.getElementById('s-package').textContent = state.package || '—';
-  document.getElementById('s-phone').textContent   = phone   || '—';
-  document.getElementById('s-pay').textContent     = payNames[state.payment] || '—';
-  document.getElementById('s-price').textContent   = state.price ? state.price+' جنيه' : '—';
+async function submitOrder(){
 
-  const ready = state.company && (state.package || state.company==='vodafone');
-  if(ready) {
-    document.getElementById('summaryCard').classList.add('visible');
-    document.getElementById('submitBtn').classList.add('visible');
-  }
-}
+  const name =
+    document.getElementById('customerName').value.trim();
 
-document.getElementById('phoneNumber')?.addEventListener('input', updateSummary);
-document.getElementById('customerName')?.addEventListener('input', updateSummary);
+  const phone =
+    document.getElementById('phoneNumber').value.trim();
 
-function scrollTo(id) {
-  setTimeout(()=>{
-    document.getElementById(id)?.scrollIntoView({behavior:'smooth', block:'start'});
-  }, 100);
-}
+  const notes =
+    document.getElementById('notes').value.trim();
 
-function submitOrder() {
-  const name  = document.getElementById('customerName').value.trim();
-  const phone = document.getElementById('phoneNumber').value.trim();
-  const notes = document.getElementById('notes').value.trim();
-  const transferRef = document.getElementById('transferRef').value.trim();
-  const proofFile   = document.getElementById('proofFile').files[0];
+  const transferRef =
+    document.getElementById('transferRef').value.trim();
 
-  // ✅ Validation
-  if(!name)                          { showToast('⚠️ اكتب اسمك الكريم', 'error'); return; }
-  if(!phone || phone.length < 10)    { showToast('⚠️ أدخل رقم الموبايل الصح', 'error'); return; }
-  if(!state.payment)                 { showToast('⚠️ اختار طريقة الدفع', 'error'); return; }
+  const proofFile =
+    document.getElementById('proofFile').files[0];
 
-  // ✅ لو الدفع إنستاباي أو كاش رقم 2 → لازم رقم عملية أو صورة
-  if(['instapay', 'cash2'].includes(state.payment)) {
-    if(!transferRef && !proofFile) {
-      showToast('⚠️ ارفع صورة التحويل أو اكتب رقم العملية', 'error');
-      document.getElementById('proofSection').scrollIntoView({behavior:'smooth', block:'center'});
-      return;
-    }
+  if(!name){
+    showToast('⚠️ اكتب اسمك','error');
+    return;
   }
 
-  const orderId = 'ORD-' + Date.now().toString().slice(-6);
-  document.getElementById('orderIdBox').textContent = orderId;
+  if(!phone){
+    showToast('⚠️ اكتب رقم الموبايل','error');
+    return;
+  }
 
-  // ⚙️ غير الـ URL ده بعد ما تنشر Apps Script كـ Web App
-  const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+  if(!state.payment){
+    showToast('⚠️ اختار طريقة الدفع','error');
+    return;
+  }
 
-  // ✅ بناء البيانات
+  let proofBase64 = '';
+
+  if(proofFile){
+
+    proofBase64 = await fileToBase64(proofFile);
+
+  }
+
+  const orderId =
+    'ORD-' + Date.now().toString().slice(-6);
+
   const payload = {
+
     orderId,
-    customerName: name,
+
+    customerName:name,
+
     phone,
-    company:     state.company,
-    package:     state.package,
-    price:       state.price,
-    payment:     state.payment,
-    transferRef: transferRef || '',
+
+    company:state.company,
+
+    package:state.package,
+
+    price:state.price,
+
+    payment:state.payment,
+
+    transferRef,
+
     notes,
+
+    proofBase64
+
   };
 
-  // ✅ إرسال للـ Backend
-  if(SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
-    // تعطيل الزرار أثناء الإرسال
-    const btn = document.getElementById('submitBtn');
-    btn.disabled = true;
-    btn.textContent = '⏳ جاري الإرسال...';
+  const btn =
+    document.getElementById('submitBtn');
 
-    fetch(SCRIPT_URL, {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
-    .then(r => r.json())
-    .then(res => {
-      if(res.success) {
-        document.getElementById('orderIdBox').textContent = res.orderId || orderId;
-        showSuccessScreen();
-      } else {
-        showToast('❌ حصل خطأ: ' + (res.error || 'حاول تاني'), 'error');
-        btn.disabled = false;
-        btn.textContent = '🚀 أرسل الطلب الآن';
-      }
-    })
-    .catch(() => {
-      showToast('❌ مشكلة في الاتصال، حاول تاني', 'error');
+  btn.disabled = true;
+
+  btn.textContent = '⏳ جاري الإرسال...';
+
+  fetch(SCRIPT_URL, {
+
+    method:'POST',
+
+    headers:{
+      'Content-Type':'application/json'
+    },
+
+    body:JSON.stringify(payload)
+
+  })
+
+  .then(r=>r.json())
+
+  .then(res=>{
+
+    if(res.success){
+
+      document.getElementById('orderIdBox')
+        .textContent = res.orderId || orderId;
+
+      showSuccessScreen();
+
+    }else{
+
+      showToast('❌ حصل خطأ','error');
+
       btn.disabled = false;
-      btn.textContent = '🚀 أرسل الطلب الآن';
-    });
-  } else {
-    // وضع التطوير — بيشتغل بدون Backend
-    console.warn('⚠️ SCRIPT_URL مش متحددة — الفورم شغال في وضع تجريبي');
-    showSuccessScreen();
-  }
+
+      btn.textContent = '🚀 أرسل الطلب';
+    }
+
+  })
+
+  .catch(err=>{
+
+    console.error(err);
+
+    showToast('❌ مشكلة في الاتصال','error');
+
+    btn.disabled = false;
+
+    btn.textContent = '🚀 أرسل الطلب';
+
+  });
+
 }
 
-function showSuccessScreen() {
-  document.getElementById('mainForm').style.display = 'none';
-  document.getElementById('successScreen').classList.add('visible');
-  showToast('✅ تم إرسال الطلب بنجاح!', 'success');
+
+function showSuccessScreen(){
+
+  document.getElementById('mainForm')
+    .style.display='none';
+
+  document.getElementById('successScreen')
+    .classList.add('visible');
+
+  showToast('✅ تم إرسال الطلب','success');
 }
 
-function resetForm() {
-  document.getElementById('mainForm').style.display='block';
-  document.getElementById('successScreen').classList.remove('visible');
-  document.querySelectorAll('.company-card').forEach(c=>c.classList.remove('selected'));
-  document.querySelectorAll('.pkg-item').forEach(p=>p.classList.remove('selected'));
-  document.querySelectorAll('.pay-card').forEach(p=>p.classList.remove('selected'));
-  document.getElementById('sectionPackage').classList.remove('visible');
-  document.getElementById('sectionInfo').classList.remove('visible');
-  document.getElementById('summaryCard').classList.remove('visible');
-  document.getElementById('submitBtn').classList.remove('visible');
-  document.getElementById('phoneNumber').value='';
+
+function resetForm(){
+
+  document.getElementById('mainForm')
+    .style.display='block';
+
+  document.getElementById('successScreen')
+    .classList.remove('visible');
+
+  document.querySelectorAll('.selected')
+    .forEach(el=>el.classList.remove('selected'));
+
+  document.getElementById('sectionPackage')
+    .classList.remove('visible');
+
+  document.getElementById('sectionInfo')
+    .classList.remove('visible');
+
+  document.getElementById('summaryCard')
+    .style.display='none';
+
+  document.getElementById('submitBtn')
+    .classList.remove('visible');
+
   document.getElementById('customerName').value='';
+
+  document.getElementById('phoneNumber').value='';
+
   document.getElementById('notes').value='';
-  state = { company:'', package:'', price:0, phone:'', customerName:'', payment:'', notes:'' };
-  window.scrollTo({top:0, behavior:'smooth'});
+
+  document.getElementById('transferRef').value='';
+
+  document.getElementById('proofFile').value='';
+
+  document.getElementById('uploadPreview')
+    .style.display='none';
+
+  document.getElementById('submitBtn').disabled=false;
+
+  document.getElementById('submitBtn')
+    .textContent='🚀 أرسل الطلب';
+
+  state = {
+    company:'',
+    package:'',
+    price:0,
+    payment:''
+  };
+
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  });
+
 }
 
-function showToast(msg, type='') {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast show '+(type||'');
-  setTimeout(()=>t.className='toast', 3000);
+
+function showToast(msg,type=''){
+
+  const t=document.getElementById('toast');
+
+  t.textContent=msg;
+
+  t.className='toast show '+type;
+
+  setTimeout(()=>{
+
+    t.className='toast';
+
+  },3000);
+
 }
 
-// Drag & drop
-const uz = document.getElementById('uploadZone');
-uz?.addEventListener('dragover', e=>{ e.preventDefault(); uz.classList.add('dragover'); });
-uz?.addEventListener('dragleave', ()=>uz.classList.remove('dragover'));
-uz?.addEventListener('drop', e=>{ e.preventDefault(); uz.classList.remove('dragover'); if(e.dataTransfer.files[0]) { document.getElementById('proofFile').files=e.dataTransfer.files; handleFile(document.getElementById('proofFile')); } });
 </script>
+
 </body>
 </html>
