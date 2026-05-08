@@ -282,7 +282,23 @@ input, select, textarea {
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwTuFMXnhZHpCBYRBQAUaJWG9kwF1NnL6gUkNTm0Uo9nVe_tbh2D_Vo8FQqNCc_3HfQ/exec'; 
 // ← غير الرابط ده بالرابط الجديد بعد إعادة النشر
+// اختبار الاتصال
+async function testConnection() {
+  try {
+    const res = await fetch(SCRIPT_URL + '?action=test');
+    const text = await res.text();
+    console.log("Response:", text);
+    alert("✅ الاتصال شغال! Response: " + text);
+  } catch(e) {
+    console.error(e);
+    alert("❌ فشل الاتصال: " + e.message);
+  }
+}
 
+// شغله تلقائياً
+window.onload = () => {
+  testConnection().then(() => loadPackages());
+};
 let allPackages = [];
 let selectedCompany = '';
 let selectedPackage = null;
