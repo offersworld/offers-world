@@ -257,6 +257,7 @@ function previewImage(e) {
 async function submitOrder() {
   const name = document.getElementById('customerName').value.trim();
   const phone = document.getElementById('phone').value.trim();
+
   if (!name || !phone || !selectedPackage) {
     alert("❌ برجاء ملء الاسم ورقم التليفون واختيار باقة");
     return;
@@ -280,17 +281,26 @@ async function submitOrder() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
     });
-    const result = await res.json();
+
+    const text = await res.text();
+    console.log("Server Response:", text);
+
+    let result;
+    try {
+      result = JSON.parse(text);
+    } catch(e) {
+      result = { success: false, error: text };
+    }
 
     if (result.success) {
       document.getElementById('orderIdDisplay').textContent = `رقم الطلب: ${result.orderId}`;
       showStep(4);
     } else {
-      alert("خطأ: " + (result.error || 'حاول مرة أخرى'));
+      alert("❌ خطأ من السيرفر: " + (result.error || 'غير معروف'));
     }
   } catch(e) {
-    console.error(e);
-    alert("❌ فشل الاتصال\nتأكد من الإنترنت وحاول مرة أخرى");
+    console.error("Submit Error:", e);
+    alert("❌ فشل الاتصال\n" + e.message + "\n\nجرب أعد نشر Web App جديد");
   }
 }
 
