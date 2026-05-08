@@ -147,34 +147,7 @@
       line-height: 1.8;
     }
 
-    /* Step Indicator */
-
-    .steps-indicator {
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 28px;
-    }
-
-    .step-badge {
-      flex: 1;
-      text-align: center;
-      padding: 10px 6px;
-      border-radius: 14px;
-      background: #171727;
-      border: 1px solid #2c2c3f;
-      color: var(--muted);
-      font-size: 0.82rem;
-      transition: 0.3s;
-    }
-
-    .step-badge.active {
-      background: rgba(123, 47, 190, 0.18);
-      border-color: var(--accent);
-      color: white;
-      box-shadow: 0 0 20px rgba(123, 47, 190, 0.25);
-    }
-
+   
     .card {
       background: var(--card);
 
@@ -308,7 +281,85 @@
 
       margin-top: 10px;
     }
+/* =========================================
+PROGRESS HEADER CSS
+ضيفه في الـ style
+========================================= */
 
+.progress-header {
+
+  margin-bottom: 28px;
+
+}
+
+.progress-top {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  margin-bottom: 12px;
+
+  gap: 12px;
+
+}
+
+.progress-title {
+
+  font-size: 1rem;
+
+  font-weight: 800;
+
+  color: white;
+
+}
+
+.progress-counter {
+
+  font-size: 0.85rem;
+
+  color: var(--muted);
+
+}
+
+.progress-bar {
+
+  width: 100%;
+
+  height: 10px;
+
+  background: #1B1B2D;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+
+  border: 1px solid rgba(255,255,255,0.06);
+
+}
+
+.progress-fill {
+
+  width: 33%;
+
+  height: 100%;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    var(--accent),
+    var(--orange)
+  );
+
+  transition: 0.35s ease;
+
+  box-shadow:
+    0 0 18px rgba(123,47,190,0.35);
+
+}
     /* Inputs */
 
     input,
@@ -736,27 +787,33 @@
     </p>
 
     <!-- Steps -->
+<!-- =========================================
+PROGRESS HEADER
+استبدل الـ Step Indicator القديم بالكامل
+========================================= -->
 
-    <div class="steps-indicator">
+<div class="progress-header">
 
-      <div class="step-badge active" id="badge1">
-        1️⃣ الشركة
-      </div>
+  <div class="progress-top">
 
-      <div class="step-badge" id="badge2">
-        2️⃣ الباقة
-      </div>
-
-      <div class="step-badge" id="badge3">
-        3️⃣ البيانات
-      </div>
-
-      <div class="step-badge" id="badge4">
-        ✅ تم
-      </div>
-
+    <div class="progress-title" id="progressTitle">
+      📡 اختيار الشركة
     </div>
 
+    <div class="progress-counter" id="progressCounter">
+      خطوة 1 من 3
+    </div>
+
+  </div>
+
+  <div class="progress-bar">
+
+    <div class="progress-fill" id="progressFill"></div>
+
+  </div>
+
+</div>
+    
     <!-- Loading -->
 
     <div id="loading" class="skeleton-wrapper">
@@ -1316,40 +1373,101 @@
 
     /* Steps */
 
-    function showStep(step) {
+    /* =========================================
+SHOW STEP
+استبدل الدالة القديمة بالكامل
+========================================= */
 
-      document.querySelectorAll('.step')
-        .forEach(s =>
-          s.classList.remove('active'));
+function showStep(step) {
 
-      const el =
-        document.getElementById(
-          step === 4
-            ? 'successScreen'
-            : `step${step}`
-        );
+  document
+    .querySelectorAll('.step')
+    .forEach(s =>
+      s.classList.remove('active'));
 
-      if (el)
-        el.classList.add('active');
+  const el =
+    document.getElementById(
+      step === 4
+        ? 'successScreen'
+        : `step${step}`
+    );
 
-      /* badges */
+  if (el)
+    el.classList.add('active');
 
-      for (let i = 1; i <= 4; i++) {
+  /* Progress */
 
-        document
-          .getElementById(`badge${i}`)
-          .classList.remove('active');
-      }
+  const progressFill =
+    document.getElementById('progressFill');
 
-      document
-        .getElementById(`badge${step}`)
-        .classList.add('active');
+  const progressTitle =
+    document.getElementById('progressTitle');
 
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
+  const progressCounter =
+    document.getElementById('progressCounter');
+
+  const progressHeader =
+    document.querySelector('.progress-header');
+
+  if (step === 1) {
+
+    progressFill.style.width = '33%';
+
+    progressTitle.textContent =
+      '📡 اختيار الشركة';
+
+    progressCounter.textContent =
+      'خطوة 1 من 3';
+
+  }
+
+  else if (step === 2) {
+
+    progressFill.style.width = '66%';
+
+    progressTitle.textContent =
+      '📦 اختيار الباقة';
+
+    progressCounter.textContent =
+      'خطوة 2 من 3';
+
+  }
+
+  else if (step === 3) {
+
+    progressFill.style.width = '100%';
+
+    progressTitle.textContent =
+      '👤 بيانات الحجز';
+
+    progressCounter.textContent =
+      'خطوة 3 من 3';
+
+  }
+
+  else if (step === 4) {
+
+    progressHeader.style.display = 'none';
+
+  }
+
+  else {
+
+    progressHeader.style.display = 'block';
+
+  }
+
+  if (step !== 4) {
+
+    progressHeader.style.display = 'block';
+
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
 
     function backToCompanies() {
       showStep(1);
