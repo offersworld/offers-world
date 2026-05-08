@@ -8,26 +8,29 @@
 <style>
 :root{
   --dark:#0D0D1A; --mid:#13132B; --card:#1A1A35; --border:#2A2A50;
-  --accent:#E94560; --gold:#F5A623; --text:#E8E8F0;
+  --accent:#E94560; --gold:#F5A623; --purple:#7B2FBE; --text:#E8E8F0;
 }
 * { margin:0; padding:0; box-sizing:border-box; }
 body { background:var(--dark); color:var(--text); font-family:'Cairo',sans-serif; min-height:100vh; }
 .container { max-width:700px; margin:auto; padding:20px 16px; }
 .header { text-align:center; padding:40px 0 30px; }
-.logo-ring { width:90px; height:90px; margin:auto; border-radius:50%; background:linear-gradient(135deg,#E94560,#7B2FBE); display:flex; align-items:center; justify-content:center; font-size:40px; }
+.logo-ring { width:90px; height:90px; margin:auto; border-radius:50%; background:linear-gradient(135deg,#E94560,#7B2FBE); display:flex; align-items:center; justify-content:center; font-size:40px; box-shadow:0 0 30px rgba(233,69,96,.4); }
 h1 { font-size:2.3rem; font-weight:900; background:linear-gradient(135deg,#F5A623,#E94560); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .form-section { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:24px; margin-bottom:16px; }
 .section-title { font-size:1.1rem; font-weight:700; color:var(--gold); margin-bottom:16px; }
 .companies-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
-.company-card { background:var(--mid); border:2px solid var(--border); border-radius:16px; padding:18px; text-align:center; cursor:pointer; }
-.company-card.selected { border-color:var(--gold); }
-.packages-list { display:flex; flex-direction:column; gap:10px; }
-.pkg-item { background:var(--mid); border:1.5px solid var(--border); border-radius:12px; padding:14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
+.company-card { background:var(--mid); border:2px solid var(--border); border-radius:16px; padding:18px; text-align:center; cursor:pointer; transition:0.3s; }
+.company-card:hover { transform:translateY(-3px); }
+.company-card.selected { border-color:var(--gold); box-shadow:0 0 15px rgba(245,166,35,.3); }
+.packages-list { display:flex; flex-direction:column; gap:10px; min-height:100px; }
+.pkg-item { background:var(--mid); border:1.5px solid var(--border); border-radius:12px; padding:14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; transition:0.2s; }
+.pkg-item:hover { background:#2a2a50; }
 .pkg-item.selected { border-color:var(--gold); background:rgba(245,166,35,.1); }
-.pkg-price { font-weight:900; color:var(--accent); }
+.pkg-price { font-weight:900; color:var(--accent); font-size:1.1rem; }
+.loading { text-align:center; color:#f59e0b; padding:20px; }
 input, textarea { width:100%; background:var(--mid); border:1.5px solid var(--border); border-radius:12px; padding:13px; color:white; margin-top:8px; }
-.submit-btn { width:100%; background:linear-gradient(135deg,var(--accent),#7B2FBE); border:none; border-radius:16px; padding:18px; font-size:1.1rem; font-weight:800; color:white; margin-top:10px; }
-.toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#1e2937; padding:12px 24px; border-radius:12px; display:none; z-index:1000; }
+.submit-btn { width:100%; background:linear-gradient(135deg,var(--accent),var(--purple)); border:none; border-radius:16px; padding:18px; font-size:1.1rem; font-weight:800; color:white; margin-top:15px; cursor:pointer; }
+.toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#1e2937; padding:12px 24px; border-radius:12px; display:none; z-index:1000; border:1px solid #f59e0b; }
 .toast.show { display:block; }
 </style>
 </head>
@@ -75,7 +78,7 @@ input, textarea { width:100%; background:var(--mid); border:1.5px solid var(--bo
     </div>
 
     <div class="summary-card" id="summaryCard" style="display:none;background:#1e2937;padding:15px;border-radius:12px;margin:15px 0;">
-      <strong>ملخص الطلب:</strong><br>
+      <strong>ملخص الطلب:</strong><br><br>
       <span id="s-name"></span> - <span id="s-company"></span><br>
       <span id="s-package"></span> - <span id="s-price"></span>
     </div>
@@ -85,8 +88,8 @@ input, textarea { width:100%; background:var(--mid); border:1.5px solid var(--bo
 
   <div id="successScreen" style="display:none;text-align:center;padding:60px 20px;">
     <h2>✅ تم إرسال الطلب بنجاح</h2>
-    <p id="orderIdBox"></p>
-    <button onclick="location.reload()" style="margin-top:20px;padding:12px 30px;background:#E94560;border:none;border-radius:12px;color:white;">طلب جديد</button>
+    <p id="orderIdBox" style="font-size:1.2rem;margin:15px 0;"></p>
+    <button onclick="location.reload()" style="padding:12px 30px;background:#E94560;border:none;border-radius:12px;color:white;">طلب جديد</button>
   </div>
 </div>
 
@@ -95,11 +98,11 @@ input, textarea { width:100%; background:var(--mid); border:1.5px solid var(--bo
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBpivEWidx2O7n0zirAEgCTXGvFE98Sda6WD-FLNzBECmfrUw7wSYI1p_HWsndLqwE/exec';
 
-let state = { company: '', package: '', price: 0, payment: '' };
+let state = { company: '', package: '', price: 0 };
 
 async function loadPackages(companyName) {
   const container = document.getElementById('packagesList');
-  container.innerHTML = '<p style="text-align:center;color:#f59e0b;">جاري تحميل الباقات...</p>';
+  container.innerHTML = `<p class="loading">جاري تحميل باقات ${companyName}...</p>`;
 
   try {
     const res = await fetch(`${SCRIPT_URL}?action=packages&company=${encodeURIComponent(companyName)}`);
@@ -108,7 +111,7 @@ async function loadPackages(companyName) {
     container.innerHTML = '';
 
     if (packages.length === 0) {
-      container.innerHTML = `<p style="color:orange;text-align:center;">لا توجد باقات متاحة لهذه الشركة</p>`;
+      container.innerHTML = `<p style="color:#f59e0b;text-align:center;">لا توجد باقات متاحة حالياً</p>`;
       return;
     }
 
@@ -124,7 +127,7 @@ async function loadPackages(companyName) {
     });
   } catch (err) {
     console.error(err);
-    container.innerHTML = '<p style="color:red;text-align:center;">خطأ في تحميل الباقات</p>';
+    container.innerHTML = `<p style="color:red;text-align:center;">خطأ في تحميل الباقات</p>`;
   }
 }
 
@@ -134,8 +137,7 @@ function selectCompany(companyName, el) {
 
   state.company = companyName;
   document.getElementById('sectionPackage').classList.remove('section-hidden');
-  
-  loadPackages(companyName);   // ← أهم تعديل
+  loadPackages(companyName);
 }
 
 function selectPkg(name, price, el) {
@@ -148,7 +150,7 @@ function selectPkg(name, price, el) {
   document.getElementById('sectionInfo').classList.remove('section-hidden');
   document.getElementById('summaryCard').style.display = 'block';
   document.getElementById('submitBtn').classList.remove('section-hidden');
-  
+
   document.getElementById('s-name').textContent = document.getElementById('customerName').value || '-';
   document.getElementById('s-company').textContent = state.company;
   document.getElementById('s-package').textContent = name;
@@ -161,16 +163,18 @@ function selectPay(el) {
 }
 
 function handleFile(inp) {
-  if (inp.files[0]) console.log('ملف مختار:', inp.files[0].name);
+  if (inp.files[0]) console.log('تم رفع:', inp.files[0].name);
 }
 
 async function submitOrder() {
-  alert('تم إرسال الطلب! (الوظيفة جاهزة للاستخدام)');
-  // يمكنك لاحقاً إضافة كود الإرسال الكامل
+  // يمكنك لاحقاً استبدال هذا بالكود الكامل للإرسال
+  const orderId = 'ORD-' + Date.now().toString().slice(-8);
+  document.getElementById('orderIdBox').innerHTML = `رقم الطلب: <strong>${orderId}</strong>`;
+  document.getElementById('mainForm').style.display = 'none';
+  document.getElementById('successScreen').style.display = 'block';
 }
 
-// للتصحيح
-console.log('✅ index.html loaded successfully');
+console.log('%c✅ index.html جاهز ومحسن', 'color:#22c55e;font-size:16px');
 </script>
 </body>
 </html>
