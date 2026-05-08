@@ -280,7 +280,7 @@ input, select, textarea {
 </div>
 
 <script>
-const  = 'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
 
 let allPackages = [];
 let selectedCompany = '';
@@ -289,27 +289,39 @@ let proofBase64 = '';
 
 async function loadPackages() {
   const loadingEl = document.getElementById('loading');
+  loadingEl.innerHTML = 'جاري تحميل الباقات...';
+
   try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
     const res = await fetch(`${SCRIPT_URL}?action=packages`, {
       method: 'GET',
-      cache: 'no-store',
-      headers: { 'Accept': 'application/json' }
+      signal: controller.signal,
+      cache: 'no-store'
     });
 
-    if (!res.ok) throw new Error('HTTP Error');
+    clearTimeout(timeoutId);
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
     allPackages = await res.json();
-    
+
     loadingEl.style.display = 'none';
     document.getElementById('step1').style.display = 'block';
     createCompanyCards();
-  } catch(e) {
-    console.error(e);
-    loadingEl.innerHTML = `❌ فشل تحميل الباقات<br><button onclick="location.reload()">إعادة المحاولة</button>`;
+
+  } catch (e) {
+    console.error("Load Error:", e);
+    if (e.name === 'AbortError') {
+      loadingEl.innerHTML = `⏰ التحميل بطيء<br><button onclick="location.reload()">إعادة المحاولة</button>`;
+    } else {
+      loadingEl.innerHTML = `❌ فشل التحميل<br><button onclick="location.reload()">إعادة المحاولة</button>`;
+    }
   }
 }
 
-// باقي الدوال (بدون تغيير)
+// باقي الدوال (كما هي)
 function createCompanyCards() {
   const companies = ['أورانج', 'وي', 'اتصالات', 'فودافون'];
   const grid = document.getElementById('companyGrid');
@@ -390,12 +402,10 @@ function previewImage(e) {
 async function submitOrder() {
   const name = document.getElementById('customerName').value.trim();
   const phone = document.getElementById('phone').value.trim();
-
   if (!name || !phone || !selectedPackage) {
     alert("❌ برجاء ملء الاسم ورقم التليفون واختيار باقة");
     return;
   }
-
   const formData = {
     customerName: name,
     phone: phone,
@@ -407,35 +417,22 @@ async function submitOrder() {
     notes: document.getElementById('notes').value || '',
     proofBase64: proofBase64 || ''
   };
-
   try {
     const res = await fetch(SCRIPT_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(formData)
     });
-
-    const text = await res.text();   // مهم: نجرب نطبع الرد أولاً
-    console.log("Raw Response:", text);
-
-    let result;
-    try {
-      result = JSON.parse(text);
-    } catch(e) {
-      result = { success: false, error: text };
-    }
-
+    const result = await res.json();
     if (result.success) {
       document.getElementById('orderIdDisplay').textContent = `رقم الطلب: ${result.orderId}`;
       showStep(4);
     } else {
-      alert("خطأ من السيرفر: " + (result.error || 'غير معروف'));
+      alert("خطأ: " + (result.error || 'حاول مرة أخرى'));
     }
   } catch(e) {
     console.error(e);
-    alert("❌ فشل الاتصال\n" + e.message);
+    alert("❌ فشل الاتصال\nجرب مرة أخرى");
   }
 }
 
