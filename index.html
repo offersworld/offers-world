@@ -23,38 +23,33 @@ body {
   min-height: 100vh;
   padding-bottom: 80px;
 }
-.stars {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background: #0A0A14; overflow: hidden;
-}
+.stars { position:fixed; inset:0; z-index:0; pointer-events:none; background:#0A0A14; overflow:hidden; }
 .stars::before, .stars::after {
-  content: ''; position: absolute; inset: 0;
-  background: transparent; animation: twinkle 8s infinite alternate;
+  content:''; position:absolute; inset:0; background:transparent; animation:twinkle 8s infinite alternate;
 }
 .stars::before {
-  background-image: radial-gradient(white 1px, transparent 1px), radial-gradient(white 1px, transparent 1px);
-  background-position: 0 0, 50px 50px; background-size: 80px 80px; opacity: 0.15;
+  background-image: radial-gradient(white 1px,transparent 1px), radial-gradient(white 1px,transparent 1px);
+  background-position:0 0,50px 50px; background-size:80px 80px; opacity:0.15;
 }
 .stars::after {
-  background-image: radial-gradient(white 1px, transparent 1px), radial-gradient(white 1px, transparent 1px);
-  background-position: 30px 30px, 80px 80px; background-size: 100px 100px; opacity: 0.1;
-  animation-delay: 3s;
+  background-image: radial-gradient(white 1px,transparent 1px), radial-gradient(white 1px,transparent 1px);
+  background-position:30px 30px,80px 80px; background-size:100px 100px; opacity:0.1; animation-delay:3s;
 }
-@keyframes twinkle { 0% { opacity: 0.08; } 100% { opacity: 0.25; } }
+@keyframes twinkle { 0%{opacity:0.08} 100%{opacity:0.25} }
 
 .container { position:relative; z-index:1; max-width:480px; margin:0 auto; padding:20px 16px; }
 
 .logo {
   width:110px; height:110px; margin:30px auto 10px;
-  background: linear-gradient(135deg, var(--accent), var(--orange));
+  background:linear-gradient(135deg,var(--accent),var(--orange));
   border-radius:50%; display:flex; align-items:center; justify-content:center;
   font-size:52px; box-shadow:0 0 60px rgba(123,47,190,0.7);
-  animation: float 3s ease-in-out infinite;
+  animation:float 3s ease-in-out infinite;
 }
-@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+@keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-15px)} }
 
 h1 { text-align:center; font-size:2.2rem; margin-bottom:6px;
-     background: linear-gradient(90deg, #fff, #c4b5fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+     background:linear-gradient(90deg,#fff,#c4b5fd); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
 .subtitle { text-align:center; color:var(--muted); margin-bottom:35px; font-size:1.1rem; }
 
 .card { background:var(--card); border-radius:24px; padding:24px; margin-bottom:20px;
@@ -82,22 +77,169 @@ h1 { text-align:center; font-size:2.2rem; margin-bottom:6px;
 .pkg-item:hover { border-color:var(--green); transform:translateX(8px); }
 .pkg-item.selected { border-color:var(--green); background:rgba(34,197,94,0.1); }
 
-#imagePreview { max-width:100%; max-height:280px; border-radius:16px; border:2px solid var(--green); display:none; }
+#imagePreview { max-width:100%; max-height:280px; border-radius:16px; border:2px solid var(--green); display:none; margin-top:10px; }
 
-input, select, textarea {
+input, textarea {
   width:100%; padding:14px 16px; margin:10px 0;
   background:#1A1A2E; border:1px solid #444; border-radius:12px;
   color:white; font-size:1rem; font-family:'Cairo',sans-serif;
 }
-input::placeholder, textarea::placeholder { color: var(--muted); }
+input::placeholder, textarea::placeholder { color:var(--muted); }
+input:focus, textarea:focus { outline:none; border-color:var(--accent); }
 
 .btn { width:100%; padding:16px; font-size:1.1rem; font-weight:700; border:none; border-radius:16px; cursor:pointer; margin-top:12px; transition:0.3s; font-family:'Cairo',sans-serif; }
-.btn-primary { background: linear-gradient(90deg, var(--accent), #A855F7); color:white; }
+.btn-primary { background:linear-gradient(90deg,var(--accent),#A855F7); color:white; }
 .btn-primary:hover { opacity:0.9; transform:translateY(-2px); }
-.btn-success { background: linear-gradient(90deg, #22C55E, #86EFAC); color:black; }
+.btn-success { background:linear-gradient(90deg,#22C55E,#86EFAC); color:black; }
 .btn-back { background:#1A1A2E; color:var(--muted); border:1px solid #444; }
 
 .loading { text-align:center; padding:50px 20px; color:var(--muted); font-size:1.1rem; }
+
+/* ======================================================
+   بطاقات طرق الدفع
+====================================================== */
+.payment-hint {
+  background: linear-gradient(135deg, rgba(123,47,190,0.12), rgba(255,107,0,0.08));
+  border: 1px solid rgba(123,47,190,0.25);
+  border-radius: 14px;
+  padding: 12px 16px;
+  font-size: 0.88rem;
+  color: var(--muted);
+  margin-bottom: 14px;
+  text-align: center;
+  line-height: 1.7;
+}
+
+.payment-methods-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.payment-card {
+  position: relative;
+  border-radius: 18px;
+  padding: 20px 12px 16px;
+  cursor: pointer;
+  border: 2px solid rgba(255,255,255,0.06);
+  transition: all 0.3s ease;
+  text-align: center;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* طبقة الخلفية */
+.payment-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.payment-card:active { transform: scale(0.97); }
+
+/* إنستا باي */
+.pay-instapay {
+  background: linear-gradient(145deg, rgba(255,107,0,0.08), rgba(255,107,0,0.03));
+}
+.pay-instapay::after { background: radial-gradient(circle at 50% 0%, rgba(255,107,0,0.25), transparent 70%); }
+.pay-instapay:hover { border-color: rgba(255,107,0,0.5); transform: translateY(-3px); }
+.pay-instapay:hover::after { opacity: 1; }
+.pay-instapay.selected {
+  border-color: #FF6B00;
+  background: linear-gradient(145deg, rgba(255,107,0,0.18), rgba(255,107,0,0.06));
+  box-shadow: 0 0 25px rgba(255,107,0,0.25), inset 0 0 20px rgba(255,107,0,0.05);
+}
+.pay-instapay.selected::after { opacity: 1; }
+.pay-instapay .pay-name { color: #FF8C3A; }
+.pay-instapay .pay-number { color: rgba(255,140,58,0.8); }
+
+/* كاش */
+.pay-cash {
+  background: linear-gradient(145deg, rgba(34,197,94,0.08), rgba(34,197,94,0.03));
+}
+.pay-cash::after { background: radial-gradient(circle at 50% 0%, rgba(34,197,94,0.25), transparent 70%); }
+.pay-cash:hover { border-color: rgba(34,197,94,0.5); transform: translateY(-3px); }
+.pay-cash:hover::after { opacity: 1; }
+.pay-cash.selected {
+  border-color: #22C55E;
+  background: linear-gradient(145deg, rgba(34,197,94,0.18), rgba(34,197,94,0.06));
+  box-shadow: 0 0 25px rgba(34,197,94,0.25), inset 0 0 20px rgba(34,197,94,0.05);
+}
+.pay-cash.selected::after { opacity: 1; }
+.pay-cash .pay-name { color: #4ADE80; }
+.pay-cash .pay-number { color: rgba(74,222,128,0.8); }
+
+/* تشيك الاختيار */
+.pay-check {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 900;
+  opacity: 0;
+  transform: scale(0.3) rotate(-30deg);
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  z-index: 2;
+}
+.pay-instapay .pay-check { background: #FF6B00; color: white; }
+.pay-cash     .pay-check { background: #22C55E; color: white; }
+.payment-card.selected .pay-check { opacity: 1; transform: scale(1) rotate(0deg); }
+
+.pay-icon {
+  font-size: 2.4rem;
+  display: block;
+  margin-bottom: 10px;
+  line-height: 1;
+  position: relative;
+  z-index: 2;
+}
+.pay-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  display: block;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 2;
+}
+.pay-number {
+  font-size: 0.8rem;
+  direction: ltr;
+  display: block;
+  line-height: 1.8;
+  position: relative;
+  z-index: 2;
+  font-weight: 600;
+}
+.pay-number span { display: block; }
+
+/* شريط "تم الاختيار" */
+.pay-badge {
+  display: inline-block;
+  margin-top: 8px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: all 0.3s ease 0.1s;
+  position: relative;
+  z-index: 2;
+}
+.pay-instapay .pay-badge { background: rgba(255,107,0,0.2); color: #FF8C3A; }
+.pay-cash     .pay-badge { background: rgba(34,197,94,0.2); color: #4ADE80; }
+.payment-card.selected .pay-badge { opacity: 1; transform: translateY(0); }
 
 /* شاشة الإرسال */
 .sending-overlay {
@@ -109,21 +251,20 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 .spinner {
   width:60px; height:60px; border:5px solid #333;
   border-top-color:var(--accent); border-radius:50%;
-  animation: spin 0.8s linear infinite;
+  animation:spin 0.8s linear infinite;
 }
-@keyframes spin { to { transform:rotate(360deg); } }
+@keyframes spin { to{transform:rotate(360deg)} }
 .sending-text { color:white; font-size:1.2rem; }
 
 .step { display:none; }
-.step.active { display:block; animation: fadeIn 0.5s; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+.step.active { display:block; animation:fadeIn 0.5s; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
 
 .success-screen { text-align:center; padding:50px 20px; background:var(--card); border-radius:24px; }
 .success-screen h2 { color:var(--green); margin:20px 0; font-size:1.8rem; }
-.success-icon { font-size:80px; animation: popIn 0.5s ease; }
-@keyframes popIn { 0% { transform:scale(0); } 80% { transform:scale(1.2); } 100% { transform:scale(1); } }
+.success-icon { font-size:80px; animation:popIn 0.5s ease; }
+@keyframes popIn { 0%{transform:scale(0)} 80%{transform:scale(1.2)} 100%{transform:scale(1)} }
 
-/* ملخص الطلب */
 .order-summary {
   background:#1A1A2E; border:1px solid #333; border-radius:16px;
   padding:18px; margin-bottom:16px; text-align:right;
@@ -134,7 +275,6 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
 </head>
 <body>
 
-<!-- شاشة الإرسال -->
 <div class="sending-overlay" id="sendingOverlay">
   <div class="spinner"></div>
   <div class="sending-text">جاري إرسال طلبك...</div>
@@ -146,19 +286,18 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
   <h1>عالم العروض</h1>
   <p class="subtitle">احجز باقتك بسهولة وسرعة</p>
 
-  <!-- تحميل -->
   <div id="loading" class="loading">⏳ جاري تحميل الباقات...</div>
 
-  <!-- الخطوة 1: اختيار الشركة -->
+  <!-- الخطوة 1 -->
   <div id="step1" class="step card">
     <div class="section-title">📡 اختر الشركة</div>
     <div class="company-grid" id="companyGrid"></div>
   </div>
 
-  <!-- الخطوة 2: اختيار الباقة -->
+  <!-- الخطوة 2 -->
   <div id="step2" class="step card">
     <div class="section-title">📦 اختر الباقة</div>
-    <div class="filter-tabs" id="filterTabs">
+    <div class="filter-tabs">
       <div class="filter-tab active" data-filter="all">الكل</div>
       <div class="filter-tab" data-filter="جيجا">جيجا</div>
       <div class="filter-tab" data-filter="دقايق">دقايق</div>
@@ -168,7 +307,7 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
     <button class="btn btn-back" style="margin-top:16px;" onclick="backToCompanies()">← رجوع للشركات</button>
   </div>
 
-  <!-- الخطوة 3: بيانات الحجز -->
+  <!-- الخطوة 3 -->
   <div id="step3" class="step card">
     <div class="section-title">📋 ملخص طلبك</div>
     <div class="order-summary" id="orderSummary"></div>
@@ -176,21 +315,46 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
     <div class="section-title">👤 بيانات الحجز</div>
     <input type="text" id="customerName" placeholder="اسمك الكامل">
     <input type="tel" id="phone" placeholder="رقم الواتساب">
-    <select id="paymentMethod">
-      <option value="">💳 طريقة الدفع</option>
-      <option value="فودافون كاش">فودافون كاش</option>
-      <option value="أورانج كاش">أورانج كاش</option>
-      <option value="إنستا باي">إنستا باي</option>
-      <option value="تحويل بنكي">تحويل بنكي</option>
-    </select>
+
+    <!-- ===== طرق الدفع ===== -->
+    <div class="section-title" style="margin-top:20px;">💳 طريقة الدفع</div>
+
+    <div class="payment-hint">
+      حوّل المبلغ على أحد الأرقام أدناه ثم ارفع إيصال الدفع
+    </div>
+
+    <div class="payment-methods-grid">
+
+      <div class="payment-card pay-instapay" onclick="selectPayment('إنستا باي', this)">
+        <div class="pay-check">✓</div>
+        <span class="pay-icon">🏧</span>
+        <span class="pay-name">إنستا باي</span>
+        <span class="pay-number">
+          <span>01284277707</span>
+        </span>
+        <span class="pay-badge">✔ تم الاختيار</span>
+      </div>
+
+      <div class="payment-card pay-cash" onclick="selectPayment('كاش', this)">
+        <div class="pay-check">✓</div>
+        <span class="pay-icon">💲</span>
+        <span class="pay-name">كاش</span>
+        <span class="pay-number">
+          <span>01284277707</span>
+          <span>01120228568</span>
+        </span>
+        <span class="pay-badge">✔ تم الاختيار</span>
+      </div>
+
+    </div>
+    <!-- ==================== -->
+
     <input type="text" id="transferRef" placeholder="رقم التحويل أو المرجع">
     <textarea id="notes" rows="2" placeholder="ملاحظات (اختياري)"></textarea>
 
     <div class="section-title">🧾 ارفع إيصال الدفع</div>
     <input type="file" id="proofUpload" accept="image/*" onchange="previewImage(event)">
-    <div class="preview-container">
-      <img id="imagePreview" alt="معاينة الإيصال">
-    </div>
+    <img id="imagePreview" alt="معاينة الإيصال">
 
     <button class="btn btn-primary" onclick="submitOrder()">✅ تأكيد وإرسال الطلب</button>
     <button class="btn btn-back" onclick="showStep(2)">← رجوع للباقات</button>
@@ -200,51 +364,45 @@ input::placeholder, textarea::placeholder { color: var(--muted); }
   <div id="successScreen" class="step success-screen">
     <div class="success-icon">🎉</div>
     <h2>تم استلام طلبك بنجاح!</h2>
-    <p id="orderIdDisplay" style="font-size:1.4rem; color:var(--green); margin:15px 0; font-weight:700;"></p>
-    <p style="color:var(--muted); margin-bottom:30px;">سيتم مراجعة وتفعيل طلبك خلال دقائق<br>شكراً لثقتك في عالم العروض 🌟</p>
+    <p id="orderIdDisplay" style="font-size:1.4rem;color:var(--green);margin:15px 0;font-weight:700;"></p>
+    <p style="color:var(--muted);margin-bottom:30px;">سيتم مراجعة وتفعيل طلبك خلال دقائق<br>شكراً لثقتك في عالم العروض 🌟</p>
     <button class="btn btn-success" onclick="restart()">📦 طلب باقة جديدة</button>
   </div>
 </div>
 
 <script>
-// ✅ ضع رابط الـ Web App الخاص بك هنا
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
 
 let allPackages = [];
 let selectedCompany = '';
 let selectedPackage = null;
 let proofBase64 = '';
+let selectedPaymentMethod = '';
 
-// ============================================================
-// تحميل الباقات
-// ============================================================
 async function loadPackages() {
   const loadingEl = document.getElementById('loading');
   try {
-    const res = await fetch(`${SCRIPT_URL}?action=packages`, { cache: 'no-store' });
+    const res = await fetch(`${SCRIPT_URL}?action=packages`, { cache:'no-store' });
     allPackages = await res.json();
     loadingEl.style.display = 'none';
     showStep(1);
     createCompanyCards();
   } catch (e) {
-    console.error(e);
     loadingEl.innerHTML = `
       <div style="color:#f87171;">❌ فشل تحميل الباقات</div>
-      <button onclick="location.reload()" style="margin-top:16px;padding:12px 24px;background:var(--accent);color:white;border:none;border-radius:12px;cursor:pointer;font-family:'Cairo',sans-serif;">
+      <button onclick="location.reload()" style="margin-top:16px;padding:12px 24px;background:var(--accent);
+        color:white;border:none;border-radius:12px;cursor:pointer;font-family:'Cairo',sans-serif;">
         🔄 إعادة المحاولة
       </button>`;
   }
 }
 
-// ============================================================
-// إنشاء كروت الشركات
-// ============================================================
 function createCompanyCards() {
   const companies = [
-    { name: 'أورانج', emoji: '🟠' },
-    { name: 'وي',     emoji: '🟣' },
-    { name: 'اتصالات',emoji: '🟢' },
-    { name: 'فودافون',emoji: '🔴' }
+    { name:'أورانج', emoji:'🟠' },
+    { name:'وي',     emoji:'🟣' },
+    { name:'اتصالات',emoji:'🟢' },
+    { name:'فودافون',emoji:'🔴' }
   ];
   const grid = document.getElementById('companyGrid');
   grid.innerHTML = '';
@@ -257,9 +415,6 @@ function createCompanyCards() {
   });
 }
 
-// ============================================================
-// اختيار الشركة
-// ============================================================
 function selectCompany(company, el) {
   document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
@@ -267,28 +422,22 @@ function selectCompany(company, el) {
   selectedPackage = null;
   showStep(2);
   filterPackages('all');
-  // reset filter tabs
   document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
   document.querySelector('[data-filter="all"]').classList.add('active');
 }
 
-// ============================================================
-// فلترة الباقات
-// ============================================================
 function filterPackages(type) {
   document.querySelectorAll('.filter-tab').forEach(tab =>
     tab.classList.toggle('active', tab.dataset.filter === type)
   );
-
   const container = document.getElementById('packagesList');
   container.innerHTML = '';
 
   let filtered = allPackages.filter(p => p.company.includes(selectedCompany));
-
   if (type !== 'all') {
     filtered = filtered.filter(p => {
       const text = (p.name + ' ' + (p.type || '')).toLowerCase();
-      if (type === 'جيجا')   return text.includes('جيجا');
+      if (type === 'جيجا')  return text.includes('جيجا');
       if (type === 'دقايق') return text.includes('دقيقة') || text.includes('دقايق');
       if (type === 'ميكس')  return text.includes('ميكس');
       return true;
@@ -312,19 +461,18 @@ function filterPackages(type) {
       document.querySelectorAll('.pkg-item').forEach(i => i.classList.remove('selected'));
       div.classList.add('selected');
       selectedPackage = pkg;
-      // تأخير بسيط عشان يظهر التحديد قبل الانتقال
-      setTimeout(() => {
-        updateOrderSummary();
-        showStep(3);
-      }, 200);
+      setTimeout(() => { updateOrderSummary(); showStep(3); }, 200);
     };
     container.appendChild(div);
   });
 }
 
-// ============================================================
-// ملخص الطلب
-// ============================================================
+function selectPayment(method, el) {
+  document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPaymentMethod = method;
+}
+
 function updateOrderSummary() {
   if (!selectedPackage) return;
   document.getElementById('orderSummary').innerHTML = `
@@ -334,21 +482,15 @@ function updateOrderSummary() {
   `;
 }
 
-// ============================================================
-// التنقل بين الخطوات
-// ============================================================
 function showStep(step) {
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
   const el = document.getElementById(step === 4 ? 'successScreen' : `step${step}`);
   if (el) el.classList.add('active');
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({ top:0, behavior:'smooth' });
 }
 
 function backToCompanies() { showStep(1); }
 
-// ============================================================
-// معاينة الإيصال
-// ============================================================
 function previewImage(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -362,47 +504,33 @@ function previewImage(e) {
   reader.readAsDataURL(file);
 }
 
-// ============================================================
-// إرسال الطلب — الحل الكامل لمشكلة CORS
-// ============================================================
 async function submitOrder() {
   const name  = document.getElementById('customerName').value.trim();
   const phone = document.getElementById('phone').value.trim();
 
-  if (!name) {
-    alert("❌ برجاء كتابة اسمك الكامل");
-    return;
-  }
-  if (!phone) {
-    alert("❌ برجاء كتابة رقم الواتساب");
-    return;
-  }
-  if (!selectedPackage) {
-    alert("❌ برجاء اختيار باقة أولاً");
-    return;
-  }
+  if (!name)  { alert("❌ برجاء كتابة اسمك الكامل"); return; }
+  if (!phone) { alert("❌ برجاء كتابة رقم الواتساب"); return; }
+  if (!selectedPackage)       { alert("❌ برجاء اختيار باقة أولاً"); return; }
+  if (!selectedPaymentMethod) { alert("❌ برجاء اختيار طريقة الدفع"); return; }
 
-  // توليد رقم طلب محلي (لأن no-cors مش هيرجع response)
   const localOrderId = 'ORD-' + Date.now();
 
   const formData = {
-    orderId: localOrderId,
+    orderId:      localOrderId,
     customerName: name,
-    phone: phone,
-    company: selectedCompany,
-    package: selectedPackage.name,
-    price: selectedPackage.price,
-    payment: document.getElementById('paymentMethod').value || '',
-    transferRef: document.getElementById('transferRef').value || '',
-    notes: document.getElementById('notes').value || '',
-    proofBase64: proofBase64 || ''
+    phone:        phone,
+    company:      selectedCompany,
+    package:      selectedPackage.name,
+    price:        selectedPackage.price,
+    payment:      selectedPaymentMethod,
+    transferRef:  document.getElementById('transferRef').value || '',
+    notes:        document.getElementById('notes').value || '',
+    proofBase64:  proofBase64 || ''
   };
 
-  // إظهار شاشة الإرسال
   document.getElementById('sendingOverlay').classList.add('show');
 
   try {
-    // ✅ الحل: mode: 'no-cors' يحل مشكلة CORS مع Google Apps Script
     await fetch(SCRIPT_URL, {
       method: 'POST',
       mode: 'no-cors',
@@ -410,29 +538,19 @@ async function submitOrder() {
       body: JSON.stringify(formData)
     });
 
-    // مع no-cors لا نقدر نقرأ الـ response، لكن الطلب وصل
-    // ننتظر ثانية ونعرض النجاح
     await new Promise(r => setTimeout(r, 1000));
-
     document.getElementById('sendingOverlay').classList.remove('show');
     document.getElementById('orderIdDisplay').textContent = `رقم طلبك: ${localOrderId}`;
     showStep(4);
 
   } catch(e) {
     document.getElementById('sendingOverlay').classList.remove('show');
-    console.error("Submit Error:", e);
-    alert("❌ فشل الإرسال\n" + e.message + "\n\nتأكد من اتصال الإنترنت وحاول مرة أخرى");
+    alert("❌ فشل الإرسال\n" + e.message);
   }
 }
 
-// ============================================================
-// إعادة التشغيل
-// ============================================================
 function restart() { location.reload(); }
 
-// ============================================================
-// الأحداث
-// ============================================================
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.filter-tab').forEach(tab => {
     tab.addEventListener('click', () => filterPackages(tab.dataset.filter));
