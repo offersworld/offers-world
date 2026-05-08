@@ -1,1179 +1,1610 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>عالم العروض — احجز باقتك</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-
-<style>
-:root{
-  --bg: #0A0A14;
-  --card: #12121F;
-  --accent: #7B2FBE;
-  --orange: #FF6B00;
-  --green: #22C55E;
-  --text: #E0E0FF;
-  --muted: #94A3B8;
-}
-
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-
-body{
-  background: linear-gradient(135deg, #0A0A14 0%, #1A0B2E 100%);
-  color: var(--text);
-  font-family: 'Cairo', sans-serif;
-  min-height:100vh;
-  padding-bottom:80px;
-}
-
-.stars{
-  position:fixed;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
-  background:#0A0A14;
-  overflow:hidden;
-}
-
-.stars::before,
-.stars::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:transparent;
-  animation:twinkle 8s infinite alternate;
-}
-
-.stars::before{
-  background-image:
-    radial-gradient(white 1px,transparent 1px),
-    radial-gradient(white 1px,transparent 1px);
-  background-position:0 0,50px 50px;
-  background-size:80px 80px;
-  opacity:0.15;
-}
-
-.stars::after{
-  background-image:
-    radial-gradient(white 1px,transparent 1px),
-    radial-gradient(white 1px,transparent 1px);
-  background-position:30px 30px,80px 80px;
-  background-size:100px 100px;
-  opacity:0.1;
-  animation-delay:3s;
-}
-
-@keyframes twinkle{
-  0%{opacity:0.08}
-  100%{opacity:0.25}
-}
-
-.container{
-  position:relative;
-  z-index:1;
-  max-width:480px;
-  margin:0 auto;
-  padding:20px 16px;
-}
-
-.logo{
-  width:110px;
-  height:110px;
-  margin:30px auto 10px;
-  background:linear-gradient(135deg,var(--accent),var(--orange));
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:52px;
-  box-shadow:0 0 60px rgba(123,47,190,0.7);
-  animation:float 3s ease-in-out infinite;
-}
-
-@keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-15px)}
-}
-
-h1{
-  text-align:center;
-  font-size:2.2rem;
-  margin-bottom:6px;
-  background:linear-gradient(90deg,#fff,#c4b5fd);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-}
-
-.subtitle{
-  text-align:center;
-  color:var(--muted);
-  margin-bottom:35px;
-  font-size:1.1rem;
-}
-
-.card{
-  background:var(--card);
-  border-radius:24px;
-  padding:24px;
-  margin-bottom:20px;
-  box-shadow:0 15px 35px rgba(0,0,0,0.5);
-  border:1px solid rgba(123,47,190,0.2);
-}
-
-.section-title{
-  color:#ddd;
-  font-size:1.1rem;
-  margin-bottom:16px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-
-.company-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:14px;
-}
-
-.company-card{
-  background:#1A1A2E;
-  border:2px solid #333;
-  border-radius:20px;
-  padding:22px 12px;
-  text-align:center;
-  cursor:pointer;
-  transition:0.4s;
-  font-weight:600;
-  font-size:1.1rem;
-}
-
-.company-card:hover{
-  border-color:var(--orange);
-  transform:scale(1.05);
-}
-
-.company-card.selected{
-  border-color:var(--orange);
-  background:rgba(255,107,0,0.12);
-  box-shadow:0 0 30px rgba(255,107,0,0.4);
-}
-
-.filter-tabs{
-  display:flex;
-  gap:8px;
-  margin-bottom:18px;
-  flex-wrap:wrap;
-}
-
-.filter-tab{
-  padding:9px 18px;
-  background:#1A1A2E;
-  border:1px solid #444;
-  border-radius:30px;
-  cursor:pointer;
-  font-size:0.95rem;
-  transition:0.3s;
-}
-
-.filter-tab.active{
-  background:var(--accent);
-  border-color:var(--accent);
-  color:white;
-}
-
-.packages-list{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-.pkg-item{
-  background:#1A1A2E;
-  border:1px solid #444;
-  border-radius:18px;
-  padding:18px;
-  cursor:pointer;
-  transition:0.3s;
-}
-
-.pkg-item:hover{
-  border-color:var(--green);
-  transform:translateX(8px);
-}
-
-.pkg-item.selected{
-  border-color:var(--green);
-  background:rgba(34,197,94,0.1);
-}
-
-#imagePreview{
-  max-width:100%;
-  max-height:280px;
-  border-radius:16px;
-  border:2px solid var(--green);
-  display:none;
-  margin-top:10px;
-}
-
-/* Inputs */
-
-input,
-textarea{
-  width:100%;
-  padding:14px 16px;
-  margin:10px 0;
-  background:#1A1A2E;
-  border:1px solid #444;
-  border-radius:12px;
-  color:white;
-  font-size:1rem;
-  font-family:'Cairo',sans-serif;
-}
-
-input::placeholder,
-textarea::placeholder{
-  color:var(--muted);
-}
-
-input:focus,
-textarea:focus{
-  outline:none;
-  border-color:var(--accent);
-}
-
-/* تحسين العربية */
-
-.rtl-input{
-  direction:rtl;
-  text-align:right;
-}
-
-.number-input{
-  direction:ltr;
-  text-align:right;
-}
-
-.input-label{
-  display:block;
-  margin-bottom:8px;
-  color:#ddd;
-  font-size:0.95rem;
-  font-weight:600;
-}
-
-.input-group{
-  margin-bottom:6px;
-}
-
-.same-number-check{
-  display:flex;
-  align-items:center;
-  gap:6px;
-  font-size:0.88rem;
-  color:var(--muted);
-  cursor:pointer;
-  user-select:none;
-}
-
-.same-number-check input{
-  width:auto;
-  margin:0;
-  accent-color:var(--accent);
-}
-
-/* Buttons */
-
-.btn{
-  width:100%;
-  padding:16px;
-  font-size:1.1rem;
-  font-weight:700;
-  border:none;
-  border-radius:16px;
-  cursor:pointer;
-  margin-top:12px;
-  transition:0.3s;
-  font-family:'Cairo',sans-serif;
-}
-
-.btn-primary{
-  background:linear-gradient(90deg,var(--accent),#A855F7);
-  color:white;
-}
-
-.btn-primary:hover{
-  opacity:0.9;
-  transform:translateY(-2px);
-}
-
-.btn-success{
-  background:linear-gradient(90deg,#22C55E,#86EFAC);
-  color:black;
-}
-
-.btn-back{
-  background:#1A1A2E;
-  color:var(--muted);
-  border:1px solid #444;
-}
-
-.loading{
-  text-align:center;
-  padding:50px 20px;
-  color:var(--muted);
-  font-size:1.1rem;
-}
-
-/* Payment */
-
-.payment-hint{
-  background: linear-gradient(135deg, rgba(123,47,190,0.12), rgba(255,107,0,0.08));
-  border: 1px solid rgba(123,47,190,0.25);
-  border-radius: 14px;
-  padding: 12px 16px;
-  font-size: 0.88rem;
-  color: var(--muted);
-  margin-bottom: 14px;
-  text-align: center;
-  line-height: 1.7;
-}
-
-.payment-methods-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-bottom:18px;
-}
-
-.payment-card{
-  position:relative;
-  border-radius:18px;
-  padding:20px 12px 16px;
-  cursor:pointer;
-  border:2px solid rgba(255,255,255,0.06);
-  transition:all 0.3s ease;
-  text-align:center;
-  overflow:hidden;
-  user-select:none;
-}
-
-.payment-card::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  border-radius:16px;
-  opacity:0;
-  transition:opacity 0.3s;
-  pointer-events:none;
-}
-
-.payment-card:active{
-  transform:scale(0.97);
-}
-
-.pay-instapay{
-  background: linear-gradient(145deg, rgba(255,107,0,0.08), rgba(255,107,0,0.03));
-}
-
-.pay-instapay.selected{
-  border-color:#FF6B00;
-}
-
-.pay-cash{
-  background: linear-gradient(145deg, rgba(34,197,94,0.08), rgba(34,197,94,0.03));
-}
-
-.pay-cash.selected{
-  border-color:#22C55E;
-}
-
-.pay-check{
-  position:absolute;
-  top:10px;
-  left:10px;
-  width:24px;
-  height:24px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:13px;
-  font-weight:900;
-  opacity:0;
-  transition:0.3s;
-}
-
-.payment-card.selected .pay-check{
-  opacity:1;
-}
-
-.pay-instapay .pay-check{
-  background:#FF6B00;
-}
-
-.pay-cash .pay-check{
-  background:#22C55E;
-}
-
-.pay-icon{
-  font-size:2.4rem;
-  display:block;
-  margin-bottom:10px;
-}
-
-.pay-name{
-  font-size:1.05rem;
-  font-weight:800;
-  display:block;
-  margin-bottom:10px;
-}
-
-.pay-number{
-  font-size:0.8rem;
-  direction:ltr;
-  display:block;
-  line-height:1.8;
-  font-weight:600;
-}
-
-.pay-number span{
-  display:block;
-}
-
-/* Sending */
-
-.sending-overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:999;
-  background:rgba(10,10,20,0.85);
-  backdrop-filter:blur(6px);
-  align-items:center;
-  justify-content:center;
-  flex-direction:column;
-  gap:16px;
-}
-
-.sending-overlay.show{
-  display:flex;
-}
-
-.spinner{
-  width:60px;
-  height:60px;
-  border:5px solid #333;
-  border-top-color:var(--accent);
-  border-radius:50%;
-  animation:spin 0.8s linear infinite;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-.sending-text{
-  color:white;
-  font-size:1.2rem;
-}
-
-/* Steps */
-
-.step{
-  display:none;
-}
-
-.step.active{
-  display:block;
-  animation:fadeIn 0.5s;
-}
-
-@keyframes fadeIn{
-  from{
-    opacity:0;
-    transform:translateY(20px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-.success-screen{
-  text-align:center;
-  padding:50px 20px;
-  background:var(--card);
-  border-radius:24px;
-}
-
-.success-screen h2{
-  color:var(--green);
-  margin:20px 0;
-  font-size:1.8rem;
-}
-
-.success-icon{
-  font-size:80px;
-}
-
-.order-summary{
-  background:#1A1A2E;
-  border:1px solid #333;
-  border-radius:16px;
-  padding:18px;
-  margin-bottom:16px;
-  text-align:right;
-}
-
-.order-summary p{
-  margin:6px 0;
-  color:var(--muted);
-  font-size:0.95rem;
-}
-
-.order-summary span{
-  color:white;
-  font-weight:600;
-}
-</style>
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>عالم العروض — احجز باقتك</title>
+
+  <!-- تحسين تحميل الخط -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap"
+    rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #0A0A14;
+      --card: #12121F;
+      --accent: #7B2FBE;
+      --orange: #FF6B00;
+      --green: #22C55E;
+      --text: #E0E0FF;
+      --muted: #94A3B8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0A0A14 0%, #1A0B2E 100%);
+      color: var(--text);
+      font-family: 'Cairo', sans-serif;
+      min-height: 100vh;
+      padding-bottom: 80px;
+    }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: #0A0A14;
+      overflow: hidden;
+    }
+
+    .stars::before,
+    .stars::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      animation: twinkle 8s infinite alternate;
+    }
+
+    .stars::before {
+      background-image:
+        radial-gradient(white 1px, transparent 1px),
+        radial-gradient(white 1px, transparent 1px);
+
+      background-position: 0 0, 50px 50px;
+      background-size: 80px 80px;
+      opacity: 0.15;
+    }
+
+    .stars::after {
+      background-image:
+        radial-gradient(white 1px, transparent 1px),
+        radial-gradient(white 1px, transparent 1px);
+
+      background-position: 30px 30px, 80px 80px;
+      background-size: 100px 100px;
+      opacity: 0.1;
+      animation-delay: 3s;
+    }
+
+    @keyframes twinkle {
+      0% {
+        opacity: 0.08
+      }
+
+      100% {
+        opacity: 0.25
+      }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 20px 16px;
+    }
+
+    .logo {
+      width: 110px;
+      height: 110px;
+      margin: 30px auto 10px;
+
+      background: linear-gradient(135deg, var(--accent), var(--orange));
+
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 52px;
+
+      box-shadow: 0 0 60px rgba(123, 47, 190, 0.7);
+
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0)
+      }
+
+      50% {
+        transform: translateY(-15px)
+      }
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2.2rem;
+      margin-bottom: 6px;
+
+      background: linear-gradient(90deg, #fff, #c4b5fd);
+
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--muted);
+      margin-bottom: 25px;
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    /* Step Indicator */
+
+    .steps-indicator {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .step-badge {
+      flex: 1;
+      text-align: center;
+      padding: 10px 6px;
+      border-radius: 14px;
+      background: #171727;
+      border: 1px solid #2c2c3f;
+      color: var(--muted);
+      font-size: 0.82rem;
+      transition: 0.3s;
+    }
+
+    .step-badge.active {
+      background: rgba(123, 47, 190, 0.18);
+      border-color: var(--accent);
+      color: white;
+      box-shadow: 0 0 20px rgba(123, 47, 190, 0.25);
+    }
+
+    .card {
+      background: var(--card);
+
+      border-radius: 24px;
+
+      padding: 24px;
+
+      margin-bottom: 20px;
+
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+
+      border: 1px solid rgba(123, 47, 190, 0.2);
+    }
+
+    .section-title {
+      color: #ddd;
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .company-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .company-card {
+      background: #1A1A2E;
+
+      border: 2px solid #333;
+
+      border-radius: 20px;
+
+      padding: 22px 12px;
+
+      text-align: center;
+
+      cursor: pointer;
+
+      transition: 0.35s;
+
+      font-weight: 600;
+
+      font-size: 1.1rem;
+    }
+
+    .company-card:hover {
+      border-color: var(--orange);
+      transform: scale(1.03);
+    }
+
+    .company-card.selected {
+      border-color: var(--orange);
+
+      background: rgba(255, 107, 0, 0.12);
+
+      box-shadow: 0 0 30px rgba(255, 107, 0, 0.4);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .filter-tab {
+      padding: 9px 18px;
+
+      background: #1A1A2E;
+
+      border: 1px solid #444;
+
+      border-radius: 30px;
+
+      cursor: pointer;
+
+      font-size: 0.95rem;
+
+      transition: 0.3s;
+    }
+
+    .filter-tab.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+    }
+
+    .packages-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .pkg-item {
+      background: #1A1A2E;
+
+      border: 1px solid #444;
+
+      border-radius: 18px;
+
+      padding: 18px;
+
+      cursor: pointer;
+
+      transition: 0.3s;
+    }
+
+    .pkg-item:hover {
+      border-color: var(--green);
+      transform: translateX(6px);
+    }
+
+    .pkg-item.selected {
+      border-color: var(--green);
+      background: rgba(34, 197, 94, 0.1);
+    }
+
+    #imagePreview {
+      max-width: 100%;
+      max-height: 280px;
+
+      border-radius: 16px;
+
+      border: 2px solid var(--green);
+
+      display: none;
+
+      margin-top: 10px;
+    }
+
+    /* Inputs */
+
+    input,
+    textarea {
+      width: 100%;
+
+      padding: 14px 16px;
+
+      margin: 10px 0;
+
+      background: #1A1A2E;
+
+      border: 1px solid #444;
+
+      border-radius: 12px;
+
+      color: white;
+
+      font-size: 1rem;
+
+      font-family: 'Cairo', sans-serif;
+
+      transition: 0.25s;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: var(--muted);
+    }
+
+    input:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(123, 47, 190, 0.12);
+    }
+
+    .rtl-input {
+      direction: rtl;
+      text-align: right;
+    }
+
+    .number-input {
+      direction: ltr;
+      text-align: right;
+    }
+
+    .input-label {
+      display: block;
+      margin-bottom: 8px;
+      color: #ddd;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .same-number-check {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.88rem;
+      color: var(--muted);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .same-number-check input {
+      width: auto;
+      margin: 0;
+      accent-color: var(--accent);
+    }
+
+    .btn {
+      width: 100%;
+
+      padding: 16px;
+
+      font-size: 1.05rem;
+
+      font-weight: 700;
+
+      border: none;
+
+      border-radius: 16px;
+
+      cursor: pointer;
+
+      margin-top: 12px;
+
+      transition: 0.3s;
+
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, var(--accent), #A855F7);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.92;
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: linear-gradient(90deg, #22C55E, #86EFAC);
+      color: black;
+    }
+
+    .btn-back {
+      background: #1A1A2E;
+      color: var(--muted);
+      border: 1px solid #444;
+    }
+
+    /* Skeleton Loading */
+
+    .skeleton-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .skeleton-card {
+      height: 90px;
+      border-radius: 18px;
+
+      background:
+        linear-gradient(90deg,
+          #171727 25%,
+          #23233a 50%,
+          #171727 75%);
+
+      background-size: 200% 100%;
+
+      animation: shimmer 1.2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: 200% 0;
+      }
+
+      100% {
+        background-position: -200% 0;
+      }
+    }
+
+    /* Payment */
+
+    .payment-hint {
+      background: linear-gradient(135deg,
+          rgba(123, 47, 190, 0.12),
+          rgba(255, 107, 0, 0.08));
+
+      border: 1px solid rgba(123, 47, 190, 0.25);
+
+      border-radius: 14px;
+
+      padding: 12px 16px;
+
+      font-size: 0.88rem;
+
+      color: var(--muted);
+
+      margin-bottom: 14px;
+
+      text-align: center;
+
+      line-height: 1.7;
+    }
+
+    .payment-methods-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .payment-card {
+      position: relative;
+
+      border-radius: 18px;
+
+      padding: 20px 12px 16px;
+
+      cursor: pointer;
+
+      border: 2px solid rgba(255, 255, 255, 0.06);
+
+      transition: all 0.3s ease;
+
+      text-align: center;
+
+      overflow: hidden;
+    }
+
+    .pay-instapay {
+      background: linear-gradient(145deg,
+          rgba(255, 107, 0, 0.08),
+          rgba(255, 107, 0, 0.03));
+    }
+
+    .pay-cash {
+      background: linear-gradient(145deg,
+          rgba(34, 197, 94, 0.08),
+          rgba(34, 197, 94, 0.03));
+    }
+
+    .payment-card.selected {
+      transform: scale(1.02);
+    }
+
+    .pay-instapay.selected {
+      border-color: #FF6B00;
+    }
+
+    .pay-cash.selected {
+      border-color: #22C55E;
+    }
+
+    .pay-check {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+
+      width: 24px;
+      height: 24px;
+
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 13px;
+      font-weight: 900;
+
+      opacity: 0;
+      transition: 0.3s;
+
+      color: white;
+    }
+
+    .pay-instapay .pay-check {
+      background: #FF6B00;
+    }
+
+    .pay-cash .pay-check {
+      background: #22C55E;
+    }
+
+    .payment-card.selected .pay-check {
+      opacity: 1;
+    }
+
+    .pay-icon {
+      font-size: 2.4rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .pay-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .pay-number {
+      font-size: 0.8rem;
+      direction: ltr;
+      display: block;
+      line-height: 1.8;
+      font-weight: 600;
+    }
+
+    .pay-number span {
+      display: block;
+    }
+
+    /* Overlay */
+
+    .sending-overlay {
+      display: none;
+
+      position: fixed;
+
+      inset: 0;
+
+      z-index: 999;
+
+      background: rgba(10, 10, 20, 0.85);
+
+      backdrop-filter: blur(6px);
+
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .sending-overlay.show {
+      display: flex;
+    }
+
+    .spinner {
+      width: 60px;
+      height: 60px;
+
+      border: 5px solid #333;
+
+      border-top-color: var(--accent);
+
+      border-radius: 50%;
+
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    .sending-text {
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    /* Steps */
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+      animation: fadeIn 0.45s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .success-screen {
+      text-align: center;
+      padding: 50px 20px;
+      background: var(--card);
+      border-radius: 24px;
+    }
+
+    .success-screen h2 {
+      color: var(--green);
+      margin: 20px 0;
+      font-size: 1.8rem;
+    }
+
+    .success-icon {
+      font-size: 80px;
+    }
+
+    .order-summary {
+      background: #1A1A2E;
+
+      border: 1px solid #333;
+
+      border-radius: 16px;
+
+      padding: 18px;
+
+      margin-bottom: 16px;
+
+      text-align: right;
+    }
+
+    .order-summary p {
+      margin: 6px 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .order-summary span {
+      color: white;
+      font-weight: 600;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="sending-overlay" id="sendingOverlay">
-  <div class="spinner"></div>
-  <div class="sending-text">جاري إرسال طلبك...</div>
-</div>
+  <!-- Overlay -->
 
-<div class="stars"></div>
+  <div class="sending-overlay" id="sendingOverlay">
 
-<div class="container">
+    <div class="spinner"></div>
 
-  <div class="logo">🌟</div>
-
-  <h1>عالم العروض</h1>
-
-  <p class="subtitle">
-    احجز باقتك بسهولة وسرعة
-  </p>
-
-  <div id="loading" class="loading">
-    ⏳ جاري تحميل الباقات...
-  </div>
-
-  <!-- Step 1 -->
-
-  <div id="step1" class="step card">
-
-    <div class="section-title">
-      📡 اختر الشركة
+    <div class="sending-text">
+      جاري إرسال طلبك...
     </div>
-
-    <div class="company-grid" id="companyGrid"></div>
 
   </div>
 
-  <!-- Step 2 -->
+  <!-- Background -->
 
-  <div id="step2" class="step card">
+  <div class="stars"></div>
 
-    <div class="section-title">
-      📦 اختر الباقة
-    </div>
+  <!-- App -->
 
-    <div class="filter-tabs">
+  <div class="container">
 
-      <div class="filter-tab active" data-filter="all">
-        الكل
+    <div class="logo">🌟</div>
+
+    <h1>عالم العروض</h1>
+
+    <p class="subtitle">
+      احجز باقتك بسهولة وسرعة
+    </p>
+
+    <!-- Steps -->
+
+    <div class="steps-indicator">
+
+      <div class="step-badge active" id="badge1">
+        1️⃣ الشركة
       </div>
 
-      <div class="filter-tab" data-filter="جيجا">
-        جيجا
+      <div class="step-badge" id="badge2">
+        2️⃣ الباقة
       </div>
 
-      <div class="filter-tab" data-filter="دقايق">
-        دقايق
+      <div class="step-badge" id="badge3">
+        3️⃣ البيانات
       </div>
 
-      <div class="filter-tab" data-filter="ميكس">
-        ميكس
+      <div class="step-badge" id="badge4">
+        ✅ تم
       </div>
 
     </div>
 
-    <div class="packages-list" id="packagesList"></div>
+    <!-- Loading -->
 
-    <button class="btn btn-back" onclick="backToCompanies()">
-      ← رجوع للشركات
-    </button>
+    <div id="loading" class="skeleton-wrapper">
 
-  </div>
-
-  <!-- Step 3 -->
-
-  <div id="step3" class="step card">
-
-    <div class="section-title">
-      📋 ملخص طلبك
-    </div>
-
-    <div class="order-summary" id="orderSummary"></div>
-
-    <!-- بيانات العميل -->
-
-    <div class="section-title">
-      👤 بيانات الحجز
-    </div>
-
-    <input
-      type="text"
-      id="customerName"
-      placeholder="اسمك الكامل"
-      class="rtl-input"
-    >
-
-    <!-- واتساب -->
-
-    <div class="input-group">
-
-      <label class="input-label">
-        📱 رقم الواتساب للتواصل والمتابعة
-      </label>
-
-      <input
-        type="tel"
-        id="phone"
-        placeholder="مثال: 01012345678"
-        class="rtl-input number-input"
-      >
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
+      <div class="skeleton-card"></div>
 
     </div>
 
-    <!-- رقم التفعيل -->
+    <!-- Step 1 -->
 
-    <div class="input-group" style="margin-top:14px;">
+    <div id="step1" class="step card">
 
-      <div style="
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        margin-bottom:8px;
-        gap:10px;
-        flex-wrap:wrap;
-      ">
+      <div class="section-title">
+        📡 اختر الشركة
+      </div>
 
-        <label class="input-label" style="margin:0;">
-          📡 الرقم المراد تفعيل الباقة عليه
-        </label>
+      <div class="company-grid" id="companyGrid"></div>
 
-        <label class="same-number-check">
+    </div>
 
-          <input type="checkbox" id="sameAsWhatsapp">
+    <!-- Step 2 -->
 
-          <span>نفس رقم الواتساب</span>
+    <div id="step2" class="step card">
 
-        </label>
+      <div class="section-title">
+        📦 اختر الباقة
+      </div>
 
+      <div class="filter-tabs">
+
+        <div class="filter-tab active" data-filter="all">
+          الكل
+        </div>
+
+        <div class="filter-tab" data-filter="جيجا">
+          جيجا
+        </div>
+
+        <div class="filter-tab" data-filter="دقايق">
+          دقايق
+        </div>
+
+        <div class="filter-tab" data-filter="ميكس">
+          ميكس
+        </div>
+
+      </div>
+
+      <div class="packages-list" id="packagesList"></div>
+
+      <button class="btn btn-back" onclick="backToCompanies()">
+        ← رجوع للشركات
+      </button>
+
+    </div>
+
+    <!-- Step 3 -->
+
+    <div id="step3" class="step card">
+
+      <div class="section-title">
+        📋 ملخص طلبك
+      </div>
+
+      <div class="order-summary" id="orderSummary"></div>
+
+      <div class="section-title">
+        👤 بيانات الحجز
       </div>
 
       <input
-        type="tel"
-        id="activationPhone"
-        placeholder="اكتب الرقم اللي هتتفعل عليه الباقة"
-        class="rtl-input number-input"
-      >
+        type="text"
+        id="customerName"
+        placeholder="اسمك الكامل"
+        class="rtl-input">
 
-    </div>
+      <!-- WhatsApp -->
 
-    <!-- الدفع -->
+      <div class="input-group">
 
-    <div class="section-title" style="margin-top:20px;">
-      💳 طريقة الدفع
-    </div>
+        <label class="input-label">
+          📱 رقم الواتساب للتواصل والمتابعة
+        </label>
 
-    <div class="payment-hint">
-      حوّل المبلغ على أحد الأرقام أدناه ثم ارفع إيصال الدفع
-    </div>
-
-    <div class="payment-methods-grid">
-
-      <div class="payment-card pay-instapay" onclick="selectPayment('إنستا باي', this)">
-
-        <div class="pay-check">✓</div>
-
-        <span class="pay-icon">🏧</span>
-
-        <span class="pay-name">إنستا باي</span>
-
-        <span class="pay-number">
-          <span>01284277707</span>
-        </span>
+        <input
+          type="tel"
+          id="phone"
+          placeholder="مثال: 01012345678"
+          class="rtl-input number-input">
 
       </div>
 
-      <div class="payment-card pay-cash" onclick="selectPayment('كاش', this)">
+      <!-- Activation -->
 
-        <div class="pay-check">✓</div>
+      <div class="input-group" style="margin-top:14px;">
 
-        <span class="pay-icon">💲</span>
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:10px;
+            flex-wrap:wrap;
+            margin-bottom:8px;
+          ">
 
-        <span class="pay-name">كاش</span>
+          <label class="input-label" style="margin:0;">
+            📡 الرقم المراد تفعيل الباقة عليه
+          </label>
 
-        <span class="pay-number">
-          <span>01284277707</span>
-          <span>01120228568</span>
-        </span>
+          <label class="same-number-check">
+
+            <input type="checkbox" id="sameAsWhatsapp">
+
+            <span>نفس رقم الواتساب</span>
+
+          </label>
+
+        </div>
+
+        <input
+          type="tel"
+          id="activationPhone"
+          placeholder="اكتب الرقم المراد التفعيل عليه"
+          class="rtl-input number-input">
 
       </div>
 
+      <!-- Payment -->
+
+      <div class="section-title" style="margin-top:20px;">
+        💳 طريقة الدفع
+      </div>
+
+      <div class="payment-hint">
+        حوّل المبلغ على أحد الأرقام التالية ثم ارفع إيصال الدفع
+      </div>
+
+      <div class="payment-methods-grid">
+
+        <div class="payment-card pay-instapay"
+          onclick="selectPayment('إنستا باي', this)">
+
+          <div class="pay-check">✓</div>
+
+          <span class="pay-icon">🏧</span>
+
+          <span class="pay-name">إنستا باي</span>
+
+          <span class="pay-number">
+            <span>01284277707</span>
+          </span>
+
+        </div>
+
+        <div class="payment-card pay-cash"
+          onclick="selectPayment('كاش', this)">
+
+          <div class="pay-check">✓</div>
+
+          <span class="pay-icon">💲</span>
+
+          <span class="pay-name">كاش</span>
+
+          <span class="pay-number">
+            <span>01284277707</span>
+            <span>01120228568</span>
+          </span>
+
+        </div>
+
+      </div>
+
+      <input
+        type="text"
+        id="transferRef"
+        placeholder="رقم التحويل أو المرجع"
+        class="rtl-input">
+
+      <textarea
+        id="notes"
+        rows="2"
+        placeholder="ملاحظات (اختياري)"
+        class="rtl-input"></textarea>
+
+      <div class="section-title">
+        🧾 ارفع إيصال الدفع
+      </div>
+
+      <input
+        type="file"
+        id="proofUpload"
+        accept="image/*"
+        onchange="previewImage(event)">
+
+      <img id="imagePreview" alt="معاينة الإيصال">
+
+      <button
+        class="btn btn-primary"
+        id="submitBtn"
+        onclick="submitOrder()">
+
+        ✅ تأكيد وإرسال الطلب
+
+      </button>
+
+      <button class="btn btn-back" onclick="showStep(2)">
+        ← رجوع للباقات
+      </button>
+
     </div>
 
-    <!-- بيانات إضافية -->
+    <!-- Success -->
 
-    <input
-      type="text"
-      id="transferRef"
-      placeholder="رقم التحويل أو المرجع"
-      class="rtl-input"
-    >
+    <div id="successScreen" class="step success-screen">
 
-    <textarea
-      id="notes"
-      rows="2"
-      placeholder="ملاحظات (اختياري)"
-      class="rtl-input"
-    ></textarea>
+      <div class="success-icon">
+        🎉
+      </div>
 
-    <!-- رفع الإيصال -->
+      <h2>
+        تم استلام طلبك بنجاح!
+      </h2>
 
-    <div class="section-title">
-      🧾 ارفع إيصال الدفع
+      <p id="orderIdDisplay"
+        style="
+          font-size:1.4rem;
+          color:var(--green);
+          margin:15px 0;
+          font-weight:700;
+        ">
+      </p>
+
+      <p style="color:var(--muted);margin-bottom:30px;">
+        سيتم مراجعة وتفعيل طلبك خلال دقائق
+        <br>
+        شكراً لثقتك في عالم العروض 🌟
+      </p>
+
+      <button class="btn btn-success" onclick="restart()">
+        📦 طلب باقة جديدة
+      </button>
+
     </div>
-
-    <input
-      type="file"
-      id="proofUpload"
-      accept="image/*"
-      onchange="previewImage(event)"
-    >
-
-    <img id="imagePreview" alt="معاينة الإيصال">
-
-    <button class="btn btn-primary" onclick="submitOrder()">
-      ✅ تأكيد وإرسال الطلب
-    </button>
-
-    <button class="btn btn-back" onclick="showStep(2)">
-      ← رجوع للباقات
-    </button>
 
   </div>
 
-  <!-- Success -->
+  <script>
 
-  <div id="successScreen" class="step success-screen">
+    const SCRIPT_URL =
+      'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
 
-    <div class="success-icon">
-      🎉
-    </div>
+    let allPackages = [];
 
-    <h2>
-      تم استلام طلبك بنجاح!
-    </h2>
+    let companyPackagesMap = {};
 
-    <p id="orderIdDisplay"
-       style="
-        font-size:1.4rem;
-        color:var(--green);
-        margin:15px 0;
-        font-weight:700;
-       ">
-    </p>
+    let selectedCompany = '';
 
-    <p style="color:var(--muted);margin-bottom:30px;">
-      سيتم مراجعة وتفعيل طلبك خلال دقائق
-      <br>
-      شكراً لثقتك في عالم العروض 🌟
-    </p>
+    let selectedPackage = null;
 
-    <button class="btn btn-success" onclick="restart()">
-      📦 طلب باقة جديدة
-    </button>
+    let proofBase64 = '';
 
-  </div>
+    let selectedPaymentMethod = '';
 
-</div>
+    /* تحسين الكاش */
 
-<script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
+    async function loadPackages() {
 
-let allPackages = [];
-let selectedCompany = '';
-let selectedPackage = null;
-let proofBase64 = '';
-let selectedPaymentMethod = '';
+      const loadingEl = document.getElementById('loading');
 
-async function loadPackages(){
+      try {
 
-  const loadingEl = document.getElementById('loading');
+        const cachedData =
+          localStorage.getItem('packages_cache');
 
-  try{
+        const cachedTime =
+          localStorage.getItem('packages_cache_time');
 
-    const res = await fetch(`${SCRIPT_URL}?action=packages`, {
-      cache:'no-store'
-    });
+        const CACHE_DURATION = 10 * 60 * 1000;
 
-    allPackages = await res.json();
+        if (
+          cachedData &&
+          cachedTime &&
+          (Date.now() - cachedTime < CACHE_DURATION)
+        ) {
 
-    loadingEl.style.display = 'none';
+          allPackages = JSON.parse(cachedData);
 
-    showStep(1);
+          preparePackagesMap();
 
-    createCompanyCards();
+          loadingEl.style.display = 'none';
 
-  }catch(e){
+          showStep(1);
 
-    loadingEl.innerHTML = `
-      <div style="color:#f87171;">
-        ❌ فشل تحميل الباقات
-      </div>
-    `;
-  }
-}
+          createCompanyCards();
 
-function createCompanyCards(){
+          return;
+        }
 
-  const companies = [
-    { name:'أورانج', emoji:'🟠' },
-    { name:'وي', emoji:'🟣' },
-    { name:'اتصالات', emoji:'🟢' },
-    { name:'فودافون', emoji:'🔴' }
-  ];
+        const res =
+          await fetch(`${SCRIPT_URL}?action=packages`);
 
-  const grid = document.getElementById('companyGrid');
+        allPackages = await res.json();
 
-  grid.innerHTML = '';
+        localStorage.setItem(
+          'packages_cache',
+          JSON.stringify(allPackages)
+        );
 
-  companies.forEach(({name,emoji})=>{
+        localStorage.setItem(
+          'packages_cache_time',
+          Date.now()
+        );
 
-    const div = document.createElement('div');
+        preparePackagesMap();
 
-    div.className = 'company-card';
+        loadingEl.style.display = 'none';
 
-    div.innerHTML = `
-      <div style="font-size:2rem;margin-bottom:8px;">
-        ${emoji}
-      </div>
-      ${name}
-    `;
+        showStep(1);
 
-    div.onclick = ()=>selectCompany(name,div);
+        createCompanyCards();
 
-    grid.appendChild(div);
+      } catch (e) {
 
-  });
-}
-
-function selectCompany(company,el){
-
-  document.querySelectorAll('.company-card')
-    .forEach(c=>c.classList.remove('selected'));
-
-  el.classList.add('selected');
-
-  selectedCompany = company;
-
-  showStep(2);
-
-  filterPackages('all');
-}
-
-function filterPackages(type){
-
-  document.querySelectorAll('.filter-tab').forEach(tab=>{
-    tab.classList.toggle('active', tab.dataset.filter === type);
-  });
-
-  const container = document.getElementById('packagesList');
-
-  container.innerHTML = '';
-
-  let filtered = allPackages.filter(
-    p => p.company.includes(selectedCompany)
-  );
-
-  filtered.forEach(pkg=>{
-
-    const div = document.createElement('div');
-
-    div.className = 'pkg-item';
-
-    div.innerHTML = `
-      <strong style="font-size:1.05rem;">
-        ${pkg.name}
-      </strong>
-
-      <div style="
-        margin-top:10px;
-        color:#22C55E;
-        font-size:1.4rem;
-        font-weight:700;
-      ">
-        ${pkg.price} جنيه
-      </div>
-    `;
-
-    div.onclick = ()=>{
-
-      document.querySelectorAll('.pkg-item')
-        .forEach(i=>i.classList.remove('selected'));
-
-      div.classList.add('selected');
-
-      selectedPackage = pkg;
-
-      setTimeout(()=>{
-
-        updateOrderSummary();
-
-        showStep(3);
-
-      },200);
-    };
-
-    container.appendChild(div);
-
-  });
-}
-
-function selectPayment(method,el){
-
-  document.querySelectorAll('.payment-card')
-    .forEach(c=>c.classList.remove('selected'));
-
-  el.classList.add('selected');
-
-  selectedPaymentMethod = method;
-}
-
-function updateOrderSummary(){
-
-  if(!selectedPackage) return;
-
-  document.getElementById('orderSummary').innerHTML = `
-    <p>📡 الشركة: <span>${selectedCompany}</span></p>
-    <p>📦 الباقة: <span>${selectedPackage.name}</span></p>
-    <p>💰 السعر: <span style="color:var(--green)">
-      ${selectedPackage.price} جنيه
-    </span></p>
-  `;
-}
-
-function showStep(step){
-
-  document.querySelectorAll('.step')
-    .forEach(s=>s.classList.remove('active'));
-
-  const el = document.getElementById(
-    step === 4 ? 'successScreen' : `step${step}`
-  );
-
-  if(el){
-    el.classList.add('active');
-  }
-
-  window.scrollTo({
-    top:0,
-    behavior:'smooth'
-  });
-}
-
-function backToCompanies(){
-  showStep(1);
-}
-
-function previewImage(e){
-
-  const file = e.target.files[0];
-
-  if(!file) return;
-
-  const reader = new FileReader();
-
-  reader.onload = ev => {
-
-    proofBase64 = ev.target.result;
-
-    const img = document.getElementById('imagePreview');
-
-    img.src = proofBase64;
-
-    img.style.display = 'block';
-  };
-
-  reader.readAsDataURL(file);
-}
-
-/* نفس رقم الواتساب */
-
-document.addEventListener('DOMContentLoaded', ()=>{
-
-  document.getElementById('sameAsWhatsapp')
-    .addEventListener('change', function(){
-
-      const whatsappInput = document.getElementById('phone');
-
-      const activationInput = document.getElementById('activationPhone');
-
-      if(this.checked){
-
-        activationInput.value = whatsappInput.value;
-
-        activationInput.setAttribute('readonly', true);
-
-        activationInput.style.opacity = '0.7';
-
-      }else{
-
-        activationInput.removeAttribute('readonly');
-
-        activationInput.style.opacity = '1';
-
-        activationInput.value = '';
+        loadingEl.innerHTML = `
+          <div style="
+            text-align:center;
+            color:#f87171;
+            padding:40px 20px;
+          ">
+            ❌ فشل تحميل الباقات
+          </div>
+        `;
       }
-    });
+    }
 
-  document.getElementById('phone')
-    .addEventListener('input', function(){
+    /* تجهيز الماب */
 
-      const checkbox = document.getElementById('sameAsWhatsapp');
+    function preparePackagesMap() {
 
-      if(checkbox.checked){
+      companyPackagesMap = {};
 
-        document.getElementById('activationPhone').value = this.value;
+      allPackages.forEach(pkg => {
+
+        if (!companyPackagesMap[pkg.company]) {
+
+          companyPackagesMap[pkg.company] = [];
+        }
+
+        companyPackagesMap[pkg.company].push(pkg);
+
+      });
+    }
+
+    /* شركات */
+
+    function createCompanyCards() {
+
+      const companies = [
+        { name: 'أورانج', emoji: '🟠' },
+        { name: 'وي', emoji: '🟣' },
+        { name: 'اتصالات', emoji: '🟢' },
+        { name: 'فودافون', emoji: '🔴' }
+      ];
+
+      const grid =
+        document.getElementById('companyGrid');
+
+      grid.innerHTML = '';
+
+      companies.forEach(({ name, emoji }) => {
+
+        const div = document.createElement('div');
+
+        div.className = 'company-card';
+
+        div.innerHTML = `
+          <div style="
+            font-size:2rem;
+            margin-bottom:8px;
+          ">
+            ${emoji}
+          </div>
+
+          ${name}
+        `;
+
+        div.onclick = () =>
+          selectCompany(name, div);
+
+        grid.appendChild(div);
+
+      });
+    }
+
+    /* اختيار شركة */
+
+    function selectCompany(company, el) {
+
+      document
+        .querySelectorAll('.company-card')
+        .forEach(c => c.classList.remove('selected'));
+
+      el.classList.add('selected');
+
+      selectedCompany = company;
+
+      showStep(2);
+
+      filterPackages('all');
+    }
+
+    /* فلترة */
+
+    function filterPackages(type) {
+
+      document.querySelectorAll('.filter-tab')
+        .forEach(tab => {
+
+          tab.classList.toggle(
+            'active',
+            tab.dataset.filter === type
+          );
+        });
+
+      const container =
+        document.getElementById('packagesList');
+
+      container.innerHTML = '';
+
+      let filtered =
+        companyPackagesMap[selectedCompany] || [];
+
+      if (type !== 'all') {
+
+        filtered = filtered.filter(pkg => {
+
+          const text =
+            (pkg.name + ' ' + (pkg.type || ''))
+              .toLowerCase();
+
+          if (type === 'جيجا')
+            return text.includes('جيجا');
+
+          if (type === 'دقايق')
+            return text.includes('دقيقة')
+              || text.includes('دقايق');
+
+          if (type === 'ميكس')
+            return text.includes('ميكس');
+
+          return true;
+        });
       }
+
+      if (!filtered.length) {
+
+        container.innerHTML = `
+          <div style="
+            text-align:center;
+            padding:40px;
+            color:#f59e0b;
+          ">
+            ⚠️ لا توجد باقات
+          </div>
+        `;
+
+        return;
+      }
+
+      filtered.forEach(pkg => {
+
+        const div = document.createElement('div');
+
+        div.className = 'pkg-item';
+
+        div.innerHTML = `
+          <strong style="font-size:1.05rem;">
+            ${pkg.name}
+          </strong>
+
+          <div style="
+            margin-top:10px;
+            color:#22C55E;
+            font-size:1.4rem;
+            font-weight:700;
+          ">
+            ${pkg.price} جنيه
+          </div>
+        `;
+
+        div.onclick = () => {
+
+          document
+            .querySelectorAll('.pkg-item')
+            .forEach(i =>
+              i.classList.remove('selected'));
+
+          div.classList.add('selected');
+
+          selectedPackage = pkg;
+
+          updateOrderSummary();
+
+          setTimeout(() => {
+
+            showStep(3);
+
+          }, 180);
+        };
+
+        container.appendChild(div);
+
+      });
+    }
+
+    /* دفع */
+
+    function selectPayment(method, el) {
+
+      document.querySelectorAll('.payment-card')
+        .forEach(c =>
+          c.classList.remove('selected'));
+
+      el.classList.add('selected');
+
+      selectedPaymentMethod = method;
+    }
+
+    /* ملخص */
+
+    function updateOrderSummary() {
+
+      if (!selectedPackage) return;
+
+      document.getElementById('orderSummary')
+        .innerHTML = `
+          <p>
+            📡 الشركة:
+            <span>${selectedCompany}</span>
+          </p>
+
+          <p>
+            📦 الباقة:
+            <span>${selectedPackage.name}</span>
+          </p>
+
+          <p>
+            💰 السعر:
+            <span style="color:var(--green)">
+              ${selectedPackage.price} جنيه
+            </span>
+          </p>
+        `;
+    }
+
+    /* Steps */
+
+    function showStep(step) {
+
+      document.querySelectorAll('.step')
+        .forEach(s =>
+          s.classList.remove('active'));
+
+      const el =
+        document.getElementById(
+          step === 4
+            ? 'successScreen'
+            : `step${step}`
+        );
+
+      if (el)
+        el.classList.add('active');
+
+      /* badges */
+
+      for (let i = 1; i <= 4; i++) {
+
+        document
+          .getElementById(`badge${i}`)
+          .classList.remove('active');
+      }
+
+      document
+        .getElementById(`badge${step}`)
+        .classList.add('active');
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    }
+
+    function backToCompanies() {
+      showStep(1);
+    }
+
+    /* صور */
+
+    function previewImage(e) {
+
+      const file = e.target.files[0];
+
+      if (!file) return;
+
+      if (file.size > 3 * 1024 * 1024) {
+
+        alert("❌ الصورة كبيرة جدًا");
+
+        return;
+      }
+
+      const reader = new FileReader();
+
+      reader.onload = ev => {
+
+        proofBase64 = ev.target.result;
+
+        const img =
+          document.getElementById('imagePreview');
+
+        img.src = proofBase64;
+
+        img.style.display = 'block';
+      };
+
+      reader.readAsDataURL(file);
+    }
+
+    /* normalize */
+
+    function normalizePhone(phone) {
+
+      return phone
+        .replace(/\s/g, '')
+        .replace('+2', '')
+        .replace(/^20/, '0');
+    }
+
+    /* إرسال */
+
+    async function submitOrder() {
+
+      const submitBtn =
+        document.getElementById('submitBtn');
+
+      let name =
+        document.getElementById('customerName')
+          .value.trim();
+
+      let phone =
+        normalizePhone(
+          document.getElementById('phone')
+            .value.trim()
+        );
+
+      let activationPhone =
+        normalizePhone(
+          document.getElementById('activationPhone')
+            .value.trim()
+        );
+
+      if (!name) {
+        alert("❌ برجاء كتابة الاسم");
+        return;
+      }
+
+      if (!phone) {
+        alert("❌ برجاء كتابة رقم الواتساب");
+        return;
+      }
+
+      if (!activationPhone) {
+        alert("❌ برجاء كتابة رقم التفعيل");
+        return;
+      }
+
+      if (!selectedPackage) {
+        alert("❌ اختر باقة");
+        return;
+      }
+
+      if (!selectedPaymentMethod) {
+        alert("❌ اختر طريقة الدفع");
+        return;
+      }
+
+      submitBtn.disabled = true;
+
+      submitBtn.style.opacity = '0.7';
+
+      const localOrderId =
+        'ORD-' + Date.now();
+
+      const formData = {
+
+        orderId: localOrderId,
+
+        customerName: name,
+
+        phone: phone,
+
+        activationPhone: activationPhone,
+
+        company: selectedCompany,
+
+        package: selectedPackage.name,
+
+        price: selectedPackage.price,
+
+        payment: selectedPaymentMethod,
+
+        transferRef:
+          document.getElementById('transferRef')
+            .value || '',
+
+        notes:
+          document.getElementById('notes')
+            .value || '',
+
+        proofBase64: proofBase64 || ''
+      };
+
+      document.getElementById('sendingOverlay')
+        .classList.add('show');
+
+      try {
+
+        await fetch(SCRIPT_URL, {
+
+          method: 'POST',
+
+          mode: 'no-cors',
+
+          headers: {
+            'Content-Type': 'text/plain'
+          },
+
+          body: JSON.stringify(formData)
+        });
+
+        await new Promise(r =>
+          setTimeout(r, 1000));
+
+        document.getElementById('sendingOverlay')
+          .classList.remove('show');
+
+        document.getElementById('orderIdDisplay')
+          .textContent =
+          `رقم طلبك: ${localOrderId}`;
+
+        showStep(4);
+
+      } catch (e) {
+
+        submitBtn.disabled = false;
+
+        submitBtn.style.opacity = '1';
+
+        document.getElementById('sendingOverlay')
+          .classList.remove('show');
+
+        alert("❌ فشل الإرسال");
+      }
+    }
+
+    /* Restart */
+
+    function restart() {
+      location.reload();
+    }
+
+    /* DOM */
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+      /* نفس الرقم */
+
+      document
+        .getElementById('sameAsWhatsapp')
+        .addEventListener('change', function () {
+
+          const whatsappInput =
+            document.getElementById('phone');
+
+          const activationInput =
+            document.getElementById('activationPhone');
+
+          if (this.checked) {
+
+            activationInput.value =
+              whatsappInput.value;
+
+            activationInput.setAttribute(
+              'readonly',
+              true
+            );
+
+            activationInput.style.opacity = '0.7';
+
+          } else {
+
+            activationInput.removeAttribute(
+              'readonly'
+            );
+
+            activationInput.style.opacity = '1';
+
+            activationInput.value = '';
+          }
+        });
+
+      /* Sync */
+
+      document
+        .getElementById('phone')
+        .addEventListener('input', function () {
+
+          const checkbox =
+            document.getElementById('sameAsWhatsapp');
+
+          if (checkbox.checked) {
+
+            document.getElementById(
+              'activationPhone'
+            ).value = this.value;
+          }
+        });
+
+      /* Tabs */
+
+      document.querySelectorAll('.filter-tab')
+        .forEach(tab => {
+
+          tab.addEventListener('click', () => {
+
+            filterPackages(tab.dataset.filter);
+
+          });
+        });
+
     });
 
-  document.querySelectorAll('.filter-tab').forEach(tab=>{
+    window.onload = loadPackages;
 
-    tab.addEventListener('click', ()=>{
-      filterPackages(tab.dataset.filter);
-    });
-
-  });
-
-});
-
-async function submitOrder(){
-
-  const name = document.getElementById('customerName').value.trim();
-
-  const phone = document.getElementById('phone').value.trim();
-
-  const activationPhone = document.getElementById('activationPhone').value.trim();
-
-  if(!name){
-    alert("❌ برجاء كتابة اسمك الكامل");
-    return;
-  }
-
-  if(!phone){
-    alert("❌ برجاء كتابة رقم الواتساب");
-    return;
-  }
-
-  if(!activationPhone){
-    alert("❌ برجاء كتابة الرقم المراد تفعيل الباقة عليه");
-    return;
-  }
-
-  if(!selectedPackage){
-    alert("❌ برجاء اختيار باقة");
-    return;
-  }
-
-  if(!selectedPaymentMethod){
-    alert("❌ برجاء اختيار طريقة الدفع");
-    return;
-  }
-
-  const localOrderId = 'ORD-' + Date.now();
-
-  const formData = {
-
-    orderId: localOrderId,
-
-    customerName: name,
-
-    phone: phone,
-
-    activationPhone: activationPhone,
-
-    company: selectedCompany,
-
-    package: selectedPackage.name,
-
-    price: selectedPackage.price,
-
-    payment: selectedPaymentMethod,
-
-    transferRef: document.getElementById('transferRef').value || '',
-
-    notes: document.getElementById('notes').value || '',
-
-    proofBase64: proofBase64 || ''
-  };
-
-  document.getElementById('sendingOverlay')
-    .classList.add('show');
-
-  try{
-
-    await fetch(SCRIPT_URL, {
-
-      method:'POST',
-
-      mode:'no-cors',
-
-      headers:{
-        'Content-Type':'text/plain'
-      },
-
-      body: JSON.stringify(formData)
-
-    });
-
-    await new Promise(r=>setTimeout(r,1000));
-
-    document.getElementById('sendingOverlay')
-      .classList.remove('show');
-
-    document.getElementById('orderIdDisplay')
-      .textContent = `رقم طلبك: ${localOrderId}`;
-
-    showStep(4);
-
-  }catch(e){
-
-    document.getElementById('sendingOverlay')
-      .classList.remove('show');
-
-    alert("❌ فشل الإرسال");
-  }
-}
-
-function restart(){
-  location.reload();
-}
-
-window.onload = loadPackages;
-</script>
+  </script>
 
 </body>
+
 </html>
