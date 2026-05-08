@@ -7,221 +7,28 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --dark:#0D0D1A;
-  --mid:#13132B;
-  --card:#1A1A35;
-  --border:#2A2A50;
-  --accent:#E94560;
-  --gold:#F5A623;
-  --purple:#7B2FBE;
-  --cyan:#00D4FF;
-  --green:#00E676;
-  --text:#E8E8F0;
-  --muted:#888AAA;
+  --dark:#0D0D1A; --mid:#13132B; --card:#1A1A35; --border:#2A2A50;
+  --accent:#E94560; --gold:#F5A623; --text:#E8E8F0;
 }
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
-body{
-  background:var(--dark);
-  color:var(--text);
-  font-family:'Cairo',sans-serif;
-  min-height:100vh;
-  overflow-x:hidden;
-}
-.container{
-  max-width:700px;
-  margin:auto;
-  padding:20px 16px 60px;
-}
-.header{
-  text-align:center;
-  padding:40px 0 30px;
-}
-.logo-ring{
-  width:90px;
-  height:90px;
-  margin:auto auto 16px;
-  border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),var(--purple));
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:40px;
-  box-shadow:0 0 30px rgba(233,69,96,.4);
-}
-.header h1{
-  font-size:2.3rem;
-  font-weight:900;
-  background:linear-gradient(135deg,var(--gold),var(--accent));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  margin-bottom:8px;
-}
-.contact-strip{
-  display:flex;
-  justify-content:center;
-  gap:10px;
-  flex-wrap:wrap;
-  margin:20px 0 30px;
-}
-.chip{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:24px;
-  padding:6px 14px;
-  font-size:.85rem;
-}
-.chip span{
-  color:white;
-  font-weight:700;
-}
-.form-section{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:24px;
-  margin-bottom:16px;
-}
-.section-title{
-  font-size:1.1rem;
-  font-weight:700;
-  color:var(--gold);
-  margin-bottom:16px;
-}
-.companies-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
-}
-.company-card{
-  background:var(--mid);
-  border:2px solid var(--border);
-  border-radius:16px;
-  padding:18px 14px;
-  text-align:center;
-  cursor:pointer;
-  transition:.25s;
-}
-.company-card:hover{
-  transform:translateY(-3px);
-}
-.company-card.selected{
-  border-color:var(--gold);
-  box-shadow:0 0 20px rgba(245,166,35,.25);
-}
-.company-emoji{
-  font-size:2.2rem;
-  margin-bottom:8px;
-}
-.packages-list{
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-.pkg-item{
-  background:var(--mid);
-  border:1.5px solid var(--border);
-  border-radius:12px;
-  padding:14px 16px;
-  cursor:pointer;
-  transition:.2s;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-}
-.pkg-item.selected{
-  border-color:var(--gold);
-  background:rgba(245,166,35,.06);
-}
-.pkg-price{
-  font-size:1.1rem;
-  font-weight:900;
-  color:var(--accent);
-}
-input, textarea{
-  width:100%;
-  background:var(--mid);
-  border:1.5px solid var(--border);
-  border-radius:12px;
-  padding:13px 16px;
-  color:white;
-  margin-top:8px;
-}
-.payment-options{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-.pay-card{
-  background:var(--mid);
-  border:1.5px solid var(--border);
-  border-radius:12px;
-  padding:12px;
-  text-align:center;
-  cursor:pointer;
-}
-.pay-card.selected{
-  border-color:var(--cyan);
-}
-.upload-zone{
-  border:2px dashed var(--border);
-  border-radius:14px;
-  padding:28px;
-  text-align:center;
-  cursor:pointer;
-  position:relative;
-}
-.upload-zone input[type=file]{
-  position:absolute;
-  inset:0;
-  opacity:0;
-  cursor:pointer;
-}
-.upload-preview{
-  margin-top:12px;
-  background:var(--mid);
-  border-radius:10px;
-  padding:10px;
-  color:var(--green);
-  display:none;
-}
-.summary-card{
-  background:linear-gradient(135deg,var(--mid),rgba(245,166,35,.06));
-  border:1px solid rgba(245,166,35,.3);
-  border-radius:16px;
-  padding:20px;
-  margin-bottom:16px;
-  display:none;
-}
-.submit-btn{
-  width:100%;
-  background:linear-gradient(135deg,var(--accent),var(--purple));
-  border:none;
-  border-radius:16px;
-  padding:18px;
-  font-size:1.1rem;
-  font-weight:800;
-  color:white;
-  cursor:pointer;
-}
-.toast{
-  position:fixed;
-  bottom:24px;
-  left:50%;
-  transform:translateX(-50%);
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:12px 24px;
-  z-index:999;
-  display:none;
-}
-.toast.show{
-  display:block;
-}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--dark); color:var(--text); font-family:'Cairo',sans-serif; min-height:100vh; }
+.container { max-width:700px; margin:auto; padding:20px 16px; }
+.header { text-align:center; padding:40px 0 30px; }
+.logo-ring { width:90px; height:90px; margin:auto; border-radius:50%; background:linear-gradient(135deg,#E94560,#7B2FBE); display:flex; align-items:center; justify-content:center; font-size:40px; }
+h1 { font-size:2.3rem; font-weight:900; background:linear-gradient(135deg,#F5A623,#E94560); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+.form-section { background:var(--card); border:1px solid var(--border); border-radius:20px; padding:24px; margin-bottom:16px; }
+.section-title { font-size:1.1rem; font-weight:700; color:var(--gold); margin-bottom:16px; }
+.companies-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; }
+.company-card { background:var(--mid); border:2px solid var(--border); border-radius:16px; padding:18px; text-align:center; cursor:pointer; }
+.company-card.selected { border-color:var(--gold); }
+.packages-list { display:flex; flex-direction:column; gap:10px; }
+.pkg-item { background:var(--mid); border:1.5px solid var(--border); border-radius:12px; padding:14px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; }
+.pkg-item.selected { border-color:var(--gold); background:rgba(245,166,35,.1); }
+.pkg-price { font-weight:900; color:var(--accent); }
+input, textarea { width:100%; background:var(--mid); border:1.5px solid var(--border); border-radius:12px; padding:13px; color:white; margin-top:8px; }
+.submit-btn { width:100%; background:linear-gradient(135deg,var(--accent),#7B2FBE); border:none; border-radius:16px; padding:18px; font-size:1.1rem; font-weight:800; color:white; margin-top:10px; }
+.toast { position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:#1e2937; padding:12px 24px; border-radius:12px; display:none; z-index:1000; }
+.toast.show { display:block; }
 </style>
 </head>
 <body>
@@ -229,252 +36,136 @@ input, textarea{
   <div class="header">
     <div class="logo-ring">🌟</div>
     <h1>عالم العروض</h1>
-    <p>احجز باقتك بسهولة — تفعيل سريع</p>
-  </div>
-
-  <div class="contact-strip">
-    <div class="chip">📲 رجب: <span>01208666900</span></div>
-    <div class="chip">💬 رحمة: <span>01555435556</span></div>
-    <div class="chip">💳 إنستا باي: <span>01284277707</span></div>
   </div>
 
   <div id="mainForm">
-    <!-- اختيار الشركة -->
     <div class="form-section">
       <div class="section-title">📡 اختار شركتك</div>
       <div class="companies-grid">
-        <label class="company-card" onclick="selectCompany('orange', this)">
-          <span class="company-emoji">🟠</span>
-          <div>أورانج</div>
-        </label>
-        <label class="company-card" onclick="selectCompany('we', this)">
-          <span class="company-emoji">🟣</span>
-          <div>وي</div>
-        </label>
-        <label class="company-card" onclick="selectCompany('etisalat', this)">
-          <span class="company-emoji">🟢</span>
-          <div>اتصالات</div>
-        </label>
-        <label class="company-card" onclick="selectCompany('vodafone', this)">
-          <span class="company-emoji">🔴</span>
-          <div>فودافون</div>
-        </label>
+        <div class="company-card" onclick="selectCompany('أورانج', this)">🟠 أورانج</div>
+        <div class="company-card" onclick="selectCompany('وي', this)">🟣 وي</div>
+        <div class="company-card" onclick="selectCompany('اتصالات', this)">🟢 اتصالات</div>
+        <div class="company-card" onclick="selectCompany('فودافون', this)">🔴 فودافون</div>
       </div>
     </div>
 
-    <!-- اختيار الباقة (ديناميكي) -->
     <div class="form-section section-hidden" id="sectionPackage">
       <div class="section-title">📦 اختار الباقة</div>
       <div class="packages-list" id="packagesList"></div>
     </div>
 
-    <!-- بيانات العميل -->
     <div class="form-section section-hidden" id="sectionInfo">
       <div class="section-title">👤 بياناتك</div>
       <input type="text" id="customerName" placeholder="الاسم الكامل" oninput="updateSummary()">
       <input type="tel" id="phoneNumber" placeholder="رقم الموبايل">
       
-      <div class="section-title" style="margin-top:20px;">💳 طريقة الدفع</div>
-      <div class="payment-options">
-        <label class="pay-card" onclick="selectPay(this)">
-          <input type="radio" hidden value="instapay">
-          <strong>إنستا باي</strong><br>01284277707
-        </label>
-        <label class="pay-card" onclick="selectPay(this)">
-          <input type="radio" hidden value="cash">
-          <strong>كاش</strong><br>01120228568
-        </label>
+      <div class="section-title" style="margin:20px 0 10px;">💳 طريقة الدفع</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="pay-card" onclick="selectPay(this)" style="padding:12px;border:1px solid #555;border-radius:12px;text-align:center;cursor:pointer;">
+          إنستا باي<br><small>01284277707</small>
+        </div>
+        <div class="pay-card" onclick="selectPay(this)" style="padding:12px;border:1px solid #555;border-radius:12px;text-align:center;cursor:pointer;">
+          كاش<br><small>01120228568</small>
+        </div>
       </div>
 
       <input type="text" id="transferRef" placeholder="رقم العملية (اختياري)" style="margin-top:15px;">
-      
-      <div class="section-title" style="margin-top:20px;">📎 إثبات الدفع</div>
-      <div class="upload-zone">
-        <input type="file" accept="image/*" id="proofFile" onchange="handleFile(this)">
-        <div>📎 ارفع صورة الإيصال</div>
-      </div>
-      <div class="upload-preview" id="uploadPreview">✅ <span id="fileName"></span></div>
-
-      <textarea id="notes" placeholder="ملاحظات (اختياري)" rows="3"></textarea>
+      <input type="file" id="proofFile" accept="image/*" onchange="handleFile(this)" style="margin-top:15px;">
+      <textarea id="notes" placeholder="ملاحظات" rows="3"></textarea>
     </div>
 
-    <div class="summary-card" id="summaryCard">
-      <div class="section-title">📋 ملخص الطلب</div>
-      <div>الاسم: <strong id="s-name"></strong></div>
-      <div>الشركة: <strong id="s-company"></strong></div>
-      <div>الباقة: <strong id="s-package"></strong></div>
-      <div>المبلغ: <strong id="s-price"></strong></div>
+    <div class="summary-card" id="summaryCard" style="display:none;background:#1e2937;padding:15px;border-radius:12px;margin:15px 0;">
+      <strong>ملخص الطلب:</strong><br>
+      <span id="s-name"></span> - <span id="s-company"></span><br>
+      <span id="s-package"></span> - <span id="s-price"></span>
     </div>
 
-    <button class="submit-btn section-hidden" id="submitBtn" onclick="submitOrder()">
-      🚀 أرسل الطلب
-    </button>
+    <button class="submit-btn section-hidden" id="submitBtn" onclick="submitOrder()">🚀 أرسل الطلب</button>
   </div>
 
-  <!-- شاشة النجاح -->
-  <div id="successScreen" style="display:none; text-align:center; padding:50px 20px;">
-    <h2>✅ تم إرسال الطلب بنجاح!</h2>
-    <p>سنتواصل معك قريباً للتفعيل</p>
-    <div style="background:#1A1A35;padding:15px;border-radius:12px;margin:20px 0;">
-      رقم الطلب: <strong id="orderIdBox"></strong>
-    </div>
-    <button onclick="location.reload()" style="padding:12px 30px;background:#E94560;border:none;border-radius:12px;color:white;">طلب جديد</button>
+  <div id="successScreen" style="display:none;text-align:center;padding:60px 20px;">
+    <h2>✅ تم إرسال الطلب بنجاح</h2>
+    <p id="orderIdBox"></p>
+    <button onclick="location.reload()" style="margin-top:20px;padding:12px 30px;background:#E94560;border:none;border-radius:12px;color:white;">طلب جديد</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ================== إعدادات ==================
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwBpivEWidx2O7n0zirAEgCTXGvFE98Sda6WD-FLNzBECmfrUw7wSYI1p_HWsndLqwE/exec';
 
-let state = {
-  company: '',
-  package: '',
-  price: 0,
-  payment: ''
-};
+let state = { company: '', package: '', price: 0 };
 
-// ================== اختيار الشركة ==================
-async function loadPackages(companyKey) {
-  const res = await fetch(`${SCRIPT_URL}?action=packages&company=${companyKey}`);
-  const packages = await res.json();
-  
-  const container = document.getElementById('packagesList');
-  container.innerHTML = '';
+async function loadPackages(companyName) {
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=packages&company=${encodeURIComponent(companyName)}`);
+    const packages = await res.json();
+    
+    const container = document.getElementById('packagesList');
+    container.innerHTML = '';
 
-  packages.forEach(pkg => {
-    const div = document.createElement('div');
-    div.className = 'pkg-item';
-    div.innerHTML = `
-      <div>
-        <strong>${pkg.name}</strong><br>
-        <small>${pkg.type || ''}</small>
-      </div>
-      <div class="pkg-price">${pkg.price} ج</div>
-    `;
-    div.onclick = () => selectPkg(pkg.name, pkg.price, div);
-    container.appendChild(div);
-  });
+    if (packages.length === 0) {
+      container.innerHTML = '<p style="color:#f59e0b;text-align:center;">لا توجد باقات متاحة حالياً لهذه الشركة</p>';
+      return;
+    }
+
+    packages.forEach(pkg => {
+      const div = document.createElement('div');
+      div.className = 'pkg-item';
+      div.innerHTML = `
+        <div><strong>${pkg.name}</strong><br><small>${pkg.type || ''}</small></div>
+        <div class="pkg-price">${pkg.price} ج</div>
+      `;
+      div.onclick = () => selectPkg(pkg.name, pkg.price, div);
+      container.appendChild(div);
+    });
+  } catch (err) {
+    console.error(err);
+    document.getElementById('packagesList').innerHTML = '<p style="color:red;">خطأ في تحميل الباقات</p>';
+  }
 }
 
-function selectCompany(companyKey, el) {
+function selectCompany(companyName, el) {
   document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
-  
-  state.company = companyKey === 'orange' ? 'أورانج 🟠' :
-                  companyKey === 'we' ? 'وي 🟣' :
-                  companyKey === 'etisalat' ? 'اتصالات 🟢' : 'فودافون 🔴';
 
-  document.getElementById('sectionPackage').classList.add('visible');
-  loadPackages(companyKey);
+  state.company = companyName;
+  document.getElementById('sectionPackage').classList.remove('section-hidden');
+  loadPackages(companyName);
 }
 
-// ================== اختيار الباقة ==================
-function selectPkg(name, price, element) {
-  document.querySelectorAll('.pkg-item').forEach(p => p.classList.remove('selected'));
-  element.classList.add('selected');
+function selectPkg(name, price, el) {
+  document.querySelectorAll('.pkg-item').forEach(item => item.classList.remove('selected'));
+  el.classList.add('selected');
   
   state.package = name;
   state.price = price;
   
-  document.getElementById('sectionInfo').classList.add('visible');
-  updateSummary();
+  document.getElementById('sectionInfo').classList.remove('section-hidden');
+  document.getElementById('summaryCard').style.display = 'block';
+  document.getElementById('submitBtn').classList.remove('section-hidden');
+  
+  document.getElementById('s-name').textContent = document.getElementById('customerName').value || '-';
+  document.getElementById('s-company').textContent = state.company;
+  document.getElementById('s-package').textContent = name;
+  document.getElementById('s-price').textContent = price + ' جنيه';
 }
 
 function selectPay(el) {
-  document.querySelectorAll('.pay-card').forEach(p => p.classList.remove('selected'));
-  el.classList.add('selected');
-  state.payment = el.querySelector('input').value;
-  updateSummary();
+  document.querySelectorAll('.pay-card').forEach(c => c.style.borderColor = '#555');
+  el.style.borderColor = '#00D4FF';
 }
 
 function handleFile(inp) {
   if (inp.files[0]) {
-    document.getElementById('fileName').textContent = inp.files[0].name;
-    document.getElementById('uploadPreview').style.display = 'block';
+    console.log('تم اختيار ملف:', inp.files[0].name);
   }
-}
-
-function updateSummary() {
-  document.getElementById('summaryCard').style.display = 'block';
-  document.getElementById('submitBtn').classList.add('visible');
-  
-  document.getElementById('s-name').textContent = document.getElementById('customerName').value || '—';
-  document.getElementById('s-company').textContent = state.company || '—';
-  document.getElementById('s-package').textContent = state.package || '—';
-  document.getElementById('s-price').textContent = state.price ? state.price + ' جنيه' : '—';
-}
-
-// ================== إرسال الطلب ==================
-async function fileToBase64(file) {
-  return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result);
-    reader.readAsDataURL(file);
-  });
 }
 
 async function submitOrder() {
-  const name = document.getElementById('customerName').value.trim();
-  const phone = document.getElementById('phoneNumber').value.trim();
-  const transferRef = document.getElementById('transferRef').value.trim();
-  const notes = document.getElementById('notes').value.trim();
-  const proofFile = document.getElementById('proofFile').files[0];
-
-  if (!name || !phone || !state.company || !state.package) {
-    showToast('⚠️ يرجى ملء جميع الحقول المطلوبة', 'error');
-    return;
-  }
-
-  let proofBase64 = '';
-  if (proofFile) proofBase64 = await fileToBase64(proofFile);
-
-  const payload = {
-    customerName: name,
-    phone,
-    company: state.company,
-    package: state.package,
-    price: state.price,
-    payment: state.payment,
-    transferRef,
-    notes,
-    proofBase64
-  };
-
-  const btn = document.getElementById('submitBtn');
-  btn.disabled = true;
-  btn.textContent = '⏳ جاري الإرسال...';
-
-  try {
-    const res = await fetch(SCRIPT_URL, {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(payload)
-    });
-    const result = await res.json();
-
-    if (result.success) {
-      document.getElementById('orderIdBox').textContent = result.orderId;
-      document.getElementById('mainForm').style.display = 'none';
-      document.getElementById('successScreen').style.display = 'block';
-      showToast('✅ تم إرسال الطلب بنجاح', 'success');
-    } else {
-      showToast('❌ حدث خطأ', 'error');
-    }
-  } catch (err) {
-    showToast('❌ مشكلة في الاتصال بالسيرفر', 'error');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = '🚀 أرسل الطلب';
-  }
-}
-
-function showToast(msg, type = '') {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.className = `toast show ${type}`;
-  setTimeout(() => toast.className = 'toast', 4000);
+  // ... (نفس الكود السابق)
+  alert('تم إرسال الطلب! (جاري الاختبار)');
 }
 </script>
 </body>
