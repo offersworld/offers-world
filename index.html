@@ -4,10 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>عالم العروض — احجز باقتك</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
 :root{
   --dark:#0D0D1A;
@@ -22,13 +19,11 @@
   --text:#E8E8F0;
   --muted:#888AAA;
 }
-
 *{
   margin:0;
   padding:0;
   box-sizing:border-box;
 }
-
 body{
   background:var(--dark);
   color:var(--text);
@@ -36,44 +31,6 @@ body{
   min-height:100vh;
   overflow-x:hidden;
 }
-
-body::before{
-  content:'';
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(ellipse at 20% 20%, rgba(123,47,190,.15) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(233,69,96,.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 50% 50%, rgba(0,212,255,.06) 0%, transparent 70%);
-  pointer-events:none;
-  z-index:0;
-}
-
-.stars{
-  position:fixed;
-  inset:0;
-  overflow:hidden;
-  z-index:0;
-  pointer-events:none;
-}
-
-.star{
-  position:absolute;
-  width:2px;
-  height:2px;
-  background:white;
-  border-radius:50%;
-  animation:twinkle var(--d,3s) var(--delay,0s) ease-in-out infinite alternate;
-  opacity:.4;
-}
-
-@keyframes twinkle{
-  to{
-    opacity:1;
-    transform:scale(1.5);
-  }
-}
-
 .container{
   position:relative;
   z-index:1;
@@ -81,12 +38,10 @@ body::before{
   margin:auto;
   padding:20px 16px 60px;
 }
-
 .header{
   text-align:center;
   padding:40px 0 30px;
 }
-
 .logo-ring{
   width:90px;
   height:90px;
@@ -99,7 +54,6 @@ body::before{
   font-size:40px;
   box-shadow:0 0 30px rgba(233,69,96,.4);
 }
-
 .header h1{
   font-size:2.3rem;
   font-weight:900;
@@ -108,12 +62,10 @@ body::before{
   -webkit-text-fill-color:transparent;
   margin-bottom:8px;
 }
-
 .header p{
   color:var(--muted);
   font-size:.95rem;
 }
-
 .contact-strip{
   display:flex;
   justify-content:center;
@@ -121,7 +73,6 @@ body::before{
   flex-wrap:wrap;
   margin:20px 0 30px;
 }
-
 .chip{
   background:var(--card);
   border:1px solid var(--border);
@@ -129,12 +80,10 @@ body::before{
   padding:6px 14px;
   font-size:.82rem;
 }
-
 .chip span{
   color:white;
   font-weight:700;
 }
-
 .form-section{
   background:var(--card);
   border:1px solid var(--border);
@@ -142,20 +91,17 @@ body::before{
   padding:24px;
   margin-bottom:16px;
 }
-
 .section-title{
   font-size:1rem;
   font-weight:700;
   color:var(--gold);
   margin-bottom:16px;
 }
-
 .companies-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:12px;
 }
-
 .company-card{
   background:var(--mid);
   border:2px solid var(--border);
@@ -165,39 +111,32 @@ body::before{
   cursor:pointer;
   transition:.25s;
 }
-
 .company-card:hover{
   transform:translateY(-3px);
 }
-
 .company-card.selected{
   border-color:var(--gold);
   box-shadow:0 0 20px rgba(245,166,35,.25);
 }
-
 .company-emoji{
   font-size:2rem;
   display:block;
   margin-bottom:8px;
 }
-
 .company-name{
   font-size:1rem;
   font-weight:700;
 }
-
 .company-sub{
   font-size:.75rem;
   color:var(--muted);
   margin-top:4px;
 }
-
 .packages-list{
   display:flex;
   flex-direction:column;
   gap:10px;
 }
-
 .pkg-item{
   background:var(--mid);
   border:1.5px solid var(--border);
@@ -210,47 +149,38 @@ body::before{
   justify-content:space-between;
   gap:10px;
 }
-
 .pkg-item.selected{
   border-color:var(--gold);
   background:rgba(245,166,35,.06);
 }
-
 .pkg-dot{
   width:16px;
   height:16px;
   border-radius:50%;
   border:2px solid var(--border);
 }
-
 .pkg-item.selected .pkg-dot{
   border-color:var(--gold);
   background:var(--gold);
 }
-
 .pkg-info{
   flex:1;
 }
-
 .pkg-name{
   font-size:.92rem;
   font-weight:600;
 }
-
 .pkg-detail{
   font-size:.78rem;
   color:var(--muted);
   margin-top:2px;
 }
-
 .pkg-price{
   font-size:1.1rem;
   font-weight:900;
   color:var(--accent);
 }
-
-input,
-textarea{
+input, textarea{
   width:100%;
   background:var(--mid);
   border:1.5px solid var(--border);
@@ -261,32 +191,14 @@ textarea{
   margin-top:8px;
   outline:none;
 }
-
-input:focus,
-textarea:focus{
+input:focus, textarea:focus{
   border-color:var(--gold);
 }
-
-textarea{
-  resize:vertical;
-  min-height:80px;
-}
-
-.input-group{
-  margin-bottom:16px;
-}
-
-.input-label{
-  color:var(--muted);
-  font-size:.85rem;
-}
-
 .payment-options{
   display:grid;
   grid-template-columns:repeat(2,1fr);
   gap:10px;
 }
-
 .pay-card{
   background:var(--mid);
   border:1.5px solid var(--border);
@@ -296,28 +208,9 @@ textarea{
   cursor:pointer;
   transition:.2s;
 }
-
 .pay-card.selected{
   border-color:var(--cyan);
 }
-
-.pay-icon{
-  font-size:1.4rem;
-  display:block;
-  margin-bottom:5px;
-}
-
-.pay-name{
-  font-size:.82rem;
-  font-weight:700;
-}
-
-.pay-num{
-  font-size:.72rem;
-  color:var(--muted);
-  direction:ltr;
-}
-
 .upload-zone{
   border:2px dashed var(--border);
   border-radius:14px;
@@ -326,14 +219,12 @@ textarea{
   cursor:pointer;
   position:relative;
 }
-
 .upload-zone input[type=file]{
   position:absolute;
   inset:0;
   opacity:0;
   cursor:pointer;
 }
-
 .upload-preview{
   margin-top:12px;
   background:var(--mid);
@@ -343,7 +234,6 @@ textarea{
   color:var(--green);
   display:none;
 }
-
 .summary-card{
   background:linear-gradient(135deg,var(--mid),rgba(245,166,35,.06));
   border:1px solid rgba(245,166,35,.3);
@@ -352,38 +242,28 @@ textarea{
   margin-bottom:16px;
   display:none;
 }
-
 .summary-row{
   display:flex;
   justify-content:space-between;
   padding:8px 0;
   border-bottom:1px solid rgba(255,255,255,.06);
 }
-
 .submit-btn{
   width:100%;
   background:linear-gradient(135deg,var(--accent),var(--purple));
   border:none;
   border-radius:16px;
   padding:18px;
-  font-family:'Cairo',sans-serif;
   font-size:1.1rem;
   font-weight:800;
   color:white;
   cursor:pointer;
   box-shadow:0 8px 30px rgba(233,69,96,.3);
-  transition:.25s;
 }
-
-.submit-btn:hover{
-  transform:translateY(-2px);
-}
-
 .submit-btn:disabled{
   opacity:.7;
   cursor:not-allowed;
 }
-
 .toast{
   position:fixed;
   bottom:24px;
@@ -396,39 +276,17 @@ textarea{
   transition:.3s;
   z-index:999;
 }
-
 .toast.show{
   transform:translateX(-50%) translateY(0);
 }
-
-.toast.error{
-  border-color:var(--accent);
-  color:var(--accent);
-}
-
-.toast.success{
-  border-color:var(--green);
-  color:var(--green);
-}
-
-.section-hidden{
-  display:none;
-}
-
-.section-hidden.visible{
-  display:block;
-}
-
 .success-screen{
   display:none;
   text-align:center;
   padding:50px 20px;
 }
-
 .success-screen.visible{
   display:block;
 }
-
 .success-ring{
   width:100px;
   height:100px;
@@ -440,7 +298,6 @@ textarea{
   font-size:3rem;
   margin:0 auto 24px;
 }
-
 .order-id-box{
   background:var(--card);
   border:1px solid var(--border);
@@ -451,34 +308,14 @@ textarea{
   font-weight:700;
   color:var(--gold);
 }
-
-.new-order-btn{
-  background:transparent;
-  border:1px solid var(--border);
-  border-radius:12px;
-  padding:13px 28px;
-  color:white;
-  cursor:pointer;
-}
-
-@media(max-width:420px){
-  .header h1{
-    font-size:1.9rem;
-  }
-}
 </style>
 </head>
-
 <body>
-
-<div class="stars" id="stars"></div>
-
 <div class="container">
-
   <div class="header">
     <div class="logo-ring">🌟</div>
     <h1>عالم العروض</h1>
-    <p>احجز باقتك بسهولة — تفعيل سريع وخدمة محترمة</p>
+    <p>احجز باقتك بسهولة — تفعيل سريع</p>
   </div>
 
   <div class="contact-strip">
@@ -488,546 +325,258 @@ textarea{
   </div>
 
   <div id="mainForm">
-
     <div class="form-section">
-
       <div class="section-title">📡 اختار شركتك</div>
-
       <div class="companies-grid">
-
         <label class="company-card" onclick="selectCompany('orange', this)">
           <span class="company-emoji">🟠</span>
           <div class="company-name">أورانج</div>
-          <div class="company-sub">باقات متنوعة</div>
         </label>
-
-        <label class="company-card" onclick="selectCompany('vodafone', this)">
-          <span class="company-emoji">🔴</span>
-          <div class="company-name">فودافون</div>
-          <div class="company-sub">عروض خاصة</div>
-        </label>
-
-        <label class="company-card" onclick="selectCompany('etisalat', this)">
-          <span class="company-emoji">🟢</span>
-          <div class="company-name">اتصالات</div>
-          <div class="company-sub">أنظمة متعددة</div>
-        </label>
-
         <label class="company-card" onclick="selectCompany('we', this)">
           <span class="company-emoji">🟣</span>
           <div class="company-name">وي</div>
-          <div class="company-sub">باقات قوية</div>
         </label>
-
+        <label class="company-card" onclick="selectCompany('etisalat', this)">
+          <span class="company-emoji">🟢</span>
+          <div class="company-name">اتصالات</div>
+        </label>
+        <label class="company-card" onclick="selectCompany('vodafone', this)">
+          <span class="company-emoji">🔴</span>
+          <div class="company-name">فودافون</div>
+        </label>
       </div>
-
     </div>
 
     <div class="form-section section-hidden" id="sectionPackage">
-
       <div class="section-title">📦 اختار الباقة</div>
-
-      <div class="packages-list">
-
-        <label class="pkg-item" onclick="selectPkg(this,'10 جيجا + 2000 دقيقة',250)">
-          <div class="pkg-dot"></div>
-          <div class="pkg-info">
-            <div class="pkg-name">10 جيجا + 2000 دقيقة</div>
-            <div class="pkg-detail">صالح شهر كامل</div>
-          </div>
-          <div class="pkg-price">250 ج</div>
-        </label>
-
-        <label class="pkg-item" onclick="selectPkg(this,'20 جيجا + 2000 دقيقة',370)">
-          <div class="pkg-dot"></div>
-          <div class="pkg-info">
-            <div class="pkg-name">20 جيجا + 2000 دقيقة</div>
-            <div class="pkg-detail">صالح شهر كامل</div>
-          </div>
-          <div class="pkg-price">370 ج</div>
-        </label>
-
-      </div>
-
+      <div class="packages-list" id="packagesList"></div>
     </div>
 
     <div class="form-section section-hidden" id="sectionInfo">
-
       <div class="section-title">👤 بياناتك</div>
-
       <div class="input-group">
         <div class="input-label">الاسم</div>
-        <input type="text" id="customerName">
+        <input type="text" id="customerName" oninput="updateSummary()">
       </div>
-
       <div class="input-group">
         <div class="input-label">رقم الموبايل</div>
         <input type="tel" id="phoneNumber">
       </div>
-
       <div class="input-group">
         <div class="input-label">طريقة الدفع</div>
-
         <div class="payment-options">
-
           <label class="pay-card" onclick="selectPay(this)">
             <input type="radio" hidden value="instapay">
             <span class="pay-icon">🏧</span>
             <div class="pay-name">إنستا باي</div>
             <div class="pay-num">01284277707</div>
           </label>
-
           <label class="pay-card" onclick="selectPay(this)">
             <input type="radio" hidden value="cash">
             <span class="pay-icon">💵</span>
             <div class="pay-name">كاش</div>
             <div class="pay-num">01120228568</div>
           </label>
-
         </div>
       </div>
-
       <div class="input-group">
-
-        <div class="input-label">إثبات الدفع</div>
-
+        <div class="input-label">رقم العملية (اختياري)</div>
         <input type="text" id="transferRef" placeholder="رقم العملية">
-
+      </div>
+      <div class="input-group">
+        <div class="input-label">إثبات الدفع</div>
         <div class="upload-zone">
-
           <input type="file" accept="image/*" id="proofFile" onchange="handleFile(this)">
-
           <div>📎 ارفع صورة الإيصال</div>
-
         </div>
-
         <div class="upload-preview" id="uploadPreview">
           ✅ <span id="fileName"></span>
         </div>
-
       </div>
-
       <div class="input-group">
         <div class="input-label">ملاحظات</div>
         <textarea id="notes"></textarea>
       </div>
-
     </div>
 
     <div class="summary-card" id="summaryCard">
-
       <div class="section-title">📋 ملخص الطلب</div>
-
-      <div class="summary-row">
-        <span>الاسم</span>
-        <span id="s-name">—</span>
-      </div>
-
-      <div class="summary-row">
-        <span>الشركة</span>
-        <span id="s-company">—</span>
-      </div>
-
-      <div class="summary-row">
-        <span>الباقة</span>
-        <span id="s-package">—</span>
-      </div>
-
-      <div class="summary-row">
-        <span>المبلغ</span>
-        <span id="s-price">—</span>
-      </div>
-
+      <div class="summary-row"><span>الاسم</span><span id="s-name">—</span></div>
+      <div class="summary-row"><span>الشركة</span><span id="s-company">—</span></div>
+      <div class="summary-row"><span>الباقة</span><span id="s-package">—</span></div>
+      <div class="summary-row"><span>المبلغ</span><span id="s-price">—</span></div>
     </div>
 
     <button class="submit-btn section-hidden" id="submitBtn" onclick="submitOrder()">
       🚀 أرسل الطلب
     </button>
-
   </div>
 
   <div class="success-screen" id="successScreen">
-
     <div class="success-ring">✅</div>
-
-    <h2>تم إرسال الطلب!</h2>
-
-    <p>هنتواصل معاك قريب جدًا 🚀</p>
-
-    <div class="order-id-box" id="orderIdBox">
-      ORD-000000
-    </div>
-
-    <button class="new-order-btn" onclick="resetForm()">
-      + طلب جديد
-    </button>
-
+    <h2>تم إرسال الطلب بنجاح!</h2>
+    <p>سنتواصل معك قريباً للتفعيل</p>
+    <div class="order-id-box" id="orderIdBox">ORD-000000</div>
+    <button onclick="resetForm()" style="margin-top:20px;padding:12px 30px;background:#333;border:none;border-radius:12px;color:white;cursor:pointer;">طلب جديد</button>
   </div>
-
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwCRWPzzH29CfEyBe5uNsiyJ2wYWMb320Pu0wM0WszBNItgUdTbOZqek8mR0oZAZAzr/exec'; // ← غيّر هذا بعد النشر
 
-// ⭐ Stars
-(function(){
-  const s=document.getElementById('stars');
-
-  for(let i=0;i<80;i++){
-
-    const d=document.createElement('div');
-
-    d.className='star';
-
-    d.style.cssText=
-      `left:${Math.random()*100}%;
-      top:${Math.random()*100}%;
-      --d:${2+Math.random()*4}s;
-      --delay:${Math.random()*5}s`;
-
-    s.appendChild(d);
-  }
-
-})();
-
-
-// ⚙️ ضع رابط Apps Script هنا
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzIS3oOHYx7JqxOYZXwkEbTovws1fmxEZdMTfg_DfFs4pqGQjUj8pwbHk-5gPoRkYVP/exec';
-
-
-let state = {
-  company:'',
-  package:'',
-  price:0,
-  payment:''
-};
+let state = { company: '', package: '', price: 0, payment: '' };
 
 const companyNames = {
-  orange:'أورانج 🟠',
-  vodafone:'فودافون 🔴',
-  etisalat:'اتصالات 🟢',
-  we:'وي 🟣'
+  orange: 'أورانج 🟠',
+  we: 'وي 🟣',
+  etisalat: 'اتصالات 🟢',
+  vodafone: 'فودافون 🔴'
 };
 
-const payNames = {
-  instapay:'إنستا باي',
-  cash:'كاش'
-};
+async function loadPackages(companyKey) {
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=packages&company=${companyKey}`);
+    const packages = await res.json();
+    const container = document.getElementById('packagesList');
+    container.innerHTML = '';
 
-
-function selectCompany(company, el){
-
-  document.querySelectorAll('.company-card')
-    .forEach(c=>c.classList.remove('selected'));
-
-  el.classList.add('selected');
-
-  state.company = company;
-
-  document.getElementById('sectionPackage')
-    .classList.add('visible');
-}
-
-
-function selectPkg(el, name, price){
-
-  document.querySelectorAll('.pkg-item')
-    .forEach(p=>p.classList.remove('selected'));
-
-  el.classList.add('selected');
-
-  state.package = name;
-  state.price   = price;
-
-  document.getElementById('sectionInfo')
-    .classList.add('visible');
-
-  updateSummary();
-}
-
-
-function selectPay(el){
-
-  document.querySelectorAll('.pay-card')
-    .forEach(p=>p.classList.remove('selected'));
-
-  el.classList.add('selected');
-
-  state.payment =
-    el.querySelector('input').value;
-
-  updateSummary();
-}
-
-
-function handleFile(inp){
-
-  if(inp.files && inp.files[0]){
-
-    document.getElementById('fileName')
-      .textContent = inp.files[0].name;
-
-    document.getElementById('uploadPreview')
-      .style.display='block';
+    packages.forEach(pkg => {
+      const div = document.createElement('label');
+      div.className = 'pkg-item';
+      div.innerHTML = `
+        <div class="pkg-dot"></div>
+        <div class="pkg-info">
+          <div class="pkg-name">${pkg.name}</div>
+          <div class="pkg-detail">${pkg.type || ''}</div>
+        </div>
+        <div class="pkg-price">${pkg.price} ج</div>
+      `;
+      div.onclick = () => selectPkg(pkg.name, pkg.price, div);
+      container.appendChild(div);
+    });
+  } catch (e) {
+    showToast('خطأ في تحميل الباقات', 'error');
   }
 }
 
-
-function updateSummary(){
-
-  document.getElementById('summaryCard')
-    .style.display='block';
-
-  document.getElementById('submitBtn')
-    .classList.add('visible');
-
-  document.getElementById('s-name')
-    .textContent =
-      document.getElementById('customerName').value || '—';
-
-  document.getElementById('s-company')
-    .textContent =
-      companyNames[state.company] || '—';
-
-  document.getElementById('s-package')
-    .textContent =
-      state.package || '—';
-
-  document.getElementById('s-price')
-    .textContent =
-      state.price ? state.price + ' جنيه' : '—';
+function selectCompany(companyKey, el) {
+  document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.company = companyNames[companyKey];
+  document.getElementById('sectionPackage').classList.add('visible');
+  loadPackages(companyKey);
 }
 
+function selectPkg(name, price, element) {
+  document.querySelectorAll('.pkg-item').forEach(p => p.classList.remove('selected'));
+  element.classList.add('selected');
+  state.package = name;
+  state.price = price;
+  document.getElementById('sectionInfo').classList.add('visible');
+  updateSummary();
+}
 
-document.getElementById('customerName')
-  .addEventListener('input', updateSummary);
+function selectPay(el) {
+  document.querySelectorAll('.pay-card').forEach(p => p.classList.remove('selected'));
+  el.classList.add('selected');
+  state.payment = el.querySelector('input').value;
+  updateSummary();
+}
 
+function handleFile(inp) {
+  if (inp.files && inp.files[0]) {
+    document.getElementById('fileName').textContent = inp.files[0].name;
+    document.getElementById('uploadPreview').style.display = 'block';
+  }
+}
 
-function fileToBase64(file){
+function updateSummary() {
+  document.getElementById('summaryCard').style.display = 'block';
+  document.getElementById('submitBtn').classList.add('visible');
+  document.getElementById('s-name').textContent = document.getElementById('customerName').value || '—';
+  document.getElementById('s-company').textContent = state.company || '—';
+  document.getElementById('s-package').textContent = state.package || '—';
+  document.getElementById('s-price').textContent = state.price ? state.price + ' جنيه' : '—';
+}
 
-  return new Promise((resolve,reject)=>{
-
+async function fileToBase64(file) {
+  return new Promise((resolve, reject) => {
     const reader = new FileReader();
-
     reader.readAsDataURL(file);
-
     reader.onload = () => resolve(reader.result);
-
     reader.onerror = error => reject(error);
-
   });
 }
 
+async function submitOrder() {
+  const name = document.getElementById('customerName').value.trim();
+  const phone = document.getElementById('phoneNumber').value.trim();
+  const transferRef = document.getElementById('transferRef').value.trim();
+  const notes = document.getElementById('notes').value.trim();
+  const proofFile = document.getElementById('proofFile').files[0];
 
-async function submitOrder(){
-
-  const name =
-    document.getElementById('customerName').value.trim();
-
-  const phone =
-    document.getElementById('phoneNumber').value.trim();
-
-  const notes =
-    document.getElementById('notes').value.trim();
-
-  const transferRef =
-    document.getElementById('transferRef').value.trim();
-
-  const proofFile =
-    document.getElementById('proofFile').files[0];
-
-  if(!name){
-    showToast('⚠️ اكتب اسمك','error');
-    return;
-  }
-
-  if(!phone){
-    showToast('⚠️ اكتب رقم الموبايل','error');
-    return;
-  }
-
-  if(!state.payment){
-    showToast('⚠️ اختار طريقة الدفع','error');
+  if (!name || !phone || !state.company || !state.package) {
+    showToast('⚠️ يرجى ملء جميع الحقول المطلوبة', 'error');
     return;
   }
 
   let proofBase64 = '';
-
-  if(proofFile){
-
+  if (proofFile) {
     proofBase64 = await fileToBase64(proofFile);
-
   }
 
-  const orderId =
-    'ORD-' + Date.now().toString().slice(-6);
-
   const payload = {
-
-    orderId,
-
-    customerName:name,
-
+    customerName: name,
     phone,
-
-    company:state.company,
-
-    package:state.package,
-
-    price:state.price,
-
-    payment:state.payment,
-
+    company: state.company,
+    package: state.package,
+    price: state.price,
+    payment: state.payment,
     transferRef,
-
     notes,
-
     proofBase64
-
   };
 
-  const btn =
-    document.getElementById('submitBtn');
-
+  const btn = document.getElementById('submitBtn');
   btn.disabled = true;
-
   btn.textContent = '⏳ جاري الإرسال...';
 
-  fetch(SCRIPT_URL, {
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const result = await res.json();
 
-    method:'POST',
-
-    headers:{
-      'Content-Type':'application/json'
-    },
-
-    body:JSON.stringify(payload)
-
-  })
-
-  .then(r=>r.json())
-
-  .then(res=>{
-
-    if(res.success){
-
-      document.getElementById('orderIdBox')
-        .textContent = res.orderId || orderId;
-
-      showSuccessScreen();
-
-    }else{
-
-      showToast('❌ حصل خطأ','error');
-
-      btn.disabled = false;
-
-      btn.textContent = '🚀 أرسل الطلب';
+    if (result.success) {
+      document.getElementById('orderIdBox').textContent = result.orderId;
+      document.getElementById('mainForm').style.display = 'none';
+      document.getElementById('successScreen').classList.add('visible');
+      showToast('✅ تم إرسال الطلب بنجاح', 'success');
+    } else {
+      showToast('❌ حدث خطأ أثناء الإرسال', 'error');
     }
-
-  })
-
-  .catch(err=>{
-
-    console.error(err);
-
-    showToast('❌ مشكلة في الاتصال','error');
-
+  } catch (err) {
+    showToast('❌ مشكلة في الاتصال', 'error');
+  } finally {
     btn.disabled = false;
-
     btn.textContent = '🚀 أرسل الطلب';
-
-  });
-
+  }
 }
 
-
-function showSuccessScreen(){
-
-  document.getElementById('mainForm')
-    .style.display='none';
-
-  document.getElementById('successScreen')
-    .classList.add('visible');
-
-  showToast('✅ تم إرسال الطلب','success');
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = `toast show ${type}`;
+  setTimeout(() => t.className = 'toast', 3500);
 }
 
-
-function resetForm(){
-
-  document.getElementById('mainForm')
-    .style.display='block';
-
-  document.getElementById('successScreen')
-    .classList.remove('visible');
-
-  document.querySelectorAll('.selected')
-    .forEach(el=>el.classList.remove('selected'));
-
-  document.getElementById('sectionPackage')
-    .classList.remove('visible');
-
-  document.getElementById('sectionInfo')
-    .classList.remove('visible');
-
-  document.getElementById('summaryCard')
-    .style.display='none';
-
-  document.getElementById('submitBtn')
-    .classList.remove('visible');
-
-  document.getElementById('customerName').value='';
-
-  document.getElementById('phoneNumber').value='';
-
-  document.getElementById('notes').value='';
-
-  document.getElementById('transferRef').value='';
-
-  document.getElementById('proofFile').value='';
-
-  document.getElementById('uploadPreview')
-    .style.display='none';
-
-  document.getElementById('submitBtn').disabled=false;
-
-  document.getElementById('submitBtn')
-    .textContent='🚀 أرسل الطلب';
-
-  state = {
-    company:'',
-    package:'',
-    price:0,
-    payment:''
-  };
-
-  window.scrollTo({
-    top:0,
-    behavior:'smooth'
-  });
-
+function resetForm() {
+  location.reload();
 }
-
-
-function showToast(msg,type=''){
-
-  const t=document.getElementById('toast');
-
-  t.textContent=msg;
-
-  t.className='toast show '+type;
-
-  setTimeout(()=>{
-
-    t.className='toast';
-
-  },3000);
-
-}
-
 </script>
-
 </body>
 </html>
