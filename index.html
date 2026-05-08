@@ -8,7 +8,6 @@
 
   <title>عالم العروض — احجز باقتك</title>
 
-  <!-- تحسين تحميل الخط -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -147,7 +146,6 @@
       line-height: 1.8;
     }
 
-   
     .card {
       background: var(--card);
 
@@ -281,86 +279,55 @@
 
       margin-top: 10px;
     }
-/* =========================================
-PROGRESS HEADER CSS
-ضيفه في الـ style
-========================================= */
 
-.progress-header {
+    .progress-header {
+      margin-bottom: 28px;
+    }
 
-  margin-bottom: 28px;
+    .progress-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      gap: 12px;
+    }
 
-}
+    .progress-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: white;
+    }
 
-.progress-top {
+    .progress-counter {
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
 
-  display: flex;
+    .progress-bar {
+      width: 100%;
+      height: 10px;
+      background: #1B1B2D;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
 
-  align-items: center;
+    .progress-fill {
+      width: 33%;
+      height: 100%;
+      border-radius: 999px;
 
-  justify-content: space-between;
+      background: linear-gradient(
+        90deg,
+        var(--accent),
+        var(--orange)
+      );
 
-  margin-bottom: 12px;
+      transition: 0.35s ease;
 
-  gap: 12px;
-
-}
-
-.progress-title {
-
-  font-size: 1rem;
-
-  font-weight: 800;
-
-  color: white;
-
-}
-
-.progress-counter {
-
-  font-size: 0.85rem;
-
-  color: var(--muted);
-
-}
-
-.progress-bar {
-
-  width: 100%;
-
-  height: 10px;
-
-  background: #1B1B2D;
-
-  border-radius: 999px;
-
-  overflow: hidden;
-
-  border: 1px solid rgba(255,255,255,0.06);
-
-}
-
-.progress-fill {
-
-  width: 33%;
-
-  height: 100%;
-
-  border-radius: 999px;
-
-  background: linear-gradient(
-    90deg,
-    var(--accent),
-    var(--orange)
-  );
-
-  transition: 0.35s ease;
-
-  box-shadow:
-    0 0 18px rgba(123,47,190,0.35);
-
-}
-    /* Inputs */
+      box-shadow:
+        0 0 18px rgba(123,47,190,0.35);
+    }
 
     input,
     textarea {
@@ -474,8 +441,6 @@ PROGRESS HEADER CSS
       border: 1px solid #444;
     }
 
-    /* Skeleton Loading */
-
     .skeleton-wrapper {
       display: flex;
       flex-direction: column;
@@ -506,8 +471,6 @@ PROGRESS HEADER CSS
         background-position: -200% 0;
       }
     }
-
-    /* Payment */
 
     .payment-hint {
       background: linear-gradient(135deg,
@@ -640,8 +603,6 @@ PROGRESS HEADER CSS
       display: block;
     }
 
-    /* Overlay */
-
     .sending-overlay {
       display: none;
 
@@ -688,8 +649,6 @@ PROGRESS HEADER CSS
       color: white;
       font-size: 1.2rem;
     }
-
-    /* Steps */
 
     .step {
       display: none;
@@ -753,12 +712,18 @@ PROGRESS HEADER CSS
       color: white;
       font-weight: 600;
     }
+
+    .company-title {
+      text-align: center;
+      margin-bottom: 16px;
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
   </style>
 </head>
 
 <body>
-
-  <!-- Overlay -->
 
   <div class="sending-overlay" id="sendingOverlay">
 
@@ -770,11 +735,7 @@ PROGRESS HEADER CSS
 
   </div>
 
-  <!-- Background -->
-
   <div class="stars"></div>
-
-  <!-- App -->
 
   <div class="container">
 
@@ -786,35 +747,27 @@ PROGRESS HEADER CSS
       احجز باقتك بسهولة وسرعة
     </p>
 
-    <!-- Steps -->
-<!-- =========================================
-PROGRESS HEADER
-استبدل الـ Step Indicator القديم بالكامل
-========================================= -->
+    <div class="progress-header">
 
-<div class="progress-header">
+      <div class="progress-top">
 
-  <div class="progress-top">
+        <div class="progress-title" id="progressTitle">
+          📡 اختيار الشركة
+        </div>
 
-    <div class="progress-title" id="progressTitle">
-      📡 اختيار الشركة
+        <div class="progress-counter" id="progressCounter">
+          خطوة 1 من 3
+        </div>
+
+      </div>
+
+      <div class="progress-bar">
+
+        <div class="progress-fill" id="progressFill"></div>
+
+      </div>
+
     </div>
-
-    <div class="progress-counter" id="progressCounter">
-      خطوة 1 من 3
-    </div>
-
-  </div>
-
-  <div class="progress-bar">
-
-    <div class="progress-fill" id="progressFill"></div>
-
-  </div>
-
-</div>
-    
-    <!-- Loading -->
 
     <div id="loading" class="skeleton-wrapper">
 
@@ -824,7 +777,7 @@ PROGRESS HEADER
 
     </div>
 
-    <!-- Step 1 -->
+    <!-- STEP 1 -->
 
     <div id="step1" class="step card">
 
@@ -836,13 +789,15 @@ PROGRESS HEADER
 
     </div>
 
-    <!-- Step 2 -->
+    <!-- STEP 2 -->
 
     <div id="step2" class="step card">
 
       <div class="section-title">
         📦 اختر الباقة
       </div>
+
+      <div class="company-title" id="selectedCompanyTitle"></div>
 
       <div class="filter-tabs">
 
@@ -872,7 +827,7 @@ PROGRESS HEADER
 
     </div>
 
-    <!-- Step 3 -->
+    <!-- STEP 3 -->
 
     <div id="step3" class="step card">
 
@@ -892,23 +847,19 @@ PROGRESS HEADER
         placeholder="اسمك الكامل"
         class="rtl-input">
 
-      <!-- WhatsApp -->
-
       <div class="input-group">
 
         <label class="input-label">
-          📱 رقم الواتساب للتواصل والمتابعة
+          📱 رقم الواتساب
         </label>
 
         <input
           type="tel"
           id="phone"
-          placeholder="مثال: 01012345678"
+          placeholder="01012345678"
           class="rtl-input number-input">
 
       </div>
-
-      <!-- Activation -->
 
       <div class="input-group" style="margin-top:14px;">
 
@@ -922,7 +873,7 @@ PROGRESS HEADER
           ">
 
           <label class="input-label" style="margin:0;">
-            📡 الرقم المراد تفعيل الباقة عليه
+            📡 رقم التفعيل
           </label>
 
           <label class="same-number-check">
@@ -938,19 +889,17 @@ PROGRESS HEADER
         <input
           type="tel"
           id="activationPhone"
-          placeholder="اكتب الرقم المراد التفعيل عليه"
+          placeholder="اكتب الرقم"
           class="rtl-input number-input">
 
       </div>
-
-      <!-- Payment -->
 
       <div class="section-title" style="margin-top:20px;">
         💳 طريقة الدفع
       </div>
 
       <div class="payment-hint">
-        حوّل المبلغ على أحد الأرقام التالية ثم ارفع إيصال الدفع
+        حوّل المبلغ ثم ارفع صورة الإيصال
       </div>
 
       <div class="payment-methods-grid">
@@ -991,17 +940,17 @@ PROGRESS HEADER
       <input
         type="text"
         id="transferRef"
-        placeholder="رقم التحويل أو المرجع"
+        placeholder="رقم التحويل"
         class="rtl-input">
 
       <textarea
         id="notes"
         rows="2"
-        placeholder="ملاحظات (اختياري)"
+        placeholder="ملاحظات"
         class="rtl-input"></textarea>
 
       <div class="section-title">
-        🧾 ارفع إيصال الدفع
+        🧾 إيصال الدفع
       </div>
 
       <input
@@ -1010,7 +959,7 @@ PROGRESS HEADER
         accept="image/*"
         onchange="previewImage(event)">
 
-      <img id="imagePreview" alt="معاينة الإيصال">
+      <img id="imagePreview" alt="معاينة">
 
       <button
         class="btn btn-primary"
@@ -1022,12 +971,12 @@ PROGRESS HEADER
       </button>
 
       <button class="btn btn-back" onclick="showStep(2)">
-        ← رجوع للباقات
+        ← رجوع
       </button>
 
     </div>
 
-    <!-- Success -->
+    <!-- SUCCESS -->
 
     <div id="successScreen" class="step success-screen">
 
@@ -1036,7 +985,7 @@ PROGRESS HEADER
       </div>
 
       <h2>
-        تم استلام طلبك بنجاح!
+        تم استلام طلبك بنجاح
       </h2>
 
       <p id="orderIdDisplay"
@@ -1049,13 +998,11 @@ PROGRESS HEADER
       </p>
 
       <p style="color:var(--muted);margin-bottom:30px;">
-        سيتم مراجعة وتفعيل طلبك خلال دقائق
-        <br>
-        شكراً لثقتك في عالم العروض 🌟
+        سيتم مراجعة طلبك خلال دقائق
       </p>
 
       <button class="btn btn-success" onclick="restart()">
-        📦 طلب باقة جديدة
+        📦 طلب جديد
       </button>
 
     </div>
@@ -1065,7 +1012,7 @@ PROGRESS HEADER
   <script>
 
     const SCRIPT_URL =
-      'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
+      'ضع_رابط_Apps_Script_هنا';
 
     let allPackages = [];
 
@@ -1073,17 +1020,20 @@ PROGRESS HEADER
 
     let selectedCompany = '';
 
+    let selectedCompanyName = '';
+
     let selectedPackage = null;
 
     let proofBase64 = '';
 
     let selectedPaymentMethod = '';
 
-    /* تحسين الكاش */
+    let isSubmitting = false;
 
     async function loadPackages() {
 
-      const loadingEl = document.getElementById('loading');
+      const loadingEl =
+        document.getElementById('loading');
 
       try {
 
@@ -1093,7 +1043,8 @@ PROGRESS HEADER
         const cachedTime =
           localStorage.getItem('packages_cache_time');
 
-        const CACHE_DURATION = 10 * 60 * 1000;
+        const CACHE_DURATION =
+          30 * 60 * 1000;
 
         if (
           cachedData &&
@@ -1110,6 +1061,21 @@ PROGRESS HEADER
           showStep(1);
 
           createCompanyCards();
+
+          return;
+        }
+
+        if (!navigator.onLine) {
+
+          loadingEl.innerHTML = `
+            <div style="
+              text-align:center;
+              color:#f87171;
+              padding:40px;
+            ">
+              ❌ لا يوجد اتصال بالإنترنت
+            </div>
+          `;
 
           return;
         }
@@ -1143,7 +1109,7 @@ PROGRESS HEADER
           <div style="
             text-align:center;
             color:#f87171;
-            padding:40px 20px;
+            padding:40px;
           ">
             ❌ فشل تحميل الباقات
           </div>
@@ -1151,33 +1117,55 @@ PROGRESS HEADER
       }
     }
 
-    /* تجهيز الماب */
-
     function preparePackagesMap() {
 
       companyPackagesMap = {};
 
       allPackages.forEach(pkg => {
 
-        if (!companyPackagesMap[pkg.company]) {
+        const companyKey =
+          (pkg.company || '')
+            .toLowerCase()
+            .trim();
 
-          companyPackagesMap[pkg.company] = [];
+        if (!companyPackagesMap[companyKey]) {
+
+          companyPackagesMap[companyKey] = [];
         }
 
-        companyPackagesMap[pkg.company].push(pkg);
+        companyPackagesMap[companyKey].push(pkg);
 
       });
     }
 
-    /* شركات */
-
     function createCompanyCards() {
 
       const companies = [
-        { name: 'أورانج', emoji: '🟠' },
-        { name: 'وي', emoji: '🟣' },
-        { name: 'اتصالات', emoji: '🟢' },
-        { name: 'فودافون', emoji: '🔴' }
+
+        {
+          id: 'orange',
+          name: 'أورانج',
+          emoji: '🟠'
+        },
+
+        {
+          id: 'we',
+          name: 'وي',
+          emoji: '🟣'
+        },
+
+        {
+          id: 'etisalat',
+          name: 'اتصالات',
+          emoji: '🟢'
+        },
+
+        {
+          id: 'vodafone',
+          name: 'فودافون',
+          emoji: '🔴'
+        }
+
       ];
 
       const grid =
@@ -1185,7 +1173,7 @@ PROGRESS HEADER
 
       grid.innerHTML = '';
 
-      companies.forEach(({ name, emoji }) => {
+      companies.forEach(({ id, name, emoji }) => {
 
         const div = document.createElement('div');
 
@@ -1203,31 +1191,34 @@ PROGRESS HEADER
         `;
 
         div.onclick = () =>
-          selectCompany(name, div);
+          selectCompany({ id, name }, div);
 
         grid.appendChild(div);
 
       });
     }
 
-    /* اختيار شركة */
-
     function selectCompany(company, el) {
 
-      document
-        .querySelectorAll('.company-card')
-        .forEach(c => c.classList.remove('selected'));
+      selectedCompany = company.id;
+
+      selectedCompanyName = company.name;
+
+      document.querySelectorAll('.company-card')
+        .forEach(c =>
+          c.classList.remove('selected'));
 
       el.classList.add('selected');
 
-      selectedCompany = company;
+      document.getElementById(
+        'selectedCompanyTitle'
+      ).textContent =
+        `باقات ${selectedCompanyName}`;
 
       showStep(2);
 
       filterPackages('all');
     }
-
-    /* فلترة */
 
     function filterPackages(type) {
 
@@ -1253,18 +1244,34 @@ PROGRESS HEADER
         filtered = filtered.filter(pkg => {
 
           const text =
-            (pkg.name + ' ' + (pkg.type || ''))
+            (
+              pkg.name +
+              ' ' +
+              (pkg.type || '')
+            )
               .toLowerCase();
 
-          if (type === 'جيجا')
-            return text.includes('جيجا');
+          if (type === 'جيجا') {
 
-          if (type === 'دقايق')
-            return text.includes('دقيقة')
-              || text.includes('دقايق');
+            return (
+              text.includes('جيجا') ||
+              text.includes('gb') ||
+              text.includes('giga')
+            );
+          }
 
-          if (type === 'ميكس')
+          if (type === 'دقايق') {
+
+            return (
+              text.includes('دقيقة') ||
+              text.includes('دقايق')
+            );
+          }
+
+          if (type === 'ميكس') {
+
             return text.includes('ميكس');
+          }
 
           return true;
         });
@@ -1287,7 +1294,8 @@ PROGRESS HEADER
 
       filtered.forEach(pkg => {
 
-        const div = document.createElement('div');
+        const div =
+          document.createElement('div');
 
         div.className = 'pkg-item';
 
@@ -1331,8 +1339,6 @@ PROGRESS HEADER
       });
     }
 
-    /* دفع */
-
     function selectPayment(method, el) {
 
       document.querySelectorAll('.payment-card')
@@ -1344,8 +1350,6 @@ PROGRESS HEADER
       selectedPaymentMethod = method;
     }
 
-    /* ملخص */
-
     function updateOrderSummary() {
 
       if (!selectedPackage) return;
@@ -1354,7 +1358,7 @@ PROGRESS HEADER
         .innerHTML = `
           <p>
             📡 الشركة:
-            <span>${selectedCompany}</span>
+            <span>${selectedCompanyName}</span>
           </p>
 
           <p>
@@ -1371,109 +1375,81 @@ PROGRESS HEADER
         `;
     }
 
-    /* Steps */
+    function showStep(step) {
 
-    /* =========================================
-SHOW STEP
-استبدل الدالة القديمة بالكامل
-========================================= */
+      document
+        .querySelectorAll('.step')
+        .forEach(s =>
+          s.classList.remove('active'));
 
-function showStep(step) {
+      const el =
+        document.getElementById(
+          step === 4
+            ? 'successScreen'
+            : `step${step}`
+        );
 
-  document
-    .querySelectorAll('.step')
-    .forEach(s =>
-      s.classList.remove('active'));
+      if (el)
+        el.classList.add('active');
 
-  const el =
-    document.getElementById(
-      step === 4
-        ? 'successScreen'
-        : `step${step}`
-    );
+      const progressFill =
+        document.getElementById('progressFill');
 
-  if (el)
-    el.classList.add('active');
+      const progressTitle =
+        document.getElementById('progressTitle');
 
-  /* Progress */
+      const progressCounter =
+        document.getElementById('progressCounter');
 
-  const progressFill =
-    document.getElementById('progressFill');
+      const progressHeader =
+        document.querySelector('.progress-header');
 
-  const progressTitle =
-    document.getElementById('progressTitle');
+      progressHeader.style.display =
+        step === 4 ? 'none' : 'block';
 
-  const progressCounter =
-    document.getElementById('progressCounter');
+      if (step === 1) {
 
-  const progressHeader =
-    document.querySelector('.progress-header');
+        progressFill.style.width = '33%';
 
-  if (step === 1) {
+        progressTitle.textContent =
+          '📡 اختيار الشركة';
 
-    progressFill.style.width = '33%';
+        progressCounter.textContent =
+          'خطوة 1 من 3';
+      }
 
-    progressTitle.textContent =
-      '📡 اختيار الشركة';
+      else if (step === 2) {
 
-    progressCounter.textContent =
-      'خطوة 1 من 3';
+        progressFill.style.width = '66%';
 
-  }
+        progressTitle.textContent =
+          '📦 اختيار الباقة';
 
-  else if (step === 2) {
+        progressCounter.textContent =
+          'خطوة 2 من 3';
+      }
 
-    progressFill.style.width = '66%';
+      else if (step === 3) {
 
-    progressTitle.textContent =
-      '📦 اختيار الباقة';
+        progressFill.style.width = '100%';
 
-    progressCounter.textContent =
-      'خطوة 2 من 3';
+        progressTitle.textContent =
+          '👤 بيانات الحجز';
 
-  }
+        progressCounter.textContent =
+          'خطوة 3 من 3';
+      }
 
-  else if (step === 3) {
-
-    progressFill.style.width = '100%';
-
-    progressTitle.textContent =
-      '👤 بيانات الحجز';
-
-    progressCounter.textContent =
-      'خطوة 3 من 3';
-
-  }
-
-  else if (step === 4) {
-
-    progressHeader.style.display = 'none';
-
-  }
-
-  else {
-
-    progressHeader.style.display = 'block';
-
-  }
-
-  if (step !== 4) {
-
-    progressHeader.style.display = 'block';
-
-  }
-
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
-}
-
-    function backToCompanies() {
-      showStep(1);
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
     }
 
-    /* صور */
+    function backToCompanies() {
+
+      showStep(1);
+    }
 
     function previewImage(e) {
 
@@ -1505,8 +1481,6 @@ function showStep(step) {
       reader.readAsDataURL(file);
     }
 
-    /* normalize */
-
     function normalizePhone(phone) {
 
       return phone
@@ -1515,9 +1489,11 @@ function showStep(step) {
         .replace(/^20/, '0');
     }
 
-    /* إرسال */
-
     async function submitOrder() {
+
+      if (isSubmitting) return;
+
+      isSubmitting = true;
 
       const submitBtn =
         document.getElementById('submitBtn');
@@ -1540,26 +1516,31 @@ function showStep(step) {
 
       if (!name) {
         alert("❌ برجاء كتابة الاسم");
+        isSubmitting = false;
         return;
       }
 
       if (!phone) {
         alert("❌ برجاء كتابة رقم الواتساب");
+        isSubmitting = false;
         return;
       }
 
       if (!activationPhone) {
         alert("❌ برجاء كتابة رقم التفعيل");
+        isSubmitting = false;
         return;
       }
 
       if (!selectedPackage) {
-        alert("❌ اختر باقة");
+        alert("❌ اختر الباقة");
+        isSubmitting = false;
         return;
       }
 
       if (!selectedPaymentMethod) {
         alert("❌ اختر طريقة الدفع");
+        isSubmitting = false;
         return;
       }
 
@@ -1604,21 +1585,23 @@ function showStep(step) {
 
       try {
 
-        await fetch(SCRIPT_URL, {
+        const res = await fetch(SCRIPT_URL, {
 
           method: 'POST',
 
-          mode: 'no-cors',
-
           headers: {
-            'Content-Type': 'text/plain'
+            'Content-Type': 'application/json'
           },
 
           body: JSON.stringify(formData)
         });
 
-        await new Promise(r =>
-          setTimeout(r, 1000));
+        const data = await res.json();
+
+        if (!data.success) {
+
+          throw new Error('failed');
+        }
 
         document.getElementById('sendingOverlay')
           .classList.remove('show');
@@ -1635,24 +1618,21 @@ function showStep(step) {
 
         submitBtn.style.opacity = '1';
 
+        isSubmitting = false;
+
         document.getElementById('sendingOverlay')
           .classList.remove('show');
 
-        alert("❌ فشل الإرسال");
+        alert("❌ فشل إرسال الطلب");
       }
     }
 
-    /* Restart */
-
     function restart() {
+
       location.reload();
     }
 
-    /* DOM */
-
     document.addEventListener('DOMContentLoaded', () => {
-
-      /* نفس الرقم */
 
       document
         .getElementById('sameAsWhatsapp')
@@ -1688,8 +1668,6 @@ function showStep(step) {
           }
         });
 
-      /* Sync */
-
       document
         .getElementById('phone')
         .addEventListener('input', function () {
@@ -1704,8 +1682,6 @@ function showStep(step) {
             ).value = this.value;
           }
         });
-
-      /* Tabs */
 
       document.querySelectorAll('.filter-tab')
         .forEach(tab => {
