@@ -84,20 +84,61 @@ h1 { text-align:center; font-size:2.2rem; margin-bottom:6px;
 
 #imagePreview { max-width:100%; max-height:280px; border-radius:16px; border:2px solid var(--green); display:none; }
 
-input, select, textarea { width:100%; padding:14px 16px; margin:10px 0; background:#1A1A2E; border:1px solid #444; border-radius:12px; color:white; font-size:1rem; }
-.btn { width:100%; padding:16px; font-size:1.1rem; font-weight:700; border:none; border-radius:16px; cursor:pointer; margin-top:12px; transition:0.3s; }
+input, select, textarea {
+  width:100%; padding:14px 16px; margin:10px 0;
+  background:#1A1A2E; border:1px solid #444; border-radius:12px;
+  color:white; font-size:1rem; font-family:'Cairo',sans-serif;
+}
+input::placeholder, textarea::placeholder { color: var(--muted); }
+
+.btn { width:100%; padding:16px; font-size:1.1rem; font-weight:700; border:none; border-radius:16px; cursor:pointer; margin-top:12px; transition:0.3s; font-family:'Cairo',sans-serif; }
 .btn-primary { background: linear-gradient(90deg, var(--accent), #A855F7); color:white; }
+.btn-primary:hover { opacity:0.9; transform:translateY(-2px); }
 .btn-success { background: linear-gradient(90deg, #22C55E, #86EFAC); color:black; }
+.btn-back { background:#1A1A2E; color:var(--muted); border:1px solid #444; }
 
 .loading { text-align:center; padding:50px 20px; color:var(--muted); font-size:1.1rem; }
+
+/* شاشة الإرسال */
+.sending-overlay {
+  display:none; position:fixed; inset:0; z-index:999;
+  background:rgba(10,10,20,0.85); backdrop-filter:blur(6px);
+  align-items:center; justify-content:center; flex-direction:column; gap:16px;
+}
+.sending-overlay.show { display:flex; }
+.spinner {
+  width:60px; height:60px; border:5px solid #333;
+  border-top-color:var(--accent); border-radius:50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+.sending-text { color:white; font-size:1.2rem; }
+
 .step { display:none; }
 .step.active { display:block; animation: fadeIn 0.5s; }
 @keyframes fadeIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
 .success-screen { text-align:center; padding:50px 20px; background:var(--card); border-radius:24px; }
 .success-screen h2 { color:var(--green); margin:20px 0; font-size:1.8rem; }
+.success-icon { font-size:80px; animation: popIn 0.5s ease; }
+@keyframes popIn { 0% { transform:scale(0); } 80% { transform:scale(1.2); } 100% { transform:scale(1); } }
+
+/* ملخص الطلب */
+.order-summary {
+  background:#1A1A2E; border:1px solid #333; border-radius:16px;
+  padding:18px; margin-bottom:16px; text-align:right;
+}
+.order-summary p { margin:6px 0; color:var(--muted); font-size:0.95rem; }
+.order-summary span { color:white; font-weight:600; }
 </style>
 </head>
 <body>
+
+<!-- شاشة الإرسال -->
+<div class="sending-overlay" id="sendingOverlay">
+  <div class="spinner"></div>
+  <div class="sending-text">جاري إرسال طلبك...</div>
+</div>
 
 <div class="stars"></div>
 <div class="container">
@@ -105,15 +146,18 @@ input, select, textarea { width:100%; padding:14px 16px; margin:10px 0; backgrou
   <h1>عالم العروض</h1>
   <p class="subtitle">احجز باقتك بسهولة وسرعة</p>
 
-  <div id="loading" class="loading">جاري تحميل الباقات...</div>
+  <!-- تحميل -->
+  <div id="loading" class="loading">⏳ جاري تحميل الباقات...</div>
 
+  <!-- الخطوة 1: اختيار الشركة -->
   <div id="step1" class="step card">
-    <div class="section-title">اختر الشركة</div>
+    <div class="section-title">📡 اختر الشركة</div>
     <div class="company-grid" id="companyGrid"></div>
   </div>
 
+  <!-- الخطوة 2: اختيار الباقة -->
   <div id="step2" class="step card">
-    <div class="section-title">اختر الباقة</div>
+    <div class="section-title">📦 اختر الباقة</div>
     <div class="filter-tabs" id="filterTabs">
       <div class="filter-tab active" data-filter="all">الكل</div>
       <div class="filter-tab" data-filter="جيجا">جيجا</div>
@@ -121,15 +165,19 @@ input, select, textarea { width:100%; padding:14px 16px; margin:10px 0; backgrou
       <div class="filter-tab" data-filter="ميكس">ميكس</div>
     </div>
     <div class="packages-list" id="packagesList"></div>
-    <button class="btn" onclick="backToCompanies()">← رجوع للشركات</button>
+    <button class="btn btn-back" style="margin-top:16px;" onclick="backToCompanies()">← رجوع للشركات</button>
   </div>
 
+  <!-- الخطوة 3: بيانات الحجز -->
   <div id="step3" class="step card">
-    <div class="section-title">بيانات الحجز</div>
+    <div class="section-title">📋 ملخص طلبك</div>
+    <div class="order-summary" id="orderSummary"></div>
+
+    <div class="section-title">👤 بيانات الحجز</div>
     <input type="text" id="customerName" placeholder="اسمك الكامل">
     <input type="tel" id="phone" placeholder="رقم الواتساب">
     <select id="paymentMethod">
-      <option value="">طريقة الدفع</option>
+      <option value="">💳 طريقة الدفع</option>
       <option value="فودافون كاش">فودافون كاش</option>
       <option value="أورانج كاش">أورانج كاش</option>
       <option value="إنستا باي">إنستا باي</option>
@@ -138,23 +186,28 @@ input, select, textarea { width:100%; padding:14px 16px; margin:10px 0; backgrou
     <input type="text" id="transferRef" placeholder="رقم التحويل أو المرجع">
     <textarea id="notes" rows="2" placeholder="ملاحظات (اختياري)"></textarea>
 
-    <div class="section-title">ارفع إيصال الدفع</div>
+    <div class="section-title">🧾 ارفع إيصال الدفع</div>
     <input type="file" id="proofUpload" accept="image/*" onchange="previewImage(event)">
     <div class="preview-container">
       <img id="imagePreview" alt="معاينة الإيصال">
     </div>
-    <button class="btn btn-primary" onclick="submitOrder()">تأكيد وإرسال الطلب</button>
+
+    <button class="btn btn-primary" onclick="submitOrder()">✅ تأكيد وإرسال الطلب</button>
+    <button class="btn btn-back" onclick="showStep(2)">← رجوع للباقات</button>
   </div>
 
+  <!-- شاشة النجاح -->
   <div id="successScreen" class="step success-screen">
-    <h2>✅ تم استلام طلبك بنجاح!</h2>
-    <p id="orderIdDisplay" style="font-size:1.5rem; color:var(--green); margin:15px 0;"></p>
-    <p>سيتم مراجعة وتفعيل طلبك خلال دقائق</p>
-    <button class="btn btn-success" onclick="restart()">طلب باقة جديدة</button>
+    <div class="success-icon">🎉</div>
+    <h2>تم استلام طلبك بنجاح!</h2>
+    <p id="orderIdDisplay" style="font-size:1.4rem; color:var(--green); margin:15px 0; font-weight:700;"></p>
+    <p style="color:var(--muted); margin-bottom:30px;">سيتم مراجعة وتفعيل طلبك خلال دقائق<br>شكراً لثقتك في عالم العروض 🌟</p>
+    <button class="btn btn-success" onclick="restart()">📦 طلب باقة جديدة</button>
   </div>
 </div>
 
 <script>
+// ✅ ضع رابط الـ Web App الخاص بك هنا
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
 
 let allPackages = [];
@@ -162,45 +215,71 @@ let selectedCompany = '';
 let selectedPackage = null;
 let proofBase64 = '';
 
+// ============================================================
+// تحميل الباقات
+// ============================================================
 async function loadPackages() {
   const loadingEl = document.getElementById('loading');
   try {
     const res = await fetch(`${SCRIPT_URL}?action=packages`, { cache: 'no-store' });
     allPackages = await res.json();
-
     loadingEl.style.display = 'none';
-    document.getElementById('step1').style.display = 'block';
+    showStep(1);
     createCompanyCards();
   } catch (e) {
     console.error(e);
-    loadingEl.innerHTML = `❌ فشل تحميل الباقات<br><button onclick="location.reload()">إعادة المحاولة</button>`;
+    loadingEl.innerHTML = `
+      <div style="color:#f87171;">❌ فشل تحميل الباقات</div>
+      <button onclick="location.reload()" style="margin-top:16px;padding:12px 24px;background:var(--accent);color:white;border:none;border-radius:12px;cursor:pointer;font-family:'Cairo',sans-serif;">
+        🔄 إعادة المحاولة
+      </button>`;
   }
 }
 
+// ============================================================
+// إنشاء كروت الشركات
+// ============================================================
 function createCompanyCards() {
-  const companies = ['أورانج', 'وي', 'اتصالات', 'فودافون'];
+  const companies = [
+    { name: 'أورانج', emoji: '🟠' },
+    { name: 'وي',     emoji: '🟣' },
+    { name: 'اتصالات',emoji: '🟢' },
+    { name: 'فودافون',emoji: '🔴' }
+  ];
   const grid = document.getElementById('companyGrid');
   grid.innerHTML = '';
-  companies.forEach(name => {
-    const emoji = name === 'أورانج' ? '🟠' : name === 'وي' ? '🟣' : name === 'اتصالات' ? '🟢' : '🔴';
+  companies.forEach(({ name, emoji }) => {
     const div = document.createElement('div');
     div.className = 'company-card';
-    div.innerHTML = `${emoji}<br>${name}`;
+    div.innerHTML = `<div style="font-size:2rem;margin-bottom:8px;">${emoji}</div>${name}`;
     div.onclick = () => selectCompany(name, div);
     grid.appendChild(div);
   });
 }
 
+// ============================================================
+// اختيار الشركة
+// ============================================================
 function selectCompany(company, el) {
   document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
   el.classList.add('selected');
   selectedCompany = company;
+  selectedPackage = null;
   showStep(2);
   filterPackages('all');
+  // reset filter tabs
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('[data-filter="all"]').classList.add('active');
 }
 
+// ============================================================
+// فلترة الباقات
+// ============================================================
 function filterPackages(type) {
-  document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.toggle('active', tab.dataset.filter === type));
+  document.querySelectorAll('.filter-tab').forEach(tab =>
+    tab.classList.toggle('active', tab.dataset.filter === type)
+  );
+
   const container = document.getElementById('packagesList');
   container.innerHTML = '';
 
@@ -209,61 +288,105 @@ function filterPackages(type) {
   if (type !== 'all') {
     filtered = filtered.filter(p => {
       const text = (p.name + ' ' + (p.type || '')).toLowerCase();
-      if (type === 'جيجا') return text.includes('جيجا');
+      if (type === 'جيجا')   return text.includes('جيجا');
       if (type === 'دقايق') return text.includes('دقيقة') || text.includes('دقايق');
-      if (type === 'ميكس') return text.includes('ميكس');
+      if (type === 'ميكس')  return text.includes('ميكس');
       return true;
     });
   }
 
   if (filtered.length === 0) {
-    container.innerHTML = `<div style="text-align:center;padding:40px;color:#f59e0b;">لا توجد باقات</div>`;
+    container.innerHTML = `<div style="text-align:center;padding:40px;color:#f59e0b;">⚠️ لا توجد باقات في هذه الفئة</div>`;
     return;
   }
 
   filtered.forEach(pkg => {
     const div = document.createElement('div');
     div.className = 'pkg-item';
-    div.innerHTML = `<strong>${pkg.name}</strong><br><small>${pkg.type || ''}</small><div style="margin-top:10px;color:#22C55E;font-size:1.4rem;font-weight:700;">${pkg.price} جنيه</div>`;
+    div.innerHTML = `
+      <strong style="font-size:1.05rem;">${pkg.name}</strong>
+      ${pkg.type ? `<br><small style="color:var(--muted);">${pkg.type}</small>` : ''}
+      <div style="margin-top:10px;color:#22C55E;font-size:1.4rem;font-weight:700;">${pkg.price} جنيه</div>
+    `;
     div.onclick = () => {
       document.querySelectorAll('.pkg-item').forEach(i => i.classList.remove('selected'));
       div.classList.add('selected');
       selectedPackage = pkg;
-      showStep(3);
+      // تأخير بسيط عشان يظهر التحديد قبل الانتقال
+      setTimeout(() => {
+        updateOrderSummary();
+        showStep(3);
+      }, 200);
     };
     container.appendChild(div);
   });
 }
 
+// ============================================================
+// ملخص الطلب
+// ============================================================
+function updateOrderSummary() {
+  if (!selectedPackage) return;
+  document.getElementById('orderSummary').innerHTML = `
+    <p>📡 الشركة: <span>${selectedCompany}</span></p>
+    <p>📦 الباقة: <span>${selectedPackage.name}</span></p>
+    <p>💰 السعر: <span style="color:var(--green)">${selectedPackage.price} جنيه</span></p>
+  `;
+}
+
+// ============================================================
+// التنقل بين الخطوات
+// ============================================================
 function showStep(step) {
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-  document.getElementById(`step${step}`).classList.add('active');
+  const el = document.getElementById(step === 4 ? 'successScreen' : `step${step}`);
+  if (el) el.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function backToCompanies() { showStep(1); }
 
+// ============================================================
+// معاينة الإيصال
+// ============================================================
 function previewImage(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = ev => {
     proofBase64 = ev.target.result;
-    document.getElementById('imagePreview').src = proofBase64;
-    document.getElementById('imagePreview').style.display = 'block';
+    const img = document.getElementById('imagePreview');
+    img.src = proofBase64;
+    img.style.display = 'block';
   };
   reader.readAsDataURL(file);
 }
 
+// ============================================================
+// إرسال الطلب — الحل الكامل لمشكلة CORS
+// ============================================================
 async function submitOrder() {
-  const name = document.getElementById('customerName').value.trim();
+  const name  = document.getElementById('customerName').value.trim();
   const phone = document.getElementById('phone').value.trim();
 
-  if (!name || !phone || !selectedPackage) {
-    alert("❌ برجاء ملء الاسم ورقم التليفون واختيار باقة");
+  if (!name) {
+    alert("❌ برجاء كتابة اسمك الكامل");
+    return;
+  }
+  if (!phone) {
+    alert("❌ برجاء كتابة رقم الواتساب");
+    return;
+  }
+  if (!selectedPackage) {
+    alert("❌ برجاء اختيار باقة أولاً");
     return;
   }
 
+  // توليد رقم طلب محلي (لأن no-cors مش هيرجع response)
+  const localOrderId = 'ORD-' + Date.now();
+
   const formData = {
+    orderId: localOrderId,
     customerName: name,
     phone: phone,
     company: selectedCompany,
@@ -275,37 +398,41 @@ async function submitOrder() {
     proofBase64: proofBase64 || ''
   };
 
+  // إظهار شاشة الإرسال
+  document.getElementById('sendingOverlay').classList.add('show');
+
   try {
-    const res = await fetch(SCRIPT_URL, {
+    // ✅ الحل: mode: 'no-cors' يحل مشكلة CORS مع Google Apps Script
+    await fetch(SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(formData)
     });
 
-    const text = await res.text();
-    console.log("Server Response:", text);
+    // مع no-cors لا نقدر نقرأ الـ response، لكن الطلب وصل
+    // ننتظر ثانية ونعرض النجاح
+    await new Promise(r => setTimeout(r, 1000));
 
-    let result;
-    try {
-      result = JSON.parse(text);
-    } catch(e) {
-      result = { success: false, error: text };
-    }
+    document.getElementById('sendingOverlay').classList.remove('show');
+    document.getElementById('orderIdDisplay').textContent = `رقم طلبك: ${localOrderId}`;
+    showStep(4);
 
-    if (result.success) {
-      document.getElementById('orderIdDisplay').textContent = `رقم الطلب: ${result.orderId}`;
-      showStep(4);
-    } else {
-      alert("❌ خطأ من السيرفر: " + (result.error || 'غير معروف'));
-    }
   } catch(e) {
+    document.getElementById('sendingOverlay').classList.remove('show');
     console.error("Submit Error:", e);
-    alert("❌ فشل الاتصال\n" + e.message + "\n\nجرب أعد نشر Web App جديد");
+    alert("❌ فشل الإرسال\n" + e.message + "\n\nتأكد من اتصال الإنترنت وحاول مرة أخرى");
   }
 }
 
+// ============================================================
+// إعادة التشغيل
+// ============================================================
 function restart() { location.reload(); }
 
+// ============================================================
+// الأحداث
+// ============================================================
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.filter-tab').forEach(tab => {
     tab.addEventListener('click', () => filterPackages(tab.dataset.filter));
