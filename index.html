@@ -280,40 +280,30 @@ input, select, textarea {
 </div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwTuFMXnhZHpCBYRBQAUaJWG9kwF1NnL6gUkNTm0Uo9nVe_tbh2D_Vo8FQqNCc_3HfQ/exec'; 
-// ← غير الرابط ده بالرابط الجديد بعد إعادة النشر
-// اختبار الاتصال
-async function testConnection() {
-  try {
-    const res = await fetch(SCRIPT_URL + '?action=test');
-    const text = await res.text();
-    console.log("Response:", text);
-    alert("✅ الاتصال شغال! Response: " + text);
-  } catch(e) {
-    console.error(e);
-    alert("❌ فشل الاتصال: " + e.message);
-  }
-}
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwTuFMXnhZHpCBYRBQAUaJWG9kwF1NnL6gUkNTm0Uo9nVe_tbh2D_Vo8FQqNCc_3HfQ/exec';
 
-// شغله تلقائياً
-window.onload = () => {
-  testConnection().then(() => loadPackages());
-};
 let allPackages = [];
 let selectedCompany = '';
 let selectedPackage = null;
 let proofBase64 = '';
 
+// تحميل الباقات
 async function loadPackages() {
   try {
     const res = await fetch(`${SCRIPT_URL}?action=packages`);
+    if (!res.ok) throw new Error('فشل الاتصال');
+    
     allPackages = await res.json();
     
     document.getElementById('loading').style.display = 'none';
     document.getElementById('step1').style.display = 'block';
     createCompanyCards();
   } catch(e) {
-    document.getElementById('loading').innerHTML = '❌ خطأ في الاتصال<br><button onclick="location.reload()">إعادة المحاولة</button>';
+    console.error(e);
+    document.getElementById('loading').innerHTML = `
+      ❌ خطأ في الاتصال بالسيرفر<br>
+      <button onclick="location.reload()" style="margin-top:15px;padding:10px 20px;">إعادة المحاولة</button>
+    `;
   }
 }
 
@@ -398,9 +388,8 @@ function previewImage(e) {
   const reader = new FileReader();
   reader.onload = function(ev) {
     proofBase64 = ev.target.result;
-    const preview = document.getElementById('imagePreview');
-    preview.src = proofBase64;
-    preview.style.display = 'block';
+    document.getElementById('imagePreview').src = proofBase64;
+    document.getElementById('imagePreview').style.display = 'block';
   };
   reader.readAsDataURL(file);
 }
