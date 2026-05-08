@@ -1011,693 +1011,788 @@
 
   <script>
 
-    const SCRIPT_URL =
-      'ضع_رابط_Apps_Script_هنا';
+const SCRIPT_URL =
+  'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
 
-    let allPackages = [];
+let allPackages = [];
 
-    let companyPackagesMap = {};
+let companyPackagesMap = {};
 
-    let selectedCompany = '';
+let selectedCompany = '';
 
-    let selectedCompanyName = '';
+let selectedCompanyName = '';
 
-    let selectedPackage = null;
+let selectedPackage = null;
 
-    let proofBase64 = '';
+let proofBase64 = '';
 
-    let selectedPaymentMethod = '';
+let selectedPaymentMethod = '';
 
-    let isSubmitting = false;
+let isSubmitting = false;
 
-    async function loadPackages() {
+/* تحميل الباقات */
 
-      const loadingEl =
-        document.getElementById('loading');
+async function loadPackages() {
 
-      try {
+  const loadingEl =
+    document.getElementById('loading');
 
-        const cachedData =
-          localStorage.getItem('packages_cache');
+  try {
 
-        const cachedTime =
-          localStorage.getItem('packages_cache_time');
+    const cachedData =
+      localStorage.getItem('packages_cache');
 
-        const CACHE_DURATION =
-          30 * 60 * 1000;
+    const cachedTime =
+      localStorage.getItem('packages_cache_time');
 
-        if (
-          cachedData &&
-          cachedTime &&
-          (Date.now() - cachedTime < CACHE_DURATION)
-        ) {
+    const CACHE_DURATION =
+      30 * 60 * 1000;
 
-          allPackages = JSON.parse(cachedData);
+    if (
+      cachedData &&
+      cachedTime &&
+      (Date.now() - cachedTime < CACHE_DURATION)
+    ) {
 
-          preparePackagesMap();
+      allPackages = JSON.parse(cachedData);
 
-          loadingEl.style.display = 'none';
+      preparePackagesMap();
 
-          showStep(1);
-
-          createCompanyCards();
-
-          return;
-        }
-
-        if (!navigator.onLine) {
-
-          loadingEl.innerHTML = `
-            <div style="
-              text-align:center;
-              color:#f87171;
-              padding:40px;
-            ">
-              ❌ لا يوجد اتصال بالإنترنت
-            </div>
-          `;
-
-          return;
-        }
-
-        const res =
-          await fetch(`${SCRIPT_URL}?action=packages`);
-
-        allPackages = await res.json();
-
-        localStorage.setItem(
-          'packages_cache',
-          JSON.stringify(allPackages)
-        );
-
-        localStorage.setItem(
-          'packages_cache_time',
-          Date.now()
-        );
-
-        preparePackagesMap();
-
-        loadingEl.style.display = 'none';
-
-        showStep(1);
-
-        createCompanyCards();
-
-      } catch (e) {
-
-        loadingEl.innerHTML = `
-          <div style="
-            text-align:center;
-            color:#f87171;
-            padding:40px;
-          ">
-            ❌ فشل تحميل الباقات
-          </div>
-        `;
-      }
-    }
-
-    function preparePackagesMap() {
-
-      companyPackagesMap = {};
-
-      allPackages.forEach(pkg => {
-
-        const companyKey =
-          (pkg.company || '')
-            .toLowerCase()
-            .trim();
-
-        if (!companyPackagesMap[companyKey]) {
-
-          companyPackagesMap[companyKey] = [];
-        }
-
-        companyPackagesMap[companyKey].push(pkg);
-
-      });
-    }
-
-    function createCompanyCards() {
-
-      const companies = [
-
-        {
-          id: 'orange',
-          name: 'أورانج',
-          emoji: '🟠'
-        },
-
-        {
-          id: 'we',
-          name: 'وي',
-          emoji: '🟣'
-        },
-
-        {
-          id: 'etisalat',
-          name: 'اتصالات',
-          emoji: '🟢'
-        },
-
-        {
-          id: 'vodafone',
-          name: 'فودافون',
-          emoji: '🔴'
-        }
-
-      ];
-
-      const grid =
-        document.getElementById('companyGrid');
-
-      grid.innerHTML = '';
-
-      companies.forEach(({ id, name, emoji }) => {
-
-        const div = document.createElement('div');
-
-        div.className = 'company-card';
-
-        div.innerHTML = `
-          <div style="
-            font-size:2rem;
-            margin-bottom:8px;
-          ">
-            ${emoji}
-          </div>
-
-          ${name}
-        `;
-
-        div.onclick = () =>
-          selectCompany({ id, name }, div);
-
-        grid.appendChild(div);
-
-      });
-    }
-
-    function selectCompany(company, el) {
-
-      selectedCompany = company.id;
-
-      selectedCompanyName = company.name;
-
-      document.querySelectorAll('.company-card')
-        .forEach(c =>
-          c.classList.remove('selected'));
-
-      el.classList.add('selected');
-
-      document.getElementById(
-        'selectedCompanyTitle'
-      ).textContent =
-        `باقات ${selectedCompanyName}`;
-
-      showStep(2);
-
-      filterPackages('all');
-    }
-
-    function filterPackages(type) {
-
-      document.querySelectorAll('.filter-tab')
-        .forEach(tab => {
-
-          tab.classList.toggle(
-            'active',
-            tab.dataset.filter === type
-          );
-        });
-
-      const container =
-        document.getElementById('packagesList');
-
-      container.innerHTML = '';
-
-      let filtered =
-        companyPackagesMap[selectedCompany] || [];
-
-      if (type !== 'all') {
-
-        filtered = filtered.filter(pkg => {
-
-          const text =
-            (
-              pkg.name +
-              ' ' +
-              (pkg.type || '')
-            )
-              .toLowerCase();
-
-          if (type === 'جيجا') {
-
-            return (
-              text.includes('جيجا') ||
-              text.includes('gb') ||
-              text.includes('giga')
-            );
-          }
-
-          if (type === 'دقايق') {
-
-            return (
-              text.includes('دقيقة') ||
-              text.includes('دقايق')
-            );
-          }
-
-          if (type === 'ميكس') {
-
-            return text.includes('ميكس');
-          }
-
-          return true;
-        });
-      }
-
-      if (!filtered.length) {
-
-        container.innerHTML = `
-          <div style="
-            text-align:center;
-            padding:40px;
-            color:#f59e0b;
-          ">
-            ⚠️ لا توجد باقات
-          </div>
-        `;
-
-        return;
-      }
-
-      filtered.forEach(pkg => {
-
-        const div =
-          document.createElement('div');
-
-        div.className = 'pkg-item';
-
-        div.innerHTML = `
-          <strong style="font-size:1.05rem;">
-            ${pkg.name}
-          </strong>
-
-          <div style="
-            margin-top:10px;
-            color:#22C55E;
-            font-size:1.4rem;
-            font-weight:700;
-          ">
-            ${pkg.price} جنيه
-          </div>
-        `;
-
-        div.onclick = () => {
-
-          document
-            .querySelectorAll('.pkg-item')
-            .forEach(i =>
-              i.classList.remove('selected'));
-
-          div.classList.add('selected');
-
-          selectedPackage = pkg;
-
-          updateOrderSummary();
-
-          setTimeout(() => {
-
-            showStep(3);
-
-          }, 180);
-        };
-
-        container.appendChild(div);
-
-      });
-    }
-
-    function selectPayment(method, el) {
-
-      document.querySelectorAll('.payment-card')
-        .forEach(c =>
-          c.classList.remove('selected'));
-
-      el.classList.add('selected');
-
-      selectedPaymentMethod = method;
-    }
-
-    function updateOrderSummary() {
-
-      if (!selectedPackage) return;
-
-      document.getElementById('orderSummary')
-        .innerHTML = `
-          <p>
-            📡 الشركة:
-            <span>${selectedCompanyName}</span>
-          </p>
-
-          <p>
-            📦 الباقة:
-            <span>${selectedPackage.name}</span>
-          </p>
-
-          <p>
-            💰 السعر:
-            <span style="color:var(--green)">
-              ${selectedPackage.price} جنيه
-            </span>
-          </p>
-        `;
-    }
-
-    function showStep(step) {
-
-      document
-        .querySelectorAll('.step')
-        .forEach(s =>
-          s.classList.remove('active'));
-
-      const el =
-        document.getElementById(
-          step === 4
-            ? 'successScreen'
-            : `step${step}`
-        );
-
-      if (el)
-        el.classList.add('active');
-
-      const progressFill =
-        document.getElementById('progressFill');
-
-      const progressTitle =
-        document.getElementById('progressTitle');
-
-      const progressCounter =
-        document.getElementById('progressCounter');
-
-      const progressHeader =
-        document.querySelector('.progress-header');
-
-      progressHeader.style.display =
-        step === 4 ? 'none' : 'block';
-
-      if (step === 1) {
-
-        progressFill.style.width = '33%';
-
-        progressTitle.textContent =
-          '📡 اختيار الشركة';
-
-        progressCounter.textContent =
-          'خطوة 1 من 3';
-      }
-
-      else if (step === 2) {
-
-        progressFill.style.width = '66%';
-
-        progressTitle.textContent =
-          '📦 اختيار الباقة';
-
-        progressCounter.textContent =
-          'خطوة 2 من 3';
-      }
-
-      else if (step === 3) {
-
-        progressFill.style.width = '100%';
-
-        progressTitle.textContent =
-          '👤 بيانات الحجز';
-
-        progressCounter.textContent =
-          'خطوة 3 من 3';
-      }
-
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
-
-    function backToCompanies() {
+      loadingEl.style.display = 'none';
 
       showStep(1);
+
+      createCompanyCards();
+
+      return;
     }
 
-    function previewImage(e) {
+    if (!navigator.onLine) {
 
-      const file = e.target.files[0];
+      loadingEl.innerHTML = `
+        <div style="
+          text-align:center;
+          color:#f87171;
+          padding:40px;
+        ">
+          ❌ لا يوجد اتصال بالإنترنت
+        </div>
+      `;
 
-      if (!file) return;
-
-      if (file.size > 3 * 1024 * 1024) {
-
-        alert("❌ الصورة كبيرة جدًا");
-
-        return;
-      }
-
-      const reader = new FileReader();
-
-      reader.onload = ev => {
-
-        proofBase64 = ev.target.result;
-
-        const img =
-          document.getElementById('imagePreview');
-
-        img.src = proofBase64;
-
-        img.style.display = 'block';
-      };
-
-      reader.readAsDataURL(file);
+      return;
     }
 
-    function normalizePhone(phone) {
+    const res =
+      await fetch(`${SCRIPT_URL}?action=packages`);
 
-      return phone
-        .replace(/\s/g, '')
-        .replace('+2', '')
-        .replace(/^20/, '0');
+    allPackages = await res.json();
+
+    console.log(allPackages);
+
+    localStorage.setItem(
+      'packages_cache',
+      JSON.stringify(allPackages)
+    );
+
+    localStorage.setItem(
+      'packages_cache_time',
+      Date.now()
+    );
+
+    preparePackagesMap();
+
+    loadingEl.style.display = 'none';
+
+    showStep(1);
+
+    createCompanyCards();
+
+  } catch (e) {
+
+    console.error(e);
+
+    loadingEl.innerHTML = `
+      <div style="
+        text-align:center;
+        color:#f87171;
+        padding:40px;
+      ">
+        ❌ فشل تحميل الباقات
+      </div>
+    `;
+  }
+}
+
+/* تجهيز الشركات */
+
+function preparePackagesMap() {
+
+  companyPackagesMap = {};
+
+  allPackages.forEach(pkg => {
+
+    let company =
+      (
+        pkg.company ||
+        pkg['الشركة'] ||
+        ''
+      )
+        .toLowerCase()
+        .trim();
+
+    /* normalize */
+
+    if (
+      company.includes('فودافون') ||
+      company.includes('vodafone')
+    ) {
+
+      company = 'vodafone';
     }
 
-    async function submitOrder() {
+    else if (
+      company.includes('أورانج') ||
+      company.includes('اورنج') ||
+      company.includes('orange')
+    ) {
 
-      if (isSubmitting) return;
-
-      isSubmitting = true;
-
-      const submitBtn =
-        document.getElementById('submitBtn');
-
-      let name =
-        document.getElementById('customerName')
-          .value.trim();
-
-      let phone =
-        normalizePhone(
-          document.getElementById('phone')
-            .value.trim()
-        );
-
-      let activationPhone =
-        normalizePhone(
-          document.getElementById('activationPhone')
-            .value.trim()
-        );
-
-      if (!name) {
-        alert("❌ برجاء كتابة الاسم");
-        isSubmitting = false;
-        return;
-      }
-
-      if (!phone) {
-        alert("❌ برجاء كتابة رقم الواتساب");
-        isSubmitting = false;
-        return;
-      }
-
-      if (!activationPhone) {
-        alert("❌ برجاء كتابة رقم التفعيل");
-        isSubmitting = false;
-        return;
-      }
-
-      if (!selectedPackage) {
-        alert("❌ اختر الباقة");
-        isSubmitting = false;
-        return;
-      }
-
-      if (!selectedPaymentMethod) {
-        alert("❌ اختر طريقة الدفع");
-        isSubmitting = false;
-        return;
-      }
-
-      submitBtn.disabled = true;
-
-      submitBtn.style.opacity = '0.7';
-
-      const localOrderId =
-        'ORD-' + Date.now();
-
-      const formData = {
-
-        orderId: localOrderId,
-
-        customerName: name,
-
-        phone: phone,
-
-        activationPhone: activationPhone,
-
-        company: selectedCompany,
-
-        package: selectedPackage.name,
-
-        price: selectedPackage.price,
-
-        payment: selectedPaymentMethod,
-
-        transferRef:
-          document.getElementById('transferRef')
-            .value || '',
-
-        notes:
-          document.getElementById('notes')
-            .value || '',
-
-        proofBase64: proofBase64 || ''
-      };
-
-      document.getElementById('sendingOverlay')
-        .classList.add('show');
-
-      try {
-
-        const res = await fetch(SCRIPT_URL, {
-
-          method: 'POST',
-
-          headers: {
-            'Content-Type': 'application/json'
-          },
-
-          body: JSON.stringify(formData)
-        });
-
-        const data = await res.json();
-
-        if (!data.success) {
-
-          throw new Error('failed');
-        }
-
-        document.getElementById('sendingOverlay')
-          .classList.remove('show');
-
-        document.getElementById('orderIdDisplay')
-          .textContent =
-          `رقم طلبك: ${localOrderId}`;
-
-        showStep(4);
-
-      } catch (e) {
-
-        submitBtn.disabled = false;
-
-        submitBtn.style.opacity = '1';
-
-        isSubmitting = false;
-
-        document.getElementById('sendingOverlay')
-          .classList.remove('show');
-
-        alert("❌ فشل إرسال الطلب");
-      }
+      company = 'orange';
     }
 
-    function restart() {
+    else if (
+      company.includes('وي') ||
+      company === 'we'
+    ) {
 
-      location.reload();
+      company = 'we';
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
+    else if (
+      company.includes('اتصالات') ||
+      company.includes('etisalat')
+    ) {
 
-      document
-        .getElementById('sameAsWhatsapp')
-        .addEventListener('change', function () {
+      company = 'etisalat';
+    }
 
-          const whatsappInput =
-            document.getElementById('phone');
+    if (!companyPackagesMap[company]) {
 
-          const activationInput =
-            document.getElementById('activationPhone');
+      companyPackagesMap[company] = [];
+    }
 
-          if (this.checked) {
+    companyPackagesMap[company].push({
 
-            activationInput.value =
-              whatsappInput.value;
+      name:
+        pkg.name ||
+        pkg['اسم الباقة / التفاصيل'] ||
+        '',
 
-            activationInput.setAttribute(
-              'readonly',
-              true
-            );
+      price:
+        pkg.price ||
+        pkg['السعر (جنيه)'] ||
+        '',
 
-            activationInput.style.opacity = '0.7';
+      type:
+        pkg.type ||
+        pkg['النوع'] ||
+        '',
 
-          } else {
-
-            activationInput.removeAttribute(
-              'readonly'
-            );
-
-            activationInput.style.opacity = '1';
-
-            activationInput.value = '';
-          }
-        });
-
-      document
-        .getElementById('phone')
-        .addEventListener('input', function () {
-
-          const checkbox =
-            document.getElementById('sameAsWhatsapp');
-
-          if (checkbox.checked) {
-
-            document.getElementById(
-              'activationPhone'
-            ).value = this.value;
-          }
-        });
-
-      document.querySelectorAll('.filter-tab')
-        .forEach(tab => {
-
-          tab.addEventListener('click', () => {
-
-            filterPackages(tab.dataset.filter);
-
-          });
-        });
-
+      company
     });
 
-    window.onload = loadPackages;
+  });
 
-  </script>
+  console.log(companyPackagesMap);
+}
+
+/* الشركات */
+
+function createCompanyCards() {
+
+  const companies = [
+
+    {
+      id: 'orange',
+      name: 'أورانج',
+      emoji: '🟠'
+    },
+
+    {
+      id: 'we',
+      name: 'وي',
+      emoji: '🟣'
+    },
+
+    {
+      id: 'etisalat',
+      name: 'اتصالات',
+      emoji: '🟢'
+    },
+
+    {
+      id: 'vodafone',
+      name: 'فودافون',
+      emoji: '🔴'
+    }
+
+  ];
+
+  const grid =
+    document.getElementById('companyGrid');
+
+  grid.innerHTML = '';
+
+  companies.forEach(({ id, name, emoji }) => {
+
+    const div = document.createElement('div');
+
+    div.className = 'company-card';
+
+    div.innerHTML = `
+      <div style="
+        font-size:2rem;
+        margin-bottom:8px;
+      ">
+        ${emoji}
+      </div>
+
+      ${name}
+    `;
+
+    div.onclick = () =>
+      selectCompany({ id, name }, div);
+
+    grid.appendChild(div);
+
+  });
+}
+
+/* اختيار شركة */
+
+function selectCompany(company, el) {
+
+  selectedCompany = company.id;
+
+  selectedCompanyName = company.name;
+
+  document.querySelectorAll('.company-card')
+    .forEach(c =>
+      c.classList.remove('selected'));
+
+  el.classList.add('selected');
+
+  document.getElementById(
+    'selectedCompanyTitle'
+  ).textContent =
+    `باقات ${selectedCompanyName}`;
+
+  showStep(2);
+
+  filterPackages('all');
+}
+
+/* فلترة */
+
+function filterPackages(type) {
+
+  document.querySelectorAll('.filter-tab')
+    .forEach(tab => {
+
+      tab.classList.toggle(
+        'active',
+        tab.dataset.filter === type
+      );
+    });
+
+  const container =
+    document.getElementById('packagesList');
+
+  container.innerHTML = '';
+
+  let filtered =
+    companyPackagesMap[selectedCompany] || [];
+
+  if (type !== 'all') {
+
+    filtered = filtered.filter(pkg => {
+
+      const pkgName =
+        pkg.name || '';
+
+      const pkgType =
+        pkg.type || '';
+
+      const text =
+        (pkgName + ' ' + pkgType)
+          .toLowerCase();
+
+      if (type === 'جيجا') {
+
+        return (
+          text.includes('جيجا') ||
+          text.includes('gb') ||
+          text.includes('giga')
+        );
+      }
+
+      if (type === 'دقايق') {
+
+        return (
+          text.includes('دقيقة') ||
+          text.includes('دقايق')
+        );
+      }
+
+      if (type === 'ميكس') {
+
+        return text.includes('ميكس');
+      }
+
+      return true;
+    });
+  }
+
+  if (!filtered.length) {
+
+    container.innerHTML = `
+      <div style="
+        text-align:center;
+        padding:40px;
+        color:#f59e0b;
+      ">
+        ⚠️ لا توجد باقات
+      </div>
+    `;
+
+    return;
+  }
+
+  filtered.forEach(pkg => {
+
+    const div =
+      document.createElement('div');
+
+    div.className = 'pkg-item';
+
+    div.innerHTML = `
+      <strong style="font-size:1.05rem;">
+        ${pkg.name}
+      </strong>
+
+      <div style="
+        margin-top:10px;
+        color:#22C55E;
+        font-size:1.4rem;
+        font-weight:700;
+      ">
+        ${pkg.price} جنيه
+      </div>
+    `;
+
+    div.onclick = () => {
+
+      document
+        .querySelectorAll('.pkg-item')
+        .forEach(i =>
+          i.classList.remove('selected'));
+
+      div.classList.add('selected');
+
+      selectedPackage = pkg;
+
+      updateOrderSummary();
+
+      setTimeout(() => {
+
+        showStep(3);
+
+      }, 180);
+    };
+
+    container.appendChild(div);
+
+  });
+}
+
+/* الدفع */
+
+function selectPayment(method, el) {
+
+  document.querySelectorAll('.payment-card')
+    .forEach(c =>
+      c.classList.remove('selected'));
+
+  el.classList.add('selected');
+
+  selectedPaymentMethod = method;
+}
+
+/* ملخص الطلب */
+
+function updateOrderSummary() {
+
+  if (!selectedPackage) return;
+
+  document.getElementById('orderSummary')
+    .innerHTML = `
+      <p>
+        📡 الشركة:
+        <span>${selectedCompanyName}</span>
+      </p>
+
+      <p>
+        📦 الباقة:
+        <span>${selectedPackage.name}</span>
+      </p>
+
+      <p>
+        💰 السعر:
+        <span style="color:var(--green)">
+          ${selectedPackage.price} جنيه
+        </span>
+      </p>
+    `;
+}
+
+/* الخطوات */
+
+function showStep(step) {
+
+  document
+    .querySelectorAll('.step')
+    .forEach(s =>
+      s.classList.remove('active'));
+
+  const el =
+    document.getElementById(
+      step === 4
+        ? 'successScreen'
+        : `step${step}`
+    );
+
+  if (el)
+    el.classList.add('active');
+
+  const progressFill =
+    document.getElementById('progressFill');
+
+  const progressTitle =
+    document.getElementById('progressTitle');
+
+  const progressCounter =
+    document.getElementById('progressCounter');
+
+  const progressHeader =
+    document.querySelector('.progress-header');
+
+  progressHeader.style.display =
+    step === 4 ? 'none' : 'block';
+
+  if (step === 1) {
+
+    progressFill.style.width = '33%';
+
+    progressTitle.textContent =
+      '📡 اختيار الشركة';
+
+    progressCounter.textContent =
+      'خطوة 1 من 3';
+  }
+
+  else if (step === 2) {
+
+    progressFill.style.width = '66%';
+
+    progressTitle.textContent =
+      '📦 اختيار الباقة';
+
+    progressCounter.textContent =
+      'خطوة 2 من 3';
+  }
+
+  else if (step === 3) {
+
+    progressFill.style.width = '100%';
+
+    progressTitle.textContent =
+      '👤 بيانات الحجز';
+
+    progressCounter.textContent =
+      'خطوة 3 من 3';
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+}
+
+/* رجوع */
+
+function backToCompanies() {
+
+  showStep(1);
+}
+
+/* رفع الصورة */
+
+function previewImage(e) {
+
+  const file = e.target.files[0];
+
+  if (!file) return;
+
+  if (file.size > 3 * 1024 * 1024) {
+
+    alert("❌ الصورة كبيرة جدًا");
+
+    return;
+  }
+
+  const reader = new FileReader();
+
+  reader.onload = ev => {
+
+    proofBase64 = ev.target.result;
+
+    const img =
+      document.getElementById('imagePreview');
+
+    img.src = proofBase64;
+
+    img.style.display = 'block';
+  };
+
+  reader.readAsDataURL(file);
+}
+
+/* تنظيف الرقم */
+
+function normalizePhone(phone) {
+
+  return phone
+    .replace(/\s/g, '')
+    .replace('+2', '')
+    .replace(/^20/, '0');
+}
+
+/* إرسال الطلب */
+
+async function submitOrder() {
+
+  if (isSubmitting) return;
+
+  isSubmitting = true;
+
+  const submitBtn =
+    document.getElementById('submitBtn');
+
+  let name =
+    document.getElementById('customerName')
+      .value.trim();
+
+  let phone =
+    normalizePhone(
+      document.getElementById('phone')
+        .value.trim()
+    );
+
+  let activationPhone =
+    normalizePhone(
+      document.getElementById('activationPhone')
+        .value.trim()
+    );
+
+  if (!name) {
+    alert("❌ برجاء كتابة الاسم");
+    isSubmitting = false;
+    return;
+  }
+
+  if (!phone) {
+    alert("❌ برجاء كتابة رقم الواتساب");
+    isSubmitting = false;
+    return;
+  }
+
+  if (!activationPhone) {
+    alert("❌ برجاء كتابة رقم التفعيل");
+    isSubmitting = false;
+    return;
+  }
+
+  if (!selectedPackage) {
+    alert("❌ اختر الباقة");
+    isSubmitting = false;
+    return;
+  }
+
+  if (!selectedPaymentMethod) {
+    alert("❌ اختر طريقة الدفع");
+    isSubmitting = false;
+    return;
+  }
+
+  submitBtn.disabled = true;
+
+  submitBtn.style.opacity = '0.7';
+
+  const localOrderId =
+    'ORD-' + Date.now();
+
+  const formData = {
+
+    orderId: localOrderId,
+
+    customerName: name,
+
+    phone: phone,
+
+    activationPhone: activationPhone,
+
+    company: selectedCompanyName,
+
+    package: selectedPackage.name,
+
+    price: selectedPackage.price,
+
+    payment: selectedPaymentMethod,
+
+    transferRef:
+      document.getElementById('transferRef')
+        .value || '',
+
+    notes:
+      document.getElementById('notes')
+        .value || '',
+
+    proofBase64: proofBase64 || ''
+  };
+
+  document.getElementById('sendingOverlay')
+    .classList.add('show');
+
+  try {
+
+    const res = await fetch(SCRIPT_URL, {
+
+      method: 'POST',
+
+      headers: {
+        'Content-Type': 'application/json'
+      },
+
+      body: JSON.stringify(formData)
+    });
+
+    const data = await res.json();
+
+    if (!data.success) {
+
+      throw new Error('failed');
+    }
+
+    document.getElementById('sendingOverlay')
+      .classList.remove('show');
+
+    document.getElementById('orderIdDisplay')
+      .textContent =
+      `رقم طلبك: ${localOrderId}`;
+
+    showStep(4);
+
+  } catch (e) {
+
+    console.error(e);
+
+    submitBtn.disabled = false;
+
+    submitBtn.style.opacity = '1';
+
+    isSubmitting = false;
+
+    document.getElementById('sendingOverlay')
+      .classList.remove('show');
+
+    alert("❌ فشل إرسال الطلب");
+  }
+}
+
+/* إعادة */
+
+function restart() {
+
+  location.reload();
+}
+
+/* DOM */
+
+document.addEventListener('DOMContentLoaded', () => {
+
+  document
+    .getElementById('sameAsWhatsapp')
+    .addEventListener('change', function () {
+
+      const whatsappInput =
+        document.getElementById('phone');
+
+      const activationInput =
+        document.getElementById('activationPhone');
+
+      if (this.checked) {
+
+        activationInput.value =
+          whatsappInput.value;
+
+        activationInput.setAttribute(
+          'readonly',
+          true
+        );
+
+        activationInput.style.opacity = '0.7';
+
+      } else {
+
+        activationInput.removeAttribute(
+          'readonly'
+        );
+
+        activationInput.style.opacity = '1';
+
+        activationInput.value = '';
+      }
+    });
+
+  document
+    .getElementById('phone')
+    .addEventListener('input', function () {
+
+      const checkbox =
+        document.getElementById('sameAsWhatsapp');
+
+      if (checkbox.checked) {
+
+        document.getElementById(
+          'activationPhone'
+        ).value = this.value;
+      }
+    });
+
+  document.querySelectorAll('.filter-tab')
+    .forEach(tab => {
+
+      tab.addEventListener('click', () => {
+
+        filterPackages(tab.dataset.filter);
+
+      });
+    });
+
+});
+
+window.onload = loadPackages;
+
+</script>
 
 </body>
 
