@@ -3,7 +3,6 @@
 
 <head>
   <meta charset="UTF-8" />
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>عالم العروض — احجز باقتك</title>
@@ -1087,8 +1086,6 @@ async function loadPackages() {
 
     allPackages = await res.json();
 
-    console.log(allPackages);
-
     localStorage.setItem(
       'packages_cache',
       JSON.stringify(allPackages)
@@ -1139,8 +1136,6 @@ function preparePackagesMap() {
       )
         .toLowerCase()
         .trim();
-
-    /* normalize */
 
     if (
       company.includes('فودافون') ||
@@ -1201,8 +1196,6 @@ function preparePackagesMap() {
     });
 
   });
-
-  console.log(companyPackagesMap);
 }
 
 /* الشركات */
@@ -1792,7 +1785,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 window.onload = loadPackages;
 
-</script>
+  </script>
 
 </body>
 
