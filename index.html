@@ -287,31 +287,33 @@ let selectedCompany = '';
 let selectedPackage = null;
 let proofBase64 = '';
 
-// تحميل الباقات
 async function loadPackages() {
+  const loadingEl = document.getElementById('loading');
   try {
-    const res = await fetch(`${SCRIPT_URL}?action=packages`);
-    if (!res.ok) throw new Error('فشل الاتصال');
-    
+    const res = await fetch(`${SCRIPT_URL}?action=packages`, {
+      method: 'GET',
+      cache: 'no-store',
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (!res.ok) throw new Error('HTTP Error');
+
     allPackages = await res.json();
     
-    document.getElementById('loading').style.display = 'none';
+    loadingEl.style.display = 'none';
     document.getElementById('step1').style.display = 'block';
     createCompanyCards();
   } catch(e) {
     console.error(e);
-    document.getElementById('loading').innerHTML = `
-      ❌ خطأ في الاتصال بالسيرفر<br>
-      <button onclick="location.reload()" style="margin-top:15px;padding:10px 20px;">إعادة المحاولة</button>
-    `;
+    loadingEl.innerHTML = `❌ فشل تحميل الباقات<br><button onclick="location.reload()">إعادة المحاولة</button>`;
   }
 }
 
+// باقي الدوال (بدون تغيير)
 function createCompanyCards() {
   const companies = ['أورانج', 'وي', 'اتصالات', 'فودافون'];
   const grid = document.getElementById('companyGrid');
   grid.innerHTML = '';
-
   companies.forEach(name => {
     const emoji = name === 'أورانج' ? '🟠' : name === 'وي' ? '🟣' : name === 'اتصالات' ? '🟢' : '🔴';
     const div = document.createElement('div');
@@ -331,10 +333,7 @@ function selectCompany(company, el) {
 }
 
 function filterPackages(type) {
-  document.querySelectorAll('.filter-tab').forEach(tab => {
-    tab.classList.toggle('active', tab.dataset.filter === type);
-  });
-
+  document.querySelectorAll('.filter-tab').forEach(tab => tab.classList.toggle('active', tab.dataset.filter === type));
   const container = document.getElementById('packagesList');
   container.innerHTML = '';
 
@@ -351,18 +350,14 @@ function filterPackages(type) {
   }
 
   if (filtered.length === 0) {
-    container.innerHTML = `<div style="text-align:center;padding:40px;color:#f59e0b;">لا توجد باقات في هذا التصنيف</div>`;
+    container.innerHTML = `<div style="text-align:center;padding:40px;color:#f59e0b;">لا توجد باقات</div>`;
     return;
   }
 
   filtered.forEach(pkg => {
     const div = document.createElement('div');
     div.className = 'pkg-item';
-    div.innerHTML = `
-      <strong>${pkg.name}</strong><br>
-      <small>${pkg.type || ''}</small>
-      <div style="margin-top:10px;color:var(--green);font-size:1.4rem;font-weight:700;">${pkg.price} جنيه</div>
-    `;
+    div.innerHTML = `<strong>${pkg.name}</strong><br><small>${pkg.type || ''}</small><div style="margin-top:10px;color:#22C55E;font-size:1.4rem;font-weight:700;">${pkg.price} جنيه</div>`;
     div.onclick = () => {
       document.querySelectorAll('.pkg-item').forEach(i => i.classList.remove('selected'));
       div.classList.add('selected');
@@ -378,15 +373,13 @@ function showStep(step) {
   document.getElementById(`step${step}`).classList.add('active');
 }
 
-function backToCompanies() {
-  showStep(1);
-}
+function backToCompanies() { showStep(1); }
 
 function previewImage(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
-  reader.onload = function(ev) {
+  reader.onload = ev => {
     proofBase64 = ev.target.result;
     document.getElementById('imagePreview').src = proofBase64;
     document.getElementById('imagePreview').style.display = 'block';
@@ -399,7 +392,7 @@ async function submitOrder() {
   const phone = document.getElementById('phone').value.trim();
 
   if (!name || !phone || !selectedPackage) {
-    alert("❌ برجاء إدخال الاسم ورقم التليفون واختيار باقة");
+    alert("❌ برجاء ملء الاسم ورقم التليفون");
     return;
   }
 
@@ -423,24 +416,20 @@ async function submitOrder() {
     });
 
     const result = await res.json();
-
     if (result.success) {
       document.getElementById('orderIdDisplay').textContent = `رقم الطلب: ${result.orderId}`;
       showStep(4);
     } else {
-      alert("حدث خطأ: " + (result.error || 'حاول مرة أخرى'));
+      alert("خطأ: " + (result.error || 'حاول تاني'));
     }
   } catch(e) {
     console.error(e);
-    alert("❌ خطأ في الاتصال بالسيرفر\nتأكد من نشر الـ Web App بشكل صحيح (Anyone)");
+    alert("❌ خطأ في الاتصال\nجرب مرة أخرى أو أعد نشر الـ Web App");
   }
 }
 
-function restart() {
-  location.reload();
-}
+function restart() { location.reload(); }
 
-// تفعيل الفلاتر
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.filter-tab').forEach(tab => {
     tab.addEventListener('click', () => filterPackages(tab.dataset.filter));
