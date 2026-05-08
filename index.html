@@ -280,7 +280,7 @@ input, select, textarea {
 </div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwTuFMXnhZHpCBYRBQAUaJWG9kwF1NnL6gUkNTm0Uo9nVe_tbh2D_Vo8FQqNCc_3HfQ/exec';
+const  = 'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
 
 let allPackages = [];
 let selectedCompany = '';
@@ -392,7 +392,7 @@ async function submitOrder() {
   const phone = document.getElementById('phone').value.trim();
 
   if (!name || !phone || !selectedPackage) {
-    alert("❌ برجاء ملء الاسم ورقم التليفون");
+    alert("❌ برجاء ملء الاسم ورقم التليفون واختيار باقة");
     return;
   }
 
@@ -402,29 +402,40 @@ async function submitOrder() {
     company: selectedCompany,
     package: selectedPackage.name,
     price: selectedPackage.price,
-    payment: document.getElementById('paymentMethod').value,
-    transferRef: document.getElementById('transferRef').value,
-    notes: document.getElementById('notes').value,
-    proofBase64: proofBase64
+    payment: document.getElementById('paymentMethod').value || '',
+    transferRef: document.getElementById('transferRef').value || '',
+    notes: document.getElementById('notes').value || '',
+    proofBase64: proofBase64 || ''
   };
 
   try {
     const res = await fetch(SCRIPT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(formData)
     });
 
-    const result = await res.json();
+    const text = await res.text();   // مهم: نجرب نطبع الرد أولاً
+    console.log("Raw Response:", text);
+
+    let result;
+    try {
+      result = JSON.parse(text);
+    } catch(e) {
+      result = { success: false, error: text };
+    }
+
     if (result.success) {
       document.getElementById('orderIdDisplay').textContent = `رقم الطلب: ${result.orderId}`;
       showStep(4);
     } else {
-      alert("خطأ: " + (result.error || 'حاول تاني'));
+      alert("خطأ من السيرفر: " + (result.error || 'غير معروف'));
     }
   } catch(e) {
     console.error(e);
-    alert("❌ خطأ في الاتصال\nجرب مرة أخرى أو أعد نشر الـ Web App");
+    alert("❌ فشل الاتصال\n" + e.message);
   }
 }
 
