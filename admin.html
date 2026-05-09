@@ -1623,8 +1623,12 @@
         let filteredPkgs = allPkgs;
         if (currentPkgFilter !== 'all') {
             filteredPkgs = allPkgs.filter(p => {
-                const comp = String(p[PKG_FIELDS.company] || '').trim();
-                return comp === currentPkgFilter || (currentPkgFilter === 'أورانج' && comp === 'اورنج');
+                const comp = String(p[PKG_FIELDS.company] || '').trim().toLowerCase();
+                if (currentPkgFilter === 'أورانج') return comp.includes('أورانج') || comp.includes('اورنج');
+                if (currentPkgFilter === 'اتصالات') return comp.includes('اتصالات') || comp.includes('إتصالات');
+                if (currentPkgFilter === 'وي') return comp.includes('وي') || comp.includes('we');
+                if (currentPkgFilter === 'فودافون') return comp.includes('فودافون');
+                return comp === currentPkgFilter;
             });
         }
 
