@@ -181,7 +181,7 @@ function getAllOrders() {
   var sheet = ss.getSheetByName(CONFIG.SHEETS.ORDERS);
   var data = sheet.getDataRange().getValues();
   var result = [];
-  for (var i = 1; i < data.length; i++) {
+  for (var i = 2; i < data.length; i++) {
     result.push({
       orderId:         data[i][0],
       date:            data[i][1],
@@ -208,7 +208,7 @@ function updateOrderStatus(orderId, newStatus, note) {
     var sheet = ss.getSheetByName(CONFIG.SHEETS.ORDERS);
     var data = sheet.getDataRange().getValues();
     var rowIndex = -1;
-    for (var i = 1; i < data.length; i++) {
+    for (var i = 2; i < data.length; i++) {
       if (String(data[i][0]).trim() === String(orderId).trim()) {
         rowIndex = i + 1;
         break;
