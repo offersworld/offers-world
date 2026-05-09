@@ -150,20 +150,20 @@ function handleNewOrder(data) {
   }
 
   var row = [
-    orderId,                        // A: رقم الطلب
-    formatDate(new Date()),         // B: التاريخ
-    data.customerName  || '',       // C: اسم العميل
-    data.phone         || '',       // D: رقم الواتساب
-    data.activationPhone || '',     // E: ✅ رقم التفعيل (كان مفقوداً)
-    data.company       || '',       // F: الشركة
-    data.package       || '',       // G: الباقة
-    data.price         || 0,        // H: السعر
-    data.transferRef   || '',       // I: رقم التحويل
-    data.payment       || '',       // J: طريقة الدفع
-    'معلق',                         // K: الحالة
-    '',                             // L: تاريخ التفعيل
-    data.notes         || '',       // M: ملاحظات
-    proofUrl                        // N: إيصال الدفع
+    orderId,                        // A[0]:  رقم الطلب
+    formatDate(new Date()),         // B[1]:  التاريخ
+    data.customerName  || '',       // C[2]:  اسم العميل
+    data.phone         || '',       // D[3]:  رقم الواتساب
+    data.company       || '',       // E[4]:  الشركة
+    data.package       || '',       // F[5]:  الباقة
+    data.price         || 0,        // G[6]:  السعر
+    data.transferRef   || '',       // H[7]:  رقم التحويل
+    data.payment       || '',       // I[8]:  طريقة الدفع
+    'معلق',                         // J[9]:  الحالة
+    '',                             // K[10]: تاريخ التفعيل
+    data.notes         || '',       // L[11]: ملاحظات
+    proofUrl,                       // M[12]: إيصال الدفع
+    data.activationPhone || ''      // N[13]: ✅ رقم التفعيل (في الآخر — backward compatible)
   ];
 
   saveOrder(row);
@@ -187,16 +187,16 @@ function getAllOrders() {
       date:            data[i][1],
       customerName:    data[i][2],
       phone:           data[i][3],
-      activationPhone: data[i][4],
-      company:         data[i][5],
-      package:         data[i][6],
-      price:           data[i][7],
-      transferRef:     data[i][8],
-      payment:         data[i][9],
-      status:          data[i][10],
-      activationDate:  data[i][11] || '',
-      notes:           data[i][12],
-      proofImage:      data[i][13]
+      company:         data[i][4],
+      package:         data[i][5],
+      price:           data[i][6],
+      transferRef:     data[i][7],
+      payment:         data[i][8],
+      status:          data[i][9],
+      activationDate:  data[i][10] || '',
+      notes:           data[i][11],
+      proofImage:      data[i][12],
+      activationPhone: data[i][13] || ''
     });
   }
   return result;
@@ -216,19 +216,19 @@ function updateOrderStatus(orderId, newStatus, note) {
     }
     if (rowIndex === -1) return { success: false, message: 'الطلب غير موجود' };
 
-    sheet.getRange(rowIndex, 11).setValue(newStatus);   // col K = status
+    sheet.getRange(rowIndex, 10).setValue(newStatus);   // col J = status
 
     if (newStatus === 'تم التفعيل') {
-      var currentActivation = sheet.getRange(rowIndex, 12).getValue();
+      var currentActivation = sheet.getRange(rowIndex, 11).getValue();
       if (!currentActivation) {
-        sheet.getRange(rowIndex, 12).setValue(formatDate(new Date()));
+        sheet.getRange(rowIndex, 11).setValue(formatDate(new Date()));
       }
     }
 
     if (note) {
-      var oldNote = sheet.getRange(rowIndex, 13).getValue() || '';
+      var oldNote = sheet.getRange(rowIndex, 12).getValue() || '';
       var newNote = oldNote + (oldNote ? '\n' : '') + '[' + formatDate(new Date()) + '] ' + note;
-      sheet.getRange(rowIndex, 13).setValue(newNote);
+      sheet.getRange(rowIndex, 12).setValue(newNote);
     }
 
     addLog('تغيير حالة', orderId, 'إلى ' + newStatus);
