@@ -883,7 +883,7 @@
 
 <script>
     // ==================== CONFIGURATION ====================
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxKs02lGtT8IiJ1VsN7YAm5sF0u8n9rgccBENIO_iVuGe5ECpXJoKESrqMd7WzBXDzj/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyVtgQHK_6jl37p2keR_JsvtF03bxqCO9XLK9lBhx3hgAN3KT7muGu9bzfv1X3I8MGi/exec';
 
     // Mapping of Arabic column names to our internal keys
     const ORDER_FIELDS = {
@@ -1003,35 +1003,39 @@
     }
 
     async function doLogin() {
-        const pass = document.getElementById('adminPass').value.trim();
-        if (!pass) return showToast('⚠️ أدخل كلمة المرور');
-        const btn = document.getElementById('loginBtn');
-        const errEl = document.getElementById('loginError');
-        btn.disabled = true;
-        btn.textContent = '⏳ جاري التحقق...';
-        errEl.style.display = 'none';
+    const pass = document.getElementById('adminPass').value.trim();
+    if (!pass) return showToast('⚠️ أدخل كلمة المرور');
+    const btn = document.getElementById('loginBtn');
+    const errEl = document.getElementById('loginError');
+    btn.disabled = true;
+    btn.textContent = '⏳ جاري التحقق...';
+    errEl.style.display = 'none';
 
-        try {
-            const data = await gGet({ action: 'checkPassword', pass });
-            if (data.success) {
-                sessionStorage.setItem('aw_admin', 'true');
-                sessionStorage.setItem('aw_login_time', Date.now());
-                document.getElementById('loginPage').style.display = 'none';
-                document.getElementById('adminPanel').style.display = 'block';
-                resetLogoutTimer();
-                await loadAllData();
-            } else {
-                errEl.style.display = 'block';
-                errEl.textContent = '❌ ' + (data.message || 'كلمة المرور غير صحيحة');
-            }
-        } catch (e) {
+    try {
+        // تعديل: استخدام gPost بدلاً من gGet لتجنب مشاكل الـ CORS
+        const data = await gPost({ action: 'checkPassword', pass: pass });
+        
+        if (data.success) {
+            sessionStorage.setItem('aw_admin', 'true');
+            sessionStorage.setItem('aw_login_time', Date.now());
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            resetLogoutTimer();
+            await loadAllData();
+        } else {
             errEl.style.display = 'block';
-            errEl.textContent = '❌ فشل الاتصال بالسيرفر';
-        } finally {
-            btn.disabled = false;
-            btn.textContent = '🔐 دخول';
+            errEl.textContent = '❌ ' + (data.message || 'كلمة المرور غير صحيحة');
         }
+    } catch (e) {
+        console.error(e);
+        errEl.style.display = 'block';
+        errEl.textContent = '❌ فشل الاتصال بالسيرفر';
+    } finally {
+        btn.disabled = false;
+        btn.textContent = '🔐 دخول';
     }
+}
+
 
     function logout() {
         clearTimeout(logoutTimer);
