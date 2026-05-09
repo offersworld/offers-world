@@ -873,7 +873,7 @@
                 <div class="page-title" id="pageTitle">📊 الرئيسية</div>
                 <div class="topbar-actions">
                     <button class="btn btn-ghost btn-sm" id="autoBtn" onclick="toggleAutoRefresh()">🔄 تلقائي</button>
-                    <button class="btn btn-ghost btn-sm" onclick="loadAllData()">🔄 تحديث الآن</button>
+                    <button class="btn btn-ghost btn-sm" onclick="loadAllData(this)">🔄 تحديث الآن</button>
                     <button class="btn btn-ghost btn-sm" id="exportBtn" onclick="exportOrdersCSV()" style="display:none;">📥 تصدير CSV</button>
                 </div>
             </div>
@@ -1227,7 +1227,13 @@
     }
 
     // ==================== DATA LOADING ====================
-    async function loadAllData() {
+    async function loadAllData(btn = null) {
+        if (btn) {
+            btn.dataset.original = btn.innerHTML;
+            btn.innerHTML = '⏳ جاري التحديث...';
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+        }
         showToast('⏳ جاري تحميل البيانات...', 2000);
         try {
             const [ordersRes, pkgsRes, statsRes] = await Promise.all([
@@ -1251,6 +1257,12 @@
             applyFilters();
             renderPackages();
             updateSidebarPending();
+        } finally {
+            if (btn) {
+                btn.innerHTML = btn.dataset.original;
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            }
         }
     }
 
@@ -1649,6 +1661,15 @@
     async function saveOrderStatus() {
         if (!selectedStatus) return showToast('⚠️ اختر حالة جديدة');
         if (!currentOrderId) return showToast('⚠️ لا يوجد طلب محدد');
+        
+        const btn = document.querySelector('#statusModal .btn-success');
+        const originalText = btn.innerHTML;
+        if (btn) {
+            btn.innerHTML = '⏳ جاري الحفظ...';
+            btn.disabled = true;
+            btn.style.opacity = '0.7';
+        }
+
         const note = document.getElementById('statusNote').value.trim();
         try {
             const res = await gPost({
@@ -1673,6 +1694,12 @@
             }
         } catch (e) {
             showToast('❌ فشل الاتصال بالسيرفر');
+        } finally {
+            if (btn) {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            }
         }
     }
 
