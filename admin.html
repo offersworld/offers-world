@@ -1652,7 +1652,7 @@
                 <div class="pkg-meta">📌 ${status} | ${notes}</div>
                 <div class="pkg-actions">
                     <button class="btn btn-ghost btn-xs" onclick="openPkgModal('${id}')">✏️ تعديل</button>
-                    <button class="btn btn-danger btn-xs" onclick="deletePackage('${id}','${name}')">🗑️ حذف</button>
+                    <button class="btn btn-danger btn-xs" onclick="deletePackage('${id}', '${name}', this)">🗑️ حذف</button>
                 </div>
             </div>`;
         }).join('');
@@ -1688,11 +1688,18 @@
     }
 
     async function savePackage() {
+        const btn = document.querySelector('#pkgModal .btn-primary');
         const editId = document.getElementById('pkgEditId').value.trim();
         const name = document.getElementById('pkgName').value.trim();
         const price = document.getElementById('pkgPrice').value.trim();
+        
         if (!name) return showToast('⚠️ أدخل اسم الباقة');
         if (!price || isNaN(parseFloat(price))) return showToast('⚠️ أدخل سعر صحيح');
+
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '⏳ جاري الحفظ...';
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
 
         const payload = {
             action: editId ? 'updatePackage' : 'addPackage',
@@ -1710,30 +1717,67 @@
             if (res.success) {
                 showToast(editId ? '✅ تم تحديث الباقة بنجاح' : '✅ تمت إضافة الباقة بنجاح');
                 closeModal('pkgModal');
-                const pkgsRes = await gGet({ action: 'packages' });
-                allPkgs = Array.isArray(pkgsRes) ? pkgsRes : (pkgsRes.packages || pkgsRes.data || []);
-                renderPackages();
+                
+                // Optimistic UI for update
+                if (editId) {
+                    const pkgIndex = allPkgs.findIndex(p => String(p[PKG_FIELDS.id] || p.id) === String(editId));
+                    if (pkgIndex > -1) {
+                        allPkgs[pkgIndex] = { ...allPkgs[pkgIndex], ...payload };
+                        renderPackages();
+                    }
+                }
+                
+                // Fetch in background to ensure sync
+                gGet({ action: 'packages' }).then(pkgsRes => {
+                    allPkgs = Array.isArray(pkgsRes) ? pkgsRes : (pkgsRes.packages || pkgsRes.data || []);
+                    renderPackages();
+                });
+                
             } else {
                 showToast('❌ ' + (res.message || 'فشلت العملية'));
             }
         } catch (e) {
             showToast('❌ فشل الاتصال بالسيرفر');
+        } finally {
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            btn.style.opacity = '1';
         }
     }
 
-    async function deletePackage(pkgId, pkgName) {
+    async function deletePackage(pkgId, pkgName, btn) {
         if (!confirm(`هل أنت متأكد من حذف الباقة "${pkgName}"؟`)) return;
+        
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '⏳ جاري الحذف...';
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+
         try {
             const res = await gPost({ action: 'deletePackage', packageId: pkgId });
             if (res.success) {
                 showToast('🗑️ تم حذف الباقة بنجاح');
                 allPkgs = allPkgs.filter(p => String(p[PKG_FIELDS.id] || p.id || '') !== String(pkgId));
-                renderPackages();
+                // Animate removal
+                const card = btn.closest('.pkg-card');
+                if (card) {
+                    card.style.opacity = '0';
+                    card.style.transform = 'scale(0.95)';
+                    setTimeout(() => renderPackages(), 300);
+                } else {
+                    renderPackages();
+                }
             } else {
                 showToast('❌ ' + (res.message || 'فشل حذف الباقة'));
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                btn.style.opacity = '1';
             }
         } catch (e) {
             showToast('❌ فشل الاتصال');
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+            btn.style.opacity = '1';
         }
     }
 
