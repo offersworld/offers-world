@@ -787,7 +787,17 @@
       if (step === 1) { progressFill.style.width = '33%'; progressTitle.textContent = '📡 اختيار الشركة'; progressCounter.textContent = 'خطوة 1 من 3'; }
       else if (step === 2) { progressFill.style.width = '66%'; progressTitle.textContent = '📦 اختيار الباقة'; progressCounter.textContent = 'خطوة 2 من 3'; }
       else if (step === 3) { progressFill.style.width = '100%'; progressTitle.textContent = '👤 بيانات الحجز'; progressCounter.textContent = 'خطوة 3 من 3'; }
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (step === 4) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        const header = document.getElementById('progressHeader');
+        if (header) {
+          const y = header.getBoundingClientRect().top + window.scrollY - 20;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
     }
 
     backToCompanies() { this.showStep(1); }
