@@ -506,6 +506,12 @@
       gap: 10px;
     }
     .confirm-dialog-actions .btn { flex: 1; }
+    .custom-file-upload { margin-bottom: 16px; }
+    .file-upload-label { display: flex; align-items: center; justify-content: center; gap: 12px; padding: 16px; background: var(--card2); border: 2px dashed #404060; border-radius: 16px; cursor: pointer; transition: var(--transition); color: var(--muted); }
+    .file-upload-label:hover { background: var(--card3); border-color: var(--accent); color: #fff; }
+    .file-upload-label.has-file { border-style: solid; border-color: var(--green2); background: rgba(34, 197, 94, 0.1); color: var(--green2); }
+    .upload-icon { font-size: 1.5rem; }
+    .upload-text { font-size: 1rem; font-weight: 600; font-family: 'Cairo', sans-serif; }
   </style>
 </head>
 <body>
@@ -618,7 +624,13 @@
     <input type="text" id="transferRef" placeholder="اكتب آخر 4 أرقام من رقم التحويل" class="rtl-input">
     <textarea id="notes" rows="2" placeholder="ملاحظات إضافية" class="rtl-input"></textarea>
     <div class="section-title">🧾 إيصال الدفع</div>
-    <input type="file" id="proofUpload" accept="image/*" onchange="app.previewImage(event)">
+    <div class="custom-file-upload">
+      <input type="file" id="proofUpload" accept="image/*" onchange="app.previewImage(event)" style="display:none;">
+      <label for="proofUpload" class="file-upload-label" id="fileUploadLabel">
+        <span class="upload-icon">📸</span>
+        <span class="upload-text">اضغط هنا لاختيار صورة الإيصال</span>
+      </label>
+    </div>
     <img id="imagePreview" alt="معاينة">
     <div class="alert-message" id="submitError"></div>
     <button class="btn btn-primary" id="submitBtn" onclick="app.showConfirm()">✅ تأكيد وإرسال الطلب</button>
@@ -804,8 +816,18 @@
 
     previewImage(e) {
       const file = e.target.files[0];
-      if (!file) return;
+      const label = document.getElementById('fileUploadLabel');
+      const textSpan = label.querySelector('.upload-text');
+      if (!file) {
+        if (label) label.classList.remove('has-file');
+        if (textSpan) textSpan.textContent = 'اضغط هنا لاختيار صورة الإيصال';
+        return;
+      }
       if (file.size > 3 * 1024 * 1024) { this.showError('الصورة كبيرة جدًا (الحد الأقصى 3 ميجابايت)'); return; }
+      
+      if (label) label.classList.add('has-file');
+      if (textSpan) textSpan.textContent = file.name.length > 25 ? file.name.substring(0, 25) + '...' : file.name;
+      
       const reader = new FileReader();
       reader.onload = ev => { this.proofBase64 = ev.target.result; const img = document.getElementById('imagePreview'); img.src = this.proofBase64; img.style.display = 'block'; };
       reader.readAsDataURL(file);
