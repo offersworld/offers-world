@@ -690,6 +690,30 @@
             font-size: 0.78rem;
             white-space: nowrap;
         }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1e1e38;
+            border: 1px solid rgba(139,60,247,0.4);
+            color: #fff;
+            padding: 12px 28px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'Cairo', sans-serif;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
         @media(max-width:900px) {
             .sidebar {
                 display: none;
@@ -715,7 +739,7 @@
         <h2>لوحة التحكم</h2>
         <p>عالم العروض — دخول الأدمن فقط</p>
         <div class="input-wrap">
-            <input type="password" id="adminPass" placeholder="كلمة المرور" autocomplete="off" onkeydown="if(event.key==='Enter')()">
+            <input type="password" id="adminPass" placeholder="كلمة المرور" autocomplete="off" onkeydown="if(event.key==='Enter') doLogin()">
             <button class="eye-btn" onclick="togglePass()" type="button" tabindex="-1">👁️</button>
         </div>
         <button class="btn-login" id="loginBtn" onclick="doLogin()">🔐 دخول</button>
@@ -866,10 +890,11 @@
     <div class="modal">
         <h3 id="pkgModalTitle">➕ إضافة باقة جديدة</h3>
         <input type="hidden" id="pkgEditId">
+        <div style="margin-bottom:14px;"><label>الشركة</label><select id="pkgCompany" style="width:100%;"><option value="فودافون">فودافون</option><option value="أورانج">أورانج</option><option value="اتصالات">اتصالات</option><option value="وي">وي</option></select></div>
         <div style="margin-bottom:14px;"><label>اسم الباقة</label><input type="text" id="pkgName" style="width:100%;"></div>
         <div style="margin-bottom:14px;"><label>السعر (جنيه)</label><input type="number" id="pkgPrice" style="width:100%;"></div>
-        <div style="margin-bottom:14px;"><label>النوع</label><input type="text" id="pkgType" style="width:100%;"></div>
-        <div style="margin-bottom:14px;"><label>الحالة</label><input type="text" id="pkgStatus" style="width:100%;" value="متاح"></div>
+        <div style="margin-bottom:14px;"><label>النوع</label><input type="text" id="pkgType" style="width:100%;" placeholder="جيجا / دقايق / ميكس"></div>
+        <div style="margin-bottom:14px;"><label>الحالة</label><select id="pkgStatus" style="width:100%;"><option value="متاح">متاح</option><option value="غير متاح">غير متاح</option></select></div>
         <div style="margin-bottom:14px;"><label>ملاحظات</label><textarea id="pkgNotes" style="width:100%;"></textarea></div>
         <div style="margin-top:20px;display:flex;gap:12px;">
             <button class="btn btn-ghost" style="flex:1;" onclick="closeModal('pkgModal')">إلغاء</button>
@@ -883,31 +908,33 @@
 
 <script>
     // ==================== CONFIGURATION ====================
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwauCZ7yQxs21mtdmAMx0g5dIzHLhpnkjdH5AnMU1qtRgfOBVyU74wZMYyL1_rNbeRB/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwJyrKpRbuVruVu8jmBxy88nERxPdri8wDerolCWEE-9oLKE10OX06b5TtsadVrpAZD/exec';
 
     // Mapping of Arabic column names to our internal keys
-   const ORDER_FIELDS = {
-  orderId: 'orderId',
-  customerName: 'customerName',   // بدلاً من 'رقم العميل'
-  phone: 'phone',                 // سيتم عرضه كرقم العميل
-  company: 'company',
-  package: 'package',
-  price: 'price',
-  proofImage: 'proofImage',       // أو paymentProof
-  status: 'status',
-  activationDate: 'activationDate',
-  notes: 'notes',
-  date: 'date'                    // إن أردت استخدام التاريخ
-};
+    const ORDER_FIELDS = {
+        orderId: 'orderId',
+        customerName: 'customerName',
+        phone: 'phone',
+        customerPhone: 'phone',
+        company: 'company',
+        package: 'package',
+        price: 'price',
+        proofImage: 'proofImage',
+        paymentProof: 'proofImage',
+        status: 'status',
+        activationDate: 'activationDate',
+        notes: 'notes',
+        date: 'date'
+    };
 
     const PKG_FIELDS = {
-        id: '#',
-        company: 'الشركة',
-        name: 'اسم الباقة / التفاصيل',
-        price: 'السعر (جنيه)',
-        type: 'النوع',
-        status: 'الحالة',
-        notes: 'ملاحظات'
+        id: 'id',
+        company: 'company',
+        name: 'name',
+        price: 'price',
+        type: 'type',
+        status: 'status',
+        notes: 'notes'
     };
 
     // ==================== GLOBAL STATE ====================
@@ -952,10 +979,16 @@
         if (!rawDate) return null;
         try {
             const str = String(rawDate).trim();
-            if (str.match(/^\d{4}-\d{2}-\d{2}/)) return new Date(str);
-            const parts = str.split(/[\/\-]/);
-            if (parts.length === 3 && parts[0].length <= 2 && parts[2].length === 4) {
-                return new Date(`${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`);
+            // استخراج جزء التاريخ فقط (نتجاهل الوقت)
+            const datePart = str.split(' ')[0];
+            if (datePart.match(/^\d{4}-\d{2}-\d{2}$/)) return new Date(datePart);
+            if (datePart.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                const p = datePart.split('/');
+                return new Date(`${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`);
+            }
+            if (datePart.match(/^\d{2}-\d{2}-\d{4}$/)) {
+                const p = datePart.split('-');
+                return new Date(`${p[2]}-${p[1].padStart(2,'0')}-${p[0].padStart(2,'0')}`);
             }
             const d = new Date(str);
             return isNaN(d.getTime()) ? null : d;
@@ -1539,6 +1572,7 @@
         const modal = document.getElementById('pkgModal');
         const title = document.getElementById('pkgModalTitle');
         document.getElementById('pkgEditId').value = pkgId || '';
+        document.getElementById('pkgCompany').value = 'فودافون';
         document.getElementById('pkgName').value = '';
         document.getElementById('pkgPrice').value = '';
         document.getElementById('pkgType').value = '';
@@ -1549,6 +1583,7 @@
             title.textContent = '✏️ تعديل باقة';
             const pkg = allPkgs.find(p => String(p[PKG_FIELDS.id] || p.id || '') === String(pkgId));
             if (pkg) {
+                document.getElementById('pkgCompany').value = pkg[PKG_FIELDS.company] || 'فودافون';
                 document.getElementById('pkgName').value = pkg[PKG_FIELDS.name] || '';
                 document.getElementById('pkgPrice').value = pkg[PKG_FIELDS.price] || '';
                 document.getElementById('pkgType').value = pkg[PKG_FIELDS.type] || '';
@@ -1571,6 +1606,7 @@
 
         const payload = {
             action: editId ? 'updatePackage' : 'addPackage',
+            company: document.getElementById('pkgCompany').value.trim(),
             name,
             price: parseFloat(price),
             type: document.getElementById('pkgType').value.trim(),
