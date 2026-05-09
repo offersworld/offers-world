@@ -714,18 +714,50 @@
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
+        .mobile-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(17, 17, 34, 0.95);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border);
+            z-index: 100;
+            padding: 8px 12px;
+            justify-content: space-around;
+            align-items: center;
+        }
+        .m-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: var(--muted);
+            font-size: 0.75rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .m-nav-item.active { color: #fff; }
+        .m-nav-item.active .m-icon { transform: translateY(-3px); color: var(--accent2); }
+        .m-icon { font-size: 1.3rem; transition: var(--transition); }
+        .m-badge {
+            position: absolute;
+            top: -5px;
+            right: -8px;
+            background: var(--yellow);
+            color: #000;
+            font-size: 0.65rem;
+            padding: 1px 5px;
+            border-radius: 10px;
+            font-weight: 900;
+        }
         @media(max-width:900px) {
-            .sidebar {
-                display: none;
-            }
-            .main {
-                margin-right: 0;
-                width: 100%;
-                padding: 16px;
-            }
-            .status-options {
-                grid-template-columns: 1fr;
-            }
+            .sidebar { display: none; }
+            .main { margin-right: 0; width: 100%; padding: 16px; padding-bottom: 80px; }
+            .status-options { grid-template-columns: 1fr; }
+            .mobile-nav { display: flex; }
         }
         .company-filters {
             display: flex;
@@ -797,6 +829,30 @@
                 <button class="btn btn-danger btn-sm" style="width:100%;" onclick="logout()">🚪 تسجيل الخروج</button>
             </div>
         </aside>
+
+        <!-- MOBILE NAV -->
+        <nav class="mobile-nav" id="mobileNav">
+            <div class="m-nav-item active" onclick="switchTab('dashboard')" id="m-nav-dashboard">
+                <span class="m-icon">📊</span>
+                <span>الرئيسية</span>
+            </div>
+            <div class="m-nav-item" onclick="switchTab('orders')" id="m-nav-orders">
+                <span class="m-icon" style="position:relative;">📋<span class="m-badge" id="mSidebarPending" style="display:none;">0</span></span>
+                <span>الطلبات</span>
+            </div>
+            <div class="m-nav-item" onclick="switchTab('packages')" id="m-nav-packages">
+                <span class="m-icon">📦</span>
+                <span>الباقات</span>
+            </div>
+            <div class="m-nav-item" onclick="switchTab('activity')" id="m-nav-activity">
+                <span class="m-icon">📜</span>
+                <span>النشاط</span>
+            </div>
+            <div class="m-nav-item" onclick="logout()" style="color:var(--red2);">
+                <span class="m-icon">🚪</span>
+                <span>خروج</span>
+            </div>
+        </nav>
 
         <!-- MAIN CONTENT -->
         <main class="main">
@@ -1131,7 +1187,12 @@
         document.getElementById(`tab-${tab}`).style.display = 'block';
 
         document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        document.getElementById(`nav-${tab}`).classList.add('active');
+        const navItem = document.getElementById(`nav-${tab}`);
+        if(navItem) navItem.classList.add('active');
+
+        document.querySelectorAll('.m-nav-item').forEach(el => el.classList.remove('active'));
+        const mNavItem = document.getElementById(`m-nav-${tab}`);
+        if(mNavItem) mNavItem.classList.add('active');
 
         const titles = {
             dashboard: '📊 الرئيسية',
@@ -1539,11 +1600,13 @@
             return s.includes('معلق');
         }).length;
         const badge = document.getElementById('sidebarPending');
+        const mBadge = document.getElementById('mSidebarPending');
         if (pending > 0) {
-            badge.style.display = 'inline';
-            badge.textContent = pending;
+            if (badge) { badge.style.display = 'inline'; badge.textContent = pending; }
+            if (mBadge) { mBadge.style.display = 'inline-block'; mBadge.textContent = pending; }
         } else {
-            badge.style.display = 'none';
+            if (badge) badge.style.display = 'none';
+            if (mBadge) mBadge.style.display = 'none';
         }
     }
 
