@@ -812,6 +812,37 @@
 
     backToCompanies() { this.showStep(1); }
 
+    compressImage(file, maxWidth, maxHeight, quality, callback) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          let width = img.width;
+          let height = img.height;
+          if (width > height) {
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+          } else {
+            if (height > maxHeight) {
+              width = Math.round((width * maxHeight) / height);
+              height = maxHeight;
+            }
+          }
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          const dataUrl = canvas.toDataURL('image/jpeg', quality);
+          callback(dataUrl);
+        };
+      };
+      reader.readAsDataURL(file);
+    }
+
     previewImage(e) {
       const file = e.target.files[0];
       const label = document.getElementById('fileUploadLabel');
@@ -821,14 +852,17 @@
         if (textSpan) textSpan.textContent = 'اضغط هنا لاختيار صورة الإيصال';
         return;
       }
-      if (file.size > 3 * 1024 * 1024) { this.showError('الصورة كبيرة جدًا (الحد الأقصى 3 ميجابايت)'); return; }
+      if (file.size > 10 * 1024 * 1024) { this.showError('الصورة كبيرة جدًا (الحد الأقصى 10 ميجابايت)'); return; }
       
       if (label) label.classList.add('has-file');
       if (textSpan) textSpan.textContent = file.name.length > 25 ? file.name.substring(0, 25) + '...' : file.name;
       
-      const reader = new FileReader();
-      reader.onload = ev => { this.proofBase64 = ev.target.result; const img = document.getElementById('imagePreview'); img.src = this.proofBase64; img.style.display = 'block'; };
-      reader.readAsDataURL(file);
+      this.compressImage(file, 800, 800, 0.7, (compressedDataUrl) => {
+        this.proofBase64 = compressedDataUrl;
+        const img = document.getElementById('imagePreview');
+        img.src = this.proofBase64;
+        img.style.display = 'block';
+      });
     }
 
     normalizePhone(phone) { return phone.replace(/\s/g, '').replace('+2', '').replace(/^20/, '0'); }
