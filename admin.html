@@ -1242,9 +1242,11 @@
     }
 
     async function loadActivityLog() {
+        const container = document.getElementById('activityLog');
+        if (container) container.innerHTML = `<div style="text-align:center;padding:40px;color:var(--muted);">⏳ جاري تحميل سجل النشاط...</div>`;
         try {
             const res = await gGet({ action: 'activity' });
-            activityLogData = Array.isArray(res) ? res : (res.log || res.data || []);
+            activityLogData = Array.isArray(res) ? res : (res.log || res.data || res.activity || []);
         } catch (e) {
             activityLogData = [];
         }
@@ -1850,14 +1852,28 @@
     function renderActivityLog() {
         const container = document.getElementById('activityLog');
         if (!container) return;
-        if (activityLogData.length === 0) {
+        if (!activityLogData || activityLogData.length === 0) {
             container.innerHTML = `<div class="empty-state"><div class="empty-icon">📜</div><p>لا توجد نشاطات مسجلة بعد</p></div>`;
             return;
         }
         container.innerHTML = activityLogData.map(item => {
-            const action = esc(item.action || item.event || 'نشاط');
-            const details = esc(item.details || item.description || '');
-            const timeRaw = item.timestamp || item.time || item.date || '';
+            // Handle both object and array formats
+            let actionText = 'نشاط';
+            let detailsText = '';
+            let timeRaw = '';
+            
+            if (Array.isArray(item)) {
+                timeRaw = item[0] || '';
+                actionText = item[1] || 'نشاط';
+                detailsText = item[2] || '';
+            } else {
+                actionText = item.action || item.event || item['النشاط'] || item['الحدث'] || 'نشاط';
+                detailsText = item.details || item.description || item['التفاصيل'] || item['الوصف'] || '';
+                timeRaw = item.timestamp || item.time || item.date || item['الوقت'] || item['التاريخ'] || '';
+            }
+
+            const action = esc(String(actionText));
+            const details = esc(String(detailsText));
             let timeDisplay = '-';
             if (timeRaw) {
                 const d = parseDate(timeRaw);
