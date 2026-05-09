@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>لوحة التحكم — عالم العروض v2.0</title>
+    <title>لوحة التحكم — عالم العروض v2.1</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js">
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <style>
         :root {
             --bg: #07070f;
@@ -29,13 +28,11 @@
             --radius: 18px;
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
         body {
             background: var(--bg);
             color: var(--text);
@@ -45,8 +42,6 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
         }
-
-        /* Stars Background */
         .stars {
             position: fixed;
             inset: 0;
@@ -59,7 +54,6 @@
             position: absolute;
             inset: 0;
             background-image: radial-gradient(white 1px, transparent 1px);
-            background-size: 70px 70px;
             opacity: 0.06;
             animation: twinkle 6s infinite alternate;
         }
@@ -70,15 +64,9 @@
             animation-duration: 9s;
         }
         @keyframes twinkle {
-            0% {
-                opacity: 0.03;
-            }
-            100% {
-                opacity: 0.1;
-            }
+            0% { opacity: 0.03; }
+            100% { opacity: 0.1; }
         }
-
-        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -89,10 +77,7 @@
         ::-webkit-scrollbar-thumb {
             background: var(--accent);
             border-radius: 12px;
-            opacity: 0.5;
         }
-
-        /* Buttons */
         .btn {
             padding: 11px 22px;
             border: none;
@@ -167,8 +152,6 @@
             font-size: 0.75rem;
             border-radius: 8px;
         }
-
-        /* Login Page */
         #loginPage {
             position: fixed;
             inset: 0;
@@ -194,13 +177,8 @@
             animation: float 3s ease-in-out infinite;
         }
         @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-12px);
-            }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
         }
         .login-card h2 {
             font-size: 1.7rem;
@@ -275,10 +253,7 @@
         .btn-login:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
         }
-
-        /* Layout */
         .layout {
             display: flex;
             min-height: 100vh;
@@ -315,7 +290,6 @@
             font-weight: 600;
             margin-top: 4px;
             font-size: 0.8rem;
-            letter-spacing: 1px;
         }
         .nav-item {
             display: flex;
@@ -350,10 +324,7 @@
             font-size: 0.75rem;
             font-weight: 700;
             margin-right: auto;
-            min-width: 22px;
-            text-align: center;
         }
-
         .main {
             margin-right: 270px;
             padding: 28px 30px;
@@ -375,13 +346,6 @@
             font-weight: 900;
             letter-spacing: -0.5px;
         }
-        .topbar-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        /* Cards */
         .stat-card {
             background: var(--card);
             border: 1px solid var(--border);
@@ -390,7 +354,6 @@
             transition: var(--transition);
             position: relative;
             overflow: hidden;
-            cursor: default;
         }
         .stat-card::before {
             content: '';
@@ -424,15 +387,12 @@
             font-size: 2.4rem;
             font-weight: 900;
             letter-spacing: -1px;
-            transition: var(--transition);
         }
         .stat-card .stat-sub {
             font-size: 0.8rem;
             color: var(--muted);
             margin-top: 4px;
         }
-
-        /* Table Card */
         .table-card {
             background: var(--card);
             border: 1px solid var(--border);
@@ -486,8 +446,6 @@
         tbody tr:hover td {
             color: #fff;
         }
-
-        /* Badges */
         .badge-pending {
             background: rgba(245, 158, 11, 0.18);
             color: var(--yellow);
@@ -518,8 +476,6 @@
             white-space: nowrap;
             display: inline-block;
         }
-
-        /* Modal */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -547,14 +503,8 @@
             animation: modalIn 0.35s ease-out;
         }
         @keyframes modalIn {
-            from {
-                opacity: 0;
-                transform: translateY(30px) scale(0.96);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+            from { opacity: 0; transform: translateY(30px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
         .modal h3 {
             font-size: 1.3rem;
@@ -608,8 +558,6 @@
             border-color: var(--red);
             background: rgba(239, 68, 68, 0.2);
         }
-
-        /* Inputs */
         input[type="text"],
         input[type="number"],
         input[type="search"],
@@ -635,8 +583,6 @@
             resize: vertical;
             min-height: 80px;
         }
-
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 80px 20px;
@@ -652,80 +598,9 @@
             font-size: 1.1rem;
             font-weight: 500;
         }
-
-        /* Skeleton Loading */
-        @keyframes shimmer {
-            0% {
-                background-position: -400px 0;
-            }
-            100% {
-                background-position: 400px 0;
-            }
-        }
-        .skeleton {
-            background: linear-gradient(90deg, var(--card2) 25%, var(--card3) 50%, var(--card2) 75%);
-            background-size: 400px 100%;
-            animation: shimmer 1.6s infinite ease-in-out;
-            border-radius: 10px;
-        }
-        .skeleton-text {
-            height: 16px;
-            margin: 8px 0;
-        }
-        .skeleton-title {
-            height: 24px;
-            width: 60%;
-        }
-        .skeleton-value {
-            height: 40px;
-            width: 40%;
-            margin: 10px 0;
-        }
-        .skeleton-card {
-            height: 120px;
-            border-radius: var(--radius);
-        }
-        .skeleton-row {
-            height: 48px;
-            margin: 6px 0;
-            border-radius: 8px;
-        }
-        .skeleton-chart {
-            height: 200px;
-            border-radius: 14px;
-            margin: 16px;
-        }
-
-        /* Toast */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(120px);
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px 28px;
-            color: #fff;
-            font-weight: 600;
-            z-index: 999;
-            transition: var(--transition);
-            opacity: 0;
-            pointer-events: none;
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
-            white-space: nowrap;
-            font-size: 0.95rem;
-        }
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        /* Packages Grid */
         .pkg-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
             gap: 16px;
             margin-top: 16px;
         }
@@ -735,7 +610,6 @@
             border-radius: var(--radius);
             padding: 20px;
             transition: var(--transition);
-            position: relative;
         }
         .pkg-card:hover {
             border-color: var(--accent);
@@ -752,18 +626,16 @@
             font-weight: 700;
             font-size: 1.3rem;
         }
-        .pkg-card .pkg-desc {
+        .pkg-card .pkg-meta {
             color: var(--muted);
             font-size: 0.85rem;
-            margin: 8px 0;
+            margin: 6px 0;
         }
         .pkg-card .pkg-actions {
             display: flex;
             gap: 8px;
             margin-top: 12px;
         }
-
-        /* Pagination */
         #pagination {
             display: flex;
             gap: 8px;
@@ -795,8 +667,6 @@
             font-weight: 800;
             pointer-events: none;
         }
-
-        /* Activity Log */
         .activity-item {
             padding: 13px 16px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
@@ -804,7 +674,6 @@
             align-items: flex-start;
             gap: 12px;
             font-size: 0.9rem;
-            transition: var(--transition);
         }
         .activity-item:hover {
             background: rgba(139, 60, 247, 0.04);
@@ -821,8 +690,6 @@
             font-size: 0.78rem;
             white-space: nowrap;
         }
-
-        /* Responsive */
         @media(max-width:900px) {
             .sidebar {
                 display: none;
@@ -835,1241 +702,1024 @@
             .status-options {
                 grid-template-columns: 1fr;
             }
-            .topbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .stat-card .stat-value {
-                font-size: 1.8rem;
-            }
-            table {
-                font-size: 0.75rem;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="stars"></div>
+<div class="stars"></div>
 
-    <!-- LOGIN PAGE -->
-    <div id="loginPage">
-        <div class="login-card">
-            <div class="login-logo">🌟</div>
-            <h2>لوحة التحكم</h2>
-            <p>عالم العروض — دخول الأدمن فقط</p>
-            <div class="input-wrap">
-                <input type="password" id="adminPass" placeholder="كلمة المرور" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()">
-                <button class="eye-btn" onclick="togglePass()" type="button" tabindex="-1">👁️</button>
-            </div>
-            <button class="btn-login" id="loginBtn" onclick="doLogin()">🔐 دخول</button>
-            <div id="loginError" style="margin-top:16px;color:#f87171;display:none;font-weight:600;">❌ كلمة المرور غير صحيحة</div>
+<!-- LOGIN PAGE -->
+<div id="loginPage">
+    <div class="login-card">
+        <div class="login-logo">🌟</div>
+        <h2>لوحة التحكم</h2>
+        <p>عالم العروض — دخول الأدمن فقط</p>
+        <div class="input-wrap">
+            <input type="password" id="adminPass" placeholder="كلمة المرور" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()">
+            <button class="eye-btn" onclick="togglePass()" type="button" tabindex="-1">👁️</button>
         </div>
+        <button class="btn-login" id="loginBtn" onclick="doLogin()">🔐 دخول</button>
+        <div id="loginError" style="margin-top:16px;color:#f87171;display:none;font-weight:600;">❌ كلمة المرور غير صحيحة</div>
     </div>
+</div>
 
-    <!-- ADMIN PANEL -->
-    <div id="adminPanel" style="display:none;">
-        <div class="layout">
-            <!-- SIDEBAR -->
-            <aside class="sidebar">
-                <div class="sidebar-logo">
-                    <span>🌟 عالم العروض</span>
-                    <small>ADMIN v2.0</small>
+<!-- ADMIN PANEL -->
+<div id="adminPanel" style="display:none;">
+    <div class="layout">
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="sidebar-logo"><span>🌟 عالم العروض</span><small>ADMIN v2.1</small></div>
+            <nav>
+                <div class="nav-item active" onclick="switchTab('dashboard')" id="nav-dashboard">📊 الرئيسية</div>
+                <div class="nav-item" onclick="switchTab('orders')" id="nav-orders">📋 الطلبات <span class="badge-count" id="sidebarPending" style="display:none;">0</span></div>
+                <div class="nav-item" onclick="switchTab('packages')" id="nav-packages">📦 الباقات</div>
+                <div class="nav-item" onclick="switchTab('activity')" id="nav-activity">📜 سجل النشاط</div>
+            </nav>
+            <div style="margin-top:auto;padding:20px;border-top:1px solid rgba(255,255,255,0.06);">
+                <button class="btn btn-danger btn-sm" style="width:100%;" onclick="logout()">🚪 تسجيل الخروج</button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <main class="main">
+            <div class="topbar">
+                <div class="page-title" id="pageTitle">📊 الرئيسية</div>
+                <div class="topbar-actions">
+                    <button class="btn btn-ghost btn-sm" id="autoBtn" onclick="toggleAutoRefresh()">🔄 تلقائي</button>
+                    <button class="btn btn-ghost btn-sm" onclick="loadAllData()">🔄 تحديث الآن</button>
+                    <button class="btn btn-ghost btn-sm" id="exportBtn" onclick="exportOrdersCSV()" style="display:none;">📥 تصدير CSV</button>
                 </div>
-                <nav>
-                    <div class="nav-item active" onclick="switchTab('dashboard')" id="nav-dashboard">
-                        📊 الرئيسية
-                    </div>
-                    <div class="nav-item" onclick="switchTab('orders')" id="nav-orders">
-                        📋 الطلبات
-                        <span class="badge-count" id="sidebarPending" style="display:none;">0</span>
-                    </div>
-                    <div class="nav-item" onclick="switchTab('packages')" id="nav-packages">
-                        📦 الباقات
-                    </div>
-                    <div class="nav-item" onclick="switchTab('activity')" id="nav-activity">
-                        📜 سجل النشاط
-                    </div>
-                </nav>
-                <div style="margin-top:auto;padding:20px;border-top:1px solid rgba(255,255,255,0.06);">
-                    <button class="btn btn-danger btn-sm" style="width:100%;" onclick="logout()">🚪 تسجيل الخروج</button>
-                </div>
-            </aside>
+            </div>
 
-            <!-- MAIN -->
-            <main class="main">
-                <div class="topbar">
-                    <div class="page-title" id="pageTitle">📊 الرئيسية</div>
-                    <div class="topbar-actions">
-                        <button class="btn btn-ghost btn-sm" id="autoBtn" onclick="toggleAutoRefresh()">🔄 تلقائي</button>
-                        <button class="btn btn-ghost btn-sm" onclick="loadAllData()">🔄 تحديث الآن</button>
-                        <button class="btn btn-ghost btn-sm" id="exportBtn" onclick="exportOrdersCSV()" style="display:none;">📥 تصدير CSV</button>
-                    </div>
-                </div>
-
-                <!-- DASHBOARD TAB -->
-                <div id="tab-dashboard">
-                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:28px;" id="statsGrid">
-                        <!-- filled by JS -->
-                    </div>
-
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;" id="chartsRow">
-                        <div class="table-card">
-                            <div class="table-header"><h3>📈 الطلبات حسب اليوم (آخر 7 أيام)</h3></div>
-                            <div style="padding:16px;position:relative;">
-                                <canvas id="barChart" height="200"></canvas>
-                                <div id="barChartEmpty" style="display:none;text-align:center;padding:40px;color:var(--muted);">لا توجد بيانات كافية للرسم البياني</div>
-                            </div>
-                        </div>
-                        <div class="table-card">
-                            <div class="table-header"><h3>🏢 توزيع الشركات</h3></div>
-                            <div style="padding:16px;position:relative;">
-                                <canvas id="pieChart" height="200"></canvas>
-                                <div id="pieChartEmpty" style="display:none;text-align:center;padding:40px;color:var(--muted);">لا توجد بيانات كافية للرسم البياني</div>
-                            </div>
-                        </div>
-                    </div>
-
+            <!-- DASHBOARD TAB -->
+            <div id="tab-dashboard">
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;margin-bottom:28px;" id="statsGrid"></div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:28px;" id="chartsRow">
                     <div class="table-card">
-                        <div class="table-header"><h3>🔥 أكثر 5 باقات طلباً</h3></div>
-                        <div id="topPackages" style="padding:16px 20px;"></div>
+                        <div class="table-header"><h3>📈 الطلبات حسب اليوم (آخر 7 أيام)</h3></div>
+                        <div style="padding:16px;">
+                            <canvas id="barChart" height="200"></canvas>
+                            <div id="barChartEmpty" style="display:none;text-align:center;padding:40px;color:var(--muted);">لا توجد بيانات كافية</div>
+                        </div>
                     </div>
-                </div>
-
-                <!-- ORDERS TAB -->
-                <div id="tab-orders" style="display:none;">
                     <div class="table-card">
-                        <div class="table-header">
-                            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-                                <input type="search" id="searchInput" placeholder="🔍 بحث بالاسم أو رقم الهاتف..." oninput="applyFilters()" style="width:260px;">
-                                <select id="quickFilter" onchange="applyFilters()">
-                                    <option value="all">كل الطلبات</option>
-                                    <option value="today">اليوم</option>
-                                    <option value="7days">آخر 7 أيام</option>
-                                    <option value="30days">آخر 30 يوم</option>
-                                    <option value="month">هذا الشهر</option>
-                                </select>
-                                <select id="statusFilter" onchange="applyFilters()">
-                                    <option value="all">كل الحالات</option>
-                                    <option value="معلق">معلق</option>
-                                    <option value="تم التفعيل">تم التفعيل</option>
-                                    <option value="ملغي">ملغي</option>
-                                </select>
-                            </div>
-                            <span style="color:var(--muted);font-size:0.85rem;" id="filteredCount"></span>
+                        <div class="table-header"><h3>🏢 توزيع الشركات</h3></div>
+                        <div style="padding:16px;">
+                            <canvas id="pieChart" height="200"></canvas>
+                            <div id="pieChartEmpty" style="display:none;text-align:center;padding:40px;color:var(--muted);">لا توجد بيانات كافية</div>
                         </div>
-                        <div style="overflow-x:auto;">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>رقم الطلب</th><th>الاسم</th><th>الواتساب</th><th>الشركة</th><th>الباقة</th><th>السعر</th><th>التاريخ</th><th>الحالة</th><th>إجراء</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="ordersTableBody"></tbody>
-                            </table>
-                        </div>
-                        <div id="pagination"></div>
                     </div>
                 </div>
+                <div class="table-card">
+                    <div class="table-header"><h3>🔥 أكثر 5 باقات طلباً</h3></div>
+                    <div id="topPackages" style="padding:16px 20px;"></div>
+                </div>
+            </div>
 
-                <!-- PACKAGES TAB -->
-                <div id="tab-packages" style="display:none;">
-                    <div class="table-card" style="padding:24px;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
-                            <h3 style="margin:0;">📦 جميع الباقات</h3>
-                            <button class="btn btn-primary btn-sm" onclick="openPkgModal(null)">➕ إضافة باقة جديدة</button>
+            <!-- ORDERS TAB -->
+            <div id="tab-orders" style="display:none;">
+                <div class="table-card">
+                    <div class="table-header">
+                        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                            <input type="search" id="searchInput" placeholder="🔍 بحث بالاسم أو رقم الهاتف..." oninput="applyFilters()" style="width:260px;">
+                            <select id="quickFilter" onchange="applyFilters()">
+                                <option value="all">كل الطلبات</option>
+                                <option value="today">اليوم</option>
+                                <option value="7days">آخر 7 أيام</option>
+                                <option value="30days">آخر 30 يوم</option>
+                                <option value="month">هذا الشهر</option>
+                            </select>
+                            <select id="statusFilter" onchange="applyFilters()">
+                                <option value="all">كل الحالات</option>
+                                <option value="معلق">معلق</option>
+                                <option value="تم التفعيل">تم التفعيل</option>
+                                <option value="ملغي">ملغي</option>
+                            </select>
                         </div>
-                        <div class="pkg-grid" id="pkgGrid"></div>
+                        <span style="color:var(--muted);font-size:0.85rem;" id="filteredCount"></span>
                     </div>
-                </div>
-
-                <!-- ACTIVITY LOG TAB -->
-                <div id="tab-activity" style="display:none;">
-                    <div class="table-card">
-                        <div class="table-header"><h3>📜 آخر النشاطات</h3></div>
-                        <div id="activityLog" style="max-height:65vh;overflow-y:auto;"></div>
+                    <div style="overflow-x:auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>رقم الطلب</th>
+                                    <th>رقم العميل</th>
+                                    <th>الشركة</th>
+                                    <th>الباقة</th>
+                                    <th>السعر</th>
+                                    <th>إثبات الدفع</th>
+                                    <th>الحالة</th>
+                                    <th>تاريخ التفعيل</th>
+                                    <th>ملاحظات</th>
+                                    <th>إجراء</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTableBody"></tbody>
+                        </table>
                     </div>
+                    <div id="pagination"></div>
                 </div>
-            </main>
+            </div>
+
+            <!-- PACKAGES TAB -->
+            <div id="tab-packages" style="display:none;">
+                <div class="table-card" style="padding:24px;">
+                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
+                        <h3 style="margin:0;">📦 جميع الباقات</h3>
+                        <button class="btn btn-primary btn-sm" onclick="openPkgModal(null)">➕ إضافة باقة جديدة</button>
+                    </div>
+                    <div class="pkg-grid" id="pkgGrid"></div>
+                </div>
+            </div>
+
+            <!-- ACTIVITY LOG TAB -->
+            <div id="tab-activity" style="display:none;">
+                <div class="table-card">
+                    <div class="table-header"><h3>📜 آخر النشاطات</h3></div>
+                    <div id="activityLog" style="max-height:65vh;overflow-y:auto;"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- STATUS MODAL -->
+<div class="modal-overlay" id="statusModal">
+    <div class="modal">
+        <h3>✏️ تغيير حالة الطلب</h3>
+        <div id="modalOrderId" style="font-weight:700;margin-bottom:12px;padding:10px;background:var(--card2);border-radius:10px;"></div>
+        <div class="status-options">
+            <button onclick="selectNewStatus('معلق')" class="status-opt opt-pending" data-status="معلق">⏳ معلق</button>
+            <button onclick="selectNewStatus('تم التفعيل')" class="status-opt opt-done" data-status="تم التفعيل">✅ تم التفعيل</button>
+            <button onclick="selectNewStatus('ملغي')" class="status-opt opt-cancel" data-status="ملغي">❌ ملغي</button>
+        </div>
+        <textarea id="statusNote" placeholder="ملاحظة (اختياري)"></textarea>
+        <div style="margin-top:20px;display:flex;gap:12px;">
+            <button class="btn btn-ghost" style="flex:1;" onclick="closeModal('statusModal')">إلغاء</button>
+            <button class="btn btn-success" style="flex:1;" onclick="saveOrderStatus()">💾 حفظ الحالة</button>
         </div>
     </div>
+</div>
 
-    <!-- STATUS MODAL -->
-    <div class="modal-overlay" id="statusModal">
-        <div class="modal">
-            <h3>✏️ تغيير حالة الطلب</h3>
-            <div id="modalOrderId" style="font-weight:700;margin-bottom:12px;padding:10px;background:var(--card2);border-radius:10px;"></div>
-            <div class="status-options">
-                <button onclick="selectNewStatus('معلق')" class="status-opt opt-pending" data-status="معلق">⏳ معلق</button>
-                <button onclick="selectNewStatus('تم التفعيل')" class="status-opt opt-done" data-status="تم التفعيل">✅ تم التفعيل</button>
-                <button onclick="selectNewStatus('ملغي')" class="status-opt opt-cancel" data-status="ملغي">❌ ملغي</button>
-            </div>
-            <textarea id="statusNote" placeholder="ملاحظة (اختياري)"></textarea>
-            <div style="margin-top:20px;display:flex;gap:12px;">
-                <button class="btn btn-ghost" style="flex:1;" onclick="closeModal('statusModal')">إلغاء</button>
-                <button class="btn btn-success" style="flex:1;" onclick="saveOrderStatus()">💾 حفظ الحالة</button>
-            </div>
+<!-- PACKAGE MODAL -->
+<div class="modal-overlay" id="pkgModal">
+    <div class="modal">
+        <h3 id="pkgModalTitle">➕ إضافة باقة جديدة</h3>
+        <input type="hidden" id="pkgEditId">
+        <div style="margin-bottom:14px;"><label>اسم الباقة</label><input type="text" id="pkgName" style="width:100%;"></div>
+        <div style="margin-bottom:14px;"><label>السعر (جنيه)</label><input type="number" id="pkgPrice" style="width:100%;"></div>
+        <div style="margin-bottom:14px;"><label>النوع</label><input type="text" id="pkgType" style="width:100%;"></div>
+        <div style="margin-bottom:14px;"><label>الحالة</label><input type="text" id="pkgStatus" style="width:100%;" value="متاح"></div>
+        <div style="margin-bottom:14px;"><label>ملاحظات</label><textarea id="pkgNotes" style="width:100%;"></textarea></div>
+        <div style="margin-top:20px;display:flex;gap:12px;">
+            <button class="btn btn-ghost" style="flex:1;" onclick="closeModal('pkgModal')">إلغاء</button>
+            <button class="btn btn-primary" style="flex:1;" onclick="savePackage()">💾 حفظ الباقة</button>
         </div>
     </div>
+</div>
 
-    <!-- PACKAGE MODAL -->
-    <div class="modal-overlay" id="pkgModal">
-        <div class="modal">
-            <h3 id="pkgModalTitle">➕ إضافة باقة جديدة</h3>
-            <input type="hidden" id="pkgEditId">
-            <div style="margin-bottom:14px;">
-                <label style="display:block;margin-bottom:4px;font-weight:600;">اسم الباقة</label>
-                <input type="text" id="pkgName" placeholder="مثال: باقة 50 جيجا" style="width:100%;">
-            </div>
-            <div style="margin-bottom:14px;">
-                <label style="display:block;margin-bottom:4px;font-weight:600;">السعر (ج.م)</label>
-                <input type="number" id="pkgPrice" placeholder="مثال: 150" style="width:100%;">
-            </div>
-            <div style="margin-bottom:14px;">
-                <label style="display:block;margin-bottom:4px;font-weight:600;">الوصف (اختياري)</label>
-                <textarea id="pkgDesc" placeholder="وصف مختصر للباقة..." style="width:100%;"></textarea>
-            </div>
-            <div style="margin-top:20px;display:flex;gap:12px;">
-                <button class="btn btn-ghost" style="flex:1;" onclick="closeModal('pkgModal')">إلغاء</button>
-                <button class="btn btn-primary" style="flex:1;" onclick="savePackage()">💾 حفظ الباقة</button>
-            </div>
-        </div>
-    </div>
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
-    <!-- TOAST -->
-    <div class="toast" id="toast"></div>
+<script>
+    // ==================== CONFIGURATION ====================
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
 
-    <script>
-        // ==================== CONFIGURATION ====================
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
+    // Mapping of Arabic column names to our internal keys
+    const ORDER_FIELDS = {
+        orderId: 'Order ID',
+        customerPhone: 'رقم العميل',
+        company: 'الشركة',
+        package: 'الباقة',
+        price: 'السعر',
+        paymentProof: 'إثبات الدفع',
+        status: 'الحالة',
+        activationDate: 'تاريخ التفعيل',
+        notes: 'ملاحظات',
+        date: 'وقت الطلب'  // used for date sorting and charts
+    };
 
-        // ==================== GLOBAL STATE ====================
-        let allOrders = [];
-        let allPkgs = [];
-        let filteredOrders = [];
-        let activityLogData = [];
-        let currentPage = 1;
-        const itemsPerPage = 15;
-        let autoRefreshEnabled = false;
-        let autoRefreshInterval = null;
-        let currentOrderId = null;
-        let selectedStatus = null;
-        let barChartInstance = null;
-        let pieChartInstance = null;
-        let logoutTimer = null;
-        const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes
+    const PKG_FIELDS = {
+        id: '#',
+        company: 'الشركة',
+        name: 'اسم الباقة / التفاصيل',
+        price: 'السعر (جنيه)',
+        type: 'النوع',
+        status: 'الحالة',
+        notes: 'ملاحظات'
+    };
 
-        // ==================== UTILITY FUNCTIONS ====================
-        function esc(str) {
-            return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
-        }
+    // ==================== GLOBAL STATE ====================
+    let allOrders = [];
+    let allPkgs = [];
+    let filteredOrders = [];
+    let activityLogData = [];
+    let currentPage = 1;
+    const itemsPerPage = 15;
+    let autoRefreshEnabled = false;
+    let autoRefreshInterval = null;
+    let currentOrderId = null;
+    let selectedStatus = null;
+    let barChartInstance = null;
+    let pieChartInstance = null;
+    let logoutTimer = null;
+    const SESSION_DURATION = 30 * 60 * 1000; // 30 minutes
 
-        function showToast(msg, duration = 3000) {
-            const t = document.getElementById('toast');
-            t.textContent = msg;
-            t.classList.add('show');
-            clearTimeout(t._timeout);
-            t._timeout = setTimeout(() => t.classList.remove('show'), duration);
-        }
+    // ==================== UTILITY FUNCTIONS ====================
+    function esc(str) {
+        return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
 
-        function resetLogoutTimer() {
-            clearTimeout(logoutTimer);
-            logoutTimer = setTimeout(() => {
-                sessionStorage.removeItem('aw_admin');
-                sessionStorage.removeItem('aw_login_time');
-                location.reload();
-            }, SESSION_DURATION);
-        }
+    function showToast(msg, duration = 3000) {
+        const t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        clearTimeout(t._timeout);
+        t._timeout = setTimeout(() => t.classList.remove('show'), duration);
+    }
 
-        // ==================== API CALLS ====================
-        async function gGet(params) {
-            try {
-                const qs = new URLSearchParams(params).toString();
-                const res = await fetch(`${SCRIPT_URL}?${qs}`, {
-                    method: 'GET',
-                    headers: { 'Accept': 'application/json' },
-                    signal: AbortSignal.timeout(15000)
-                });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const data = await res.json();
-                return data;
-            } catch (e) {
-                console.error('API GET Error:', e);
-                return { success: false, error: e.message };
-            }
-        }
-
-        async function gPost(payload) {
-            try {
-                const res = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify(payload),
-                    signal: AbortSignal.timeout(20000)
-                });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                const data = await res.json();
-                return data;
-            } catch (e) {
-                console.error('API POST Error:', e);
-                return { success: false, error: e.message };
-            }
-        }
-
-        // ==================== AUTH ====================
-        function togglePass() {
-            const input = document.getElementById('adminPass');
-            input.type = input.type === 'password' ? 'text' : 'password';
-        }
-
-        async function doLogin() {
-            const pass = document.getElementById('adminPass').value.trim();
-            if (!pass) return showToast('⚠️ الرجاء إدخال كلمة المرور');
-
-            const btn = document.getElementById('loginBtn');
-            const errEl = document.getElementById('loginError');
-            btn.disabled = true;
-            btn.textContent = '⏳ جاري التحقق...';
-            errEl.style.display = 'none';
-
-            try {
-                const data = await gGet({ action: 'checkPassword', pass });
-                if (data.success) {
-                    sessionStorage.setItem('aw_admin', 'true');
-                    sessionStorage.setItem('aw_login_time', Date.now());
-                    document.getElementById('loginPage').style.display = 'none';
-                    document.getElementById('adminPanel').style.display = 'block';
-                    resetLogoutTimer();
-                    await loadAllData();
-                } else {
-                    errEl.style.display = 'block';
-                    errEl.textContent = '❌ ' + (data.message || 'كلمة المرور غير صحيحة');
-                }
-            } catch (e) {
-                errEl.style.display = 'block';
-                errEl.textContent = '❌ فشل الاتصال بالسيرفر، حاول مرة أخرى';
-            } finally {
-                btn.disabled = false;
-                btn.textContent = '🔐 دخول';
-            }
-        }
-
-        function logout() {
-            clearTimeout(logoutTimer);
-            clearInterval(autoRefreshInterval);
+    function resetLogoutTimer() {
+        clearTimeout(logoutTimer);
+        logoutTimer = setTimeout(() => {
             sessionStorage.removeItem('aw_admin');
             sessionStorage.removeItem('aw_login_time');
             location.reload();
+        }, SESSION_DURATION);
+    }
+
+    function parseDate(rawDate) {
+        if (!rawDate) return null;
+        try {
+            const str = String(rawDate).trim();
+            if (str.match(/^\d{4}-\d{2}-\d{2}/)) return new Date(str);
+            const parts = str.split(/[\/\-]/);
+            if (parts.length === 3 && parts[0].length <= 2 && parts[2].length === 4) {
+                return new Date(`${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`);
+            }
+            const d = new Date(str);
+            return isNaN(d.getTime()) ? null : d;
+        } catch (e) {
+            return null;
         }
+    }
 
-        // ==================== NAVIGATION ====================
-        function switchTab(tab) {
-            document.querySelectorAll('[id^="tab-"]').forEach(el => el.style.display = 'none');
-            const tabEl = document.getElementById(`tab-${tab}`);
-            if (tabEl) tabEl.style.display = 'block';
-
-            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            const navEl = document.getElementById(`nav-${tab}`);
-            if (navEl) navEl.classList.add('active');
-
-            const titles = {
-                dashboard: '📊 الرئيسية',
-                orders: '📋 الطلبات',
-                packages: '📦 الباقات',
-                activity: '📜 سجل النشاط'
-            };
-            document.getElementById('pageTitle').textContent = titles[tab] || '📊 الرئيسية';
-
-            // Show/hide export button
-            document.getElementById('exportBtn').style.display = tab === 'orders' ? 'inline-flex' : 'none';
-
-            // Load activity log when switching to activity tab
-            if (tab === 'activity' && activityLogData.length === 0) {
-                loadActivityLog();
-            }
-            // Re-render charts when switching to dashboard (in case of resize)
-            if (tab === 'dashboard') {
-                setTimeout(() => {
-                    if (barChartInstance) barChartInstance.resize();
-                    if (pieChartInstance) pieChartInstance.resize();
-                }, 100);
-            }
-            // Re-render packages when switching
-            if (tab === 'packages') {
-                renderPackages();
-            }
-
-            resetLogoutTimer();
+    // ==================== API CALLS ====================
+    async function gGet(params) {
+        try {
+            const qs = new URLSearchParams(params).toString();
+            const res = await fetch(`${SCRIPT_URL}?${qs}`, {
+                method: 'GET',
+                headers: { 'Accept': 'application/json' },
+                signal: AbortSignal.timeout(15000)
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return await res.json();
+        } catch (e) {
+            console.error(e);
+            return { success: false, error: e.message };
         }
+    }
 
-        // ==================== DATA LOADING ====================
-        async function loadAllData() {
-            showToast('⏳ جاري تحميل البيانات...', 2000);
-            try {
-                const [ordersRes, pkgsRes, statsRes] = await Promise.all([
-                    gGet({ action: 'orders' }),
-                    gGet({ action: 'packages' }),
-                    gGet({ action: 'stats' })
-                ]);
+    async function gPost(payload) {
+        try {
+            const res = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify(payload),
+                signal: AbortSignal.timeout(20000)
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            return await res.json();
+        } catch (e) {
+            console.error(e);
+            return { success: false, error: e.message };
+        }
+    }
 
-                // Process orders
-                if (Array.isArray(ordersRes)) {
-                    allOrders = ordersRes;
-                } else if (ordersRes.orders && Array.isArray(ordersRes.orders)) {
-                    allOrders = ordersRes.orders;
-                } else if (ordersRes.data && Array.isArray(ordersRes.data)) {
-                    allOrders = ordersRes.data;
-                } else {
-                    allOrders = [];
-                }
+    // ==================== AUTHENTICATION ====================
+    function togglePass() {
+        const inp = document.getElementById('adminPass');
+        inp.type = (inp.type === 'password' ? 'text' : 'password');
+    }
 
-                // Process packages
-                if (Array.isArray(pkgsRes)) {
-                    allPkgs = pkgsRes;
-                } else if (pkgsRes.packages && Array.isArray(pkgsRes.packages)) {
-                    allPkgs = pkgsRes.packages;
-                } else if (pkgsRes.data && Array.isArray(pkgsRes.data)) {
-                    allPkgs = pkgsRes.data;
-                } else {
-                    allPkgs = [];
-                }
+    async function doLogin() {
+        const pass = document.getElementById('adminPass').value.trim();
+        if (!pass) return showToast('⚠️ أدخل كلمة المرور');
+        const btn = document.getElementById('loginBtn');
+        const errEl = document.getElementById('loginError');
+        btn.disabled = true;
+        btn.textContent = '⏳ جاري التحقق...';
+        errEl.style.display = 'none';
 
-                // Render everything
-                renderStats(statsRes);
-                renderCharts();
-                renderTopPackages();
-                applyFilters(); // This also renders orders table
-                updateSidebarPending();
-                renderPackages();
-
-                showToast('✅ تم تحديث جميع البيانات بنجاح');
+        try {
+            const data = await gGet({ action: 'checkPassword', pass });
+            if (data.success) {
+                sessionStorage.setItem('aw_admin', 'true');
+                sessionStorage.setItem('aw_login_time', Date.now());
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
                 resetLogoutTimer();
-            } catch (e) {
-                console.error('loadAllData error:', e);
-                showToast('⚠️ حدث خطأ أثناء تحميل البيانات');
-                // Still try to render with whatever we have
-                applyFilters();
-                renderPackages();
-                updateSidebarPending();
-            }
-        }
-
-        async function loadActivityLog() {
-            try {
-                const res = await gGet({ action: 'activity' });
-                if (Array.isArray(res)) {
-                    activityLogData = res;
-                } else if (res.log && Array.isArray(res.log)) {
-                    activityLogData = res.log;
-                } else if (res.data && Array.isArray(res.data)) {
-                    activityLogData = res.data;
-                } else {
-                    activityLogData = [];
-                }
-                renderActivityLog();
-            } catch (e) {
-                activityLogData = [];
-                renderActivityLog();
-            }
-        }
-
-        // ==================== STATS ====================
-        function renderStats(statsRes) {
-            // Calculate real stats from allOrders if API didn't return stats
-            let total = 0,
-                pending = 0,
-                active = 0,
-                cancelled = 0,
-                revenue = 0;
-
-            if (statsRes && statsRes.success !== false && (statsRes.total !== undefined || statsRes.stats)) {
-                const s = statsRes.stats || statsRes;
-                total = s.total || s.totalOrders || 0;
-                pending = s.pending || 0;
-                active = s.active || s.completed || 0;
-                cancelled = s.cancelled || 0;
-                revenue = s.revenue || s.totalRevenue || 0;
+                await loadAllData();
             } else {
-                // Calculate from allOrders
-                total = allOrders.length;
-                allOrders.forEach(o => {
-                    const status = String(o.status || '').trim();
-                    if (status.includes('معلق')) pending++;
-                    else if (status.includes('تم') || status.includes('تفعيل')) active++;
-                    else if (status.includes('ملغ')) cancelled++;
-                    // Sum revenue for active/completed orders
-                    if (status.includes('تم') || status.includes('تفعيل')) {
-                        const price = parseFloat(String(o.price || '0').replace(/[^0-9.]/g, ''));
-                        if (!isNaN(price)) revenue += price;
-                    }
-                });
+                errEl.style.display = 'block';
+                errEl.textContent = '❌ ' + (data.message || 'كلمة المرور غير صحيحة');
             }
+        } catch (e) {
+            errEl.style.display = 'block';
+            errEl.textContent = '❌ فشل الاتصال بالسيرفر';
+        } finally {
+            btn.disabled = false;
+            btn.textContent = '🔐 دخول';
+        }
+    }
 
-            const grid = document.getElementById('statsGrid');
-            grid.innerHTML = `
-            <div class="stat-card">
-              <div class="stat-label">📋 إجمالي الطلبات</div>
-              <div class="stat-value">${total.toLocaleString('ar-EG')}</div>
-              <div class="stat-sub">كل الطلبات المسجلة</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-label">⏳ طلبات معلقة</div>
-              <div class="stat-value" style="color:var(--yellow);">${pending.toLocaleString('ar-EG')}</div>
-              <div class="stat-sub">بانتظار المعالجة</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-label">✅ طلبات مفعلة</div>
-              <div class="stat-value" style="color:var(--green2);">${active.toLocaleString('ar-EG')}</div>
-              <div class="stat-sub">تمت بنجاح</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-label">💰 إجمالي الإيرادات</div>
-              <div class="stat-value" style="color:var(--green2);">${revenue.toLocaleString('ar-EG')} ج</div>
-              <div class="stat-sub">من الطلبات المفعلة</div>
-            </div>
-          `;
+    function logout() {
+        clearTimeout(logoutTimer);
+        clearInterval(autoRefreshInterval);
+        sessionStorage.removeItem('aw_admin');
+        sessionStorage.removeItem('aw_login_time');
+        location.reload();
+    }
+
+    // ==================== NAVIGATION ====================
+    function switchTab(tab) {
+        document.querySelectorAll('[id^="tab-"]').forEach(el => el.style.display = 'none');
+        document.getElementById(`tab-${tab}`).style.display = 'block';
+
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        document.getElementById(`nav-${tab}`).classList.add('active');
+
+        const titles = {
+            dashboard: '📊 الرئيسية',
+            orders: '📋 الطلبات',
+            packages: '📦 الباقات',
+            activity: '📜 سجل النشاط'
+        };
+        document.getElementById('pageTitle').textContent = titles[tab] || '📊 الرئيسية';
+        document.getElementById('exportBtn').style.display = (tab === 'orders') ? 'inline-flex' : 'none';
+
+        if (tab === 'activity' && activityLogData.length === 0) loadActivityLog();
+        if (tab === 'dashboard') {
+            setTimeout(() => {
+                if (barChartInstance) barChartInstance.resize();
+                if (pieChartInstance) pieChartInstance.resize();
+            }, 100);
+        }
+        if (tab === 'packages') renderPackages();
+        resetLogoutTimer();
+    }
+
+    // ==================== DATA LOADING ====================
+    async function loadAllData() {
+        showToast('⏳ جاري تحميل البيانات...', 2000);
+        try {
+            const [ordersRes, pkgsRes, statsRes] = await Promise.all([
+                gGet({ action: 'orders' }),
+                gGet({ action: 'packages' }),
+                gGet({ action: 'stats' })
+            ]);
+            allOrders = Array.isArray(ordersRes) ? ordersRes : (ordersRes.orders || ordersRes.data || []);
+            allPkgs = Array.isArray(pkgsRes) ? pkgsRes : (pkgsRes.packages || pkgsRes.data || []);
+
+            renderStats(statsRes);
+            renderCharts();
+            renderTopPackages();
+            applyFilters();
+            updateSidebarPending();
+            renderPackages();
+            showToast('✅ تم تحديث جميع البيانات بنجاح');
+            resetLogoutTimer();
+        } catch (e) {
+            showToast('⚠️ حدث خطأ أثناء تحميل البيانات');
+            applyFilters();
+            renderPackages();
+            updateSidebarPending();
+        }
+    }
+
+    async function loadActivityLog() {
+        try {
+            const res = await gGet({ action: 'activity' });
+            activityLogData = Array.isArray(res) ? res : (res.log || res.data || []);
+        } catch (e) {
+            activityLogData = [];
+        }
+        renderActivityLog();
+    }
+
+    // ==================== STATISTICS ====================
+    function renderStats(statsRes) {
+        let total = 0, pending = 0, active = 0, cancelled = 0, revenue = 0;
+        if (statsRes && statsRes.success !== false && (statsRes.total !== undefined || statsRes.stats)) {
+            const s = statsRes.stats || statsRes;
+            total = s.total || 0;
+            pending = s.pending || 0;
+            active = s.active || s.completed || 0;
+            cancelled = s.cancelled || 0;
+            revenue = s.revenue || 0;
+        } else {
+            total = allOrders.length;
+            allOrders.forEach(o => {
+                const st = String(o[ORDER_FIELDS.status] || '').trim();
+                if (st.includes('معلق')) pending++;
+                else if (st.includes('تم') || st.includes('تفعيل')) active++;
+                else if (st.includes('ملغ')) cancelled++;
+                if (st.includes('تم') || st.includes('تفعيل')) {
+                    const price = parseFloat(String(o[ORDER_FIELDS.price] || '0').replace(/[^0-9.]/g, ''));
+                    if (!isNaN(price)) revenue += price;
+                }
+            });
         }
 
-        // ==================== CHARTS (100% REAL DATA) ====================
-        function renderCharts() {
-            // Destroy previous chart instances
-            if (barChartInstance) { barChartInstance.destroy();
-                barChartInstance = null; }
-            if (pieChartInstance) { pieChartInstance.destroy();
-                pieChartInstance = null; }
+        document.getElementById('statsGrid').innerHTML = `
+            <div class="stat-card"><div class="stat-label">📋 إجمالي الطلبات</div><div class="stat-value">${total.toLocaleString('ar-EG')}</div><div class="stat-sub">كل الطلبات المسجلة</div></div>
+            <div class="stat-card"><div class="stat-label">⏳ طلبات معلقة</div><div class="stat-value" style="color:var(--yellow);">${pending.toLocaleString('ar-EG')}</div><div class="stat-sub">بانتظار المعالجة</div></div>
+            <div class="stat-card"><div class="stat-label">✅ طلبات مفعلة</div><div class="stat-value" style="color:var(--green2);">${active.toLocaleString('ar-EG')}</div><div class="stat-sub">تمت بنجاح</div></div>
+            <div class="stat-card"><div class="stat-label">💰 إجمالي الإيرادات</div><div class="stat-value" style="color:var(--green2);">${revenue.toLocaleString('ar-EG')} ج</div><div class="stat-sub">من الطلبات المفعلة</div></div>
+        `;
+    }
 
-            // ---- BAR CHART: Orders per day (last 7 days) ----
-            const barCanvas = document.getElementById('barChart');
-            const barEmpty = document.getElementById('barChartEmpty');
-            const barCtx = barCanvas.getContext('2d');
+    // ==================== CHARTS ====================
+    function renderCharts() {
+        if (barChartInstance) { barChartInstance.destroy(); barChartInstance = null; }
+        if (pieChartInstance) { pieChartInstance.destroy(); pieChartInstance = null; }
 
-            // Calculate last 7 days from allOrders
-            const daysMap = {};
-            const today = new Date();
-            for (let i = 6; i >= 0; i--) {
-                const d = new Date(today);
-                d.setDate(d.getDate() - i);
-                const key = d.toISOString().split('T')[0]; // YYYY-MM-DD
-                const label = d.toLocaleDateString('ar-EG', { weekday: 'short', day: 'numeric', month: 'short' });
-                daysMap[key] = { label, count: 0 };
-            }
+        // Bar chart - last 7 days
+        const barCanvas = document.getElementById('barChart');
+        const barEmpty = document.getElementById('barChartEmpty');
+        const daysMap = {};
+        const today = new Date();
+        for (let i = 6; i >= 0; i--) {
+            const d = new Date(today);
+            d.setDate(d.getDate() - i);
+            const key = d.toISOString().split('T')[0];
+            const label = d.toLocaleDateString('ar-EG', { weekday: 'short', day: 'numeric', month: 'short' });
+            daysMap[key] = { label, count: 0 };
+        }
 
-            allOrders.forEach(o => {
-                const rawDate = o.date || o.orderDate || o.createdAt || o.timestamp || '';
-                try {
-                    let dateStr = '';
-                    if (rawDate.includes('T')) {
-                        dateStr = rawDate.split('T')[0];
-                    } else if (rawDate.includes(' ')) {
-                        dateStr = rawDate.split(' ')[0];
-                    } else if (rawDate.match(/^\d{4}-\d{2}-\d{2}$/)) {
-                        dateStr = rawDate;
-                    } else if (rawDate.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
-                        const parts = rawDate.split('/');
-                        dateStr = `${parts[2]}-${parts[1]}-${parts[0]}`;
-                    } else if (rawDate.match(/^\d{2}-\d{2}-\d{4}$/)) {
-                        const parts = rawDate.split('-');
-                        dateStr = `${parts[2]}-${parts[1]}-${parts[0]}`;
+        allOrders.forEach(o => {
+            const rawDate = o[ORDER_FIELDS.date] || '';
+            try {
+                let dateStr = '';
+                const rd = String(rawDate).trim();
+                if (rd.includes('T')) dateStr = rd.split('T')[0];
+                else if (rd.includes(' ')) dateStr = rd.split(' ')[0];
+                else if (rd.match(/^\d{4}-\d{2}-\d{2}$/)) dateStr = rd;
+                else if (rd.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
+                    const p = rd.split('/');
+                    dateStr = `${p[2]}-${p[1]}-${p[0]}`;
+                } else if (rd.match(/^\d{2}-\d{2}-\d{4}$/)) {
+                    const p = rd.split('-');
+                    dateStr = `${p[2]}-${p[1]}-${p[0]}`;
+                }
+                if (dateStr && daysMap[dateStr]) daysMap[dateStr].count++;
+            } catch (e) {}
+        });
+
+        const barLabels = Object.values(daysMap).map(d => d.label);
+        const barData = Object.values(daysMap).map(d => d.count);
+
+        if (barData.some(v => v > 0)) {
+            barEmpty.style.display = 'none';
+            barCanvas.style.display = 'block';
+            barChartInstance = new Chart(barCanvas.getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: barLabels,
+                    datasets: [{
+                        label: 'عدد الطلبات',
+                        data: barData,
+                        backgroundColor: 'rgba(139,60,247,0.7)',
+                        borderColor: '#a855f7',
+                        borderWidth: 1,
+                        borderRadius: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
                     }
-                    if (dateStr && daysMap[dateStr] !== undefined) {
-                        daysMap[dateStr].count++;
-                    }
-                } catch (e) { /* skip invalid dates */ }
+                }
             });
+        } else {
+            barCanvas.style.display = 'none';
+            barEmpty.style.display = 'block';
+        }
 
-            const barLabels = Object.values(daysMap).map(d => d.label);
-            const barData = Object.values(daysMap).map(d => d.count);
-            const hasBarData = barData.some(v => v > 0);
+        // Pie chart - company distribution
+        const pieCanvas = document.getElementById('pieChart');
+        const pieEmpty = document.getElementById('pieChartEmpty');
+        const companyMap = {};
+        allOrders.forEach(o => {
+            const comp = String(o[ORDER_FIELDS.company] || 'غير محدد').trim();
+            companyMap[comp] = (companyMap[comp] || 0) + 1;
+        });
+        const pieLabels = Object.keys(companyMap);
+        const pieData = Object.values(companyMap);
 
-            if (hasBarData) {
-                barEmpty.style.display = 'none';
-                barCanvas.style.display = 'block';
-                barChartInstance = new Chart(barCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: barLabels,
-                        datasets: [{
-                            label: 'عدد الطلبات',
-                            data: barData,
-                            backgroundColor: [
-                                'rgba(139,60,247,0.7)',
-                                'rgba(139,60,247,0.75)',
-                                'rgba(139,60,247,0.8)',
-                                'rgba(139,60,247,0.85)',
-                                'rgba(139,60,247,0.9)',
-                                'rgba(139,60,247,0.85)',
-                                'rgba(139,60,247,0.75)'
-                            ],
-                            borderColor: 'rgba(165,96,247,0.9)',
-                            borderWidth: 1,
-                            borderRadius: 10,
-                            hoverBackgroundColor: '#a855f7'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: { display: false }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    color: '#94a3b8',
-                                    stepSize: Math.max(1, Math.ceil(Math.max(...barData) / 8))
-                                },
-                                grid: { color: 'rgba(255,255,255,0.05)' }
-                            },
-                            x: {
-                                ticks: { color: '#94a3b8', maxRotation: 45 },
-                                grid: { display: false }
-                            }
+        if (pieData.some(v => v > 0) && pieLabels.length > 0) {
+            pieEmpty.style.display = 'none';
+            pieCanvas.style.display = 'block';
+            const colors = ['#FF6B2B', '#E60000', '#00A651', '#8B00FF', '#F59E0B', '#3B82F6', '#EC4899', '#14B8A6'];
+            pieChartInstance = new Chart(pieCanvas.getContext('2d'), {
+                type: 'doughnut',
+                data: {
+                    labels: pieLabels,
+                    datasets: [{
+                        data: pieData,
+                        backgroundColor: colors.slice(0, pieLabels.length),
+                        borderColor: 'rgba(17,17,34,0.8)',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#e2e2f0', padding: 16, font: { size: 13, family: 'Cairo' }, usePointStyle: true, pointStyleWidth: 10 }
                         }
                     }
-                });
-            } else {
-                barCanvas.style.display = 'none';
-                barEmpty.style.display = 'block';
-            }
-
-            // ---- PIE CHART: Company distribution ----
-            const pieCanvas = document.getElementById('pieChart');
-            const pieEmpty = document.getElementById('pieChartEmpty');
-            const pieCtx = pieCanvas.getContext('2d');
-
-            const companyMap = {};
-            allOrders.forEach(o => {
-                const company = String(o.company || 'غير محدد').trim();
-                companyMap[company] = (companyMap[company] || 0) + 1;
+                }
             });
-            const pieLabels = Object.keys(companyMap);
-            const pieData = Object.values(companyMap);
-            const hasPieData = pieData.some(v => v > 0);
+        } else {
+            pieCanvas.style.display = 'none';
+            pieEmpty.style.display = 'block';
+        }
+    }
 
-            const pieColors = ['#FF6B2B', '#E60000', '#00A651', '#8B00FF', '#F59E0B', '#3B82F6', '#EC4899',
-            '#14B8A6'];
+    // ==================== TOP PACKAGES ====================
+    function renderTopPackages() {
+        const pkgCountMap = {};
+        allOrders.forEach(o => {
+            const pkg = String(o[ORDER_FIELDS.package] || 'غير معروف').trim();
+            pkgCountMap[pkg] = (pkgCountMap[pkg] || 0) + 1;
+        });
+        const sorted = Object.entries(pkgCountMap).sort((a, b) => b[1] - a[1]).slice(0, 5);
+        const container = document.getElementById('topPackages');
 
-            if (hasPieData && pieLabels.length > 0) {
-                pieEmpty.style.display = 'none';
-                pieCanvas.style.display = 'block';
-                pieChartInstance = new Chart(pieCtx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: pieLabels,
-                        datasets: [{
-                            data: pieData,
-                            backgroundColor: pieColors.slice(0, pieLabels.length),
-                            borderColor: 'rgba(17,17,34,0.8)',
-                            borderWidth: 3,
-                            hoverBorderColor: '#fff',
-                            hoverBorderWidth: 4
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: 'bottom',
-                                labels: { color: '#e2e2f0', padding: 16, font: { size: 13,
-                                        family: 'Cairo' }, usePointStyle: true, pointStyleWidth: 10 }
-                            }
-                        }
-                    }
-                });
-            } else {
-                pieCanvas.style.display = 'none';
-                pieEmpty.style.display = 'block';
-            }
+        if (sorted.length === 0) {
+            container.innerHTML = `<div class="empty-state"><div class="empty-icon">📦</div><p>لا توجد طلبات لعرض أكثر الباقات طلباً</p></div>`;
+            return;
         }
 
-        // ==================== TOP PACKAGES (Real data from orders) ====================
-        function renderTopPackages() {
-            const container = document.getElementById('topPackages');
-            // Count packages from allOrders
-            const pkgCountMap = {};
-            allOrders.forEach(o => {
-                const pkg = String(o.package || 'غير معروف').trim();
-                pkgCountMap[pkg] = (pkgCountMap[pkg] || 0) + 1;
-            });
-            const sorted = Object.entries(pkgCountMap)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 5);
-
-            if (sorted.length === 0) {
-                container.innerHTML = `
-              <div class="empty-state">
-                <div class="empty-icon">📦</div>
-                <p>لا توجد طلبات لعرض أكثر الباقات طلباً</p>
-              </div>`;
-                return;
-            }
-
-            const maxCount = sorted[0][1];
-            container.innerHTML = sorted.map(([name, count], i) => {
-                const barWidth = Math.round((count / maxCount) * 100);
-                const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
-                return `
-              <div style="padding:13px 8px;border-bottom:1px solid rgba(255,255,255,0.04);">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-                  <span style="font-weight:700;">${medals[i] || ''} ${esc(name)}</span>
-                  <span style="color:var(--green2);font-weight:700;">${count} طلب</span>
+        const maxCount = sorted[0][1];
+        const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+        container.innerHTML = sorted.map(([name, count], i) => `
+            <div style="padding:13px 8px;border-bottom:1px solid rgba(255,255,255,0.04);">
+                <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+                    <span style="font-weight:700;">${medals[i] || ''} ${esc(name)}</span>
+                    <span style="color:var(--green2);font-weight:700;">${count} طلب</span>
                 </div>
-                <div style="height:8px;background:var(--card2);border-radius:8px;overflow:hidden;">
-                  <div style="height:100%;width:${barWidth}%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:8px;transition:width 1s ease;"></div>
+                <div style="height:8px;background:var(--card2);border-radius:8px;">
+                    <div style="height:100%;width:${Math.round((count / maxCount) * 100)}%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:8px;"></div>
                 </div>
-              </div>`;
-            }).join('');
+            </div>
+        `).join('');
+    }
+
+    // ==================== ORDERS TABLE & FILTERS ====================
+    function applyFilters() {
+        const searchTerm = document.getElementById('searchInput')?.value?.trim()?.toLowerCase() || '';
+        const quickFilter = document.getElementById('quickFilter')?.value || 'all';
+        const statusFilter = document.getElementById('statusFilter')?.value || 'all';
+
+        filteredOrders = [...allOrders];
+
+        // Date quick filter
+        if (quickFilter !== 'all') {
+            const now = new Date();
+            const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            let cutoff = null;
+            if (quickFilter === 'today') cutoff = todayStart;
+            else if (quickFilter === '7days') { cutoff = new Date(todayStart); cutoff.setDate(cutoff.getDate() - 7); }
+            else if (quickFilter === '30days') { cutoff = new Date(todayStart); cutoff.setDate(cutoff.getDate() - 30); }
+            else if (quickFilter === 'month') cutoff = new Date(now.getFullYear(), now.getMonth(), 1);
+
+            if (cutoff) {
+                filteredOrders = filteredOrders.filter(o => {
+                    const d = parseDate(o[ORDER_FIELDS.date]);
+                    return d && d >= cutoff;
+                });
+            }
         }
 
-        // ==================== ORDERS TABLE ====================
-        function applyFilters() {
-            const searchTerm = document.getElementById('searchInput')?.value?.trim()?.toLowerCase() || '';
-            const quickFilter = document.getElementById('quickFilter')?.value || 'all';
-            const statusFilter = document.getElementById('statusFilter')?.value || 'all';
-
-            filteredOrders = [...allOrders];
-
-            // Quick date filter
-            if (quickFilter !== 'all') {
-                const now = new Date();
-                const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-                let cutoff = null;
-
-                if (quickFilter === 'today') {
-                    cutoff = todayStart;
-                } else if (quickFilter === '7days') {
-                    cutoff = new Date(todayStart);
-                    cutoff.setDate(cutoff.getDate() - 7);
-                } else if (quickFilter === '30days') {
-                    cutoff = new Date(todayStart);
-                    cutoff.setDate(cutoff.getDate() - 30);
-                } else if (quickFilter === 'month') {
-                    cutoff = new Date(now.getFullYear(), now.getMonth(), 1);
-                }
-
-                if (cutoff) {
-                    filteredOrders = filteredOrders.filter(o => {
-                        const rawDate = o.date || o.orderDate || o.createdAt || o.timestamp || '';
-                        const parsed = parseDate(rawDate);
-                        return parsed && parsed >= cutoff;
-                    });
-                }
-            }
-
-            // Status filter
-            if (statusFilter !== 'all') {
-                filteredOrders = filteredOrders.filter(o => {
-                    const s = String(o.status || '').trim();
-                    if (statusFilter === 'معلق') return s.includes('معلق');
-                    if (statusFilter === 'تم التفعيل') return s.includes('تم') || s.includes('تفعيل');
-                    if (statusFilter === 'ملغي') return s.includes('ملغ');
-                    return true;
-                });
-            }
-
-            // Search
-            if (searchTerm) {
-                filteredOrders = filteredOrders.filter(o => {
-                    const name = String(o.customerName || o.name || '').toLowerCase();
-                    const phone = String(o.phone || o.mobile || '').toLowerCase();
-                    const orderId = String(o.orderId || o.id || '').toLowerCase();
-                    const company = String(o.company || '').toLowerCase();
-                    const pkg = String(o.package || '').toLowerCase();
-                    return name.includes(searchTerm) || phone.includes(searchTerm) ||
-                        orderId.includes(searchTerm) || company.includes(searchTerm) ||
-                        pkg.includes(searchTerm);
-                });
-            }
-
-            // Sort by date descending (newest first)
-            filteredOrders.sort((a, b) => {
-                const da = parseDate(a.date || a.orderDate || a.createdAt || a.timestamp || '');
-                const db = parseDate(b.date || b.orderDate || b.createdAt || b.timestamp || '');
-                return db - da;
+        // Status filter
+        if (statusFilter !== 'all') {
+            filteredOrders = filteredOrders.filter(o => {
+                const s = String(o[ORDER_FIELDS.status] || '').trim();
+                if (statusFilter === 'معلق') return s.includes('معلق');
+                if (statusFilter === 'تم التفعيل') return s.includes('تم') || s.includes('تفعيل');
+                if (statusFilter === 'ملغي') return s.includes('ملغ');
+                return true;
             });
-
-            currentPage = 1;
-            document.getElementById('filteredCount').textContent =
-                `(${filteredOrders.length} طلب)`;
-            renderOrdersPage();
         }
 
-        function parseDate(rawDate) {
-            if (!rawDate) return null;
-            try {
-                const str = String(rawDate).trim();
-                // ISO format
-                if (str.match(/^\d{4}-\d{2}-\d{2}/)) return new Date(str);
-                // DD/MM/YYYY or DD-MM-YYYY
-                const parts = str.split(/[\/\-]/);
-                if (parts.length === 3 && parts[0].length <= 2 && parts[2].length === 4) {
-                    return new Date(`${parts[2]}-${parts[1].padStart(2,'0')}-${parts[0].padStart(2,'0')}`);
-                }
-                // Fallback
-                const d = new Date(str);
-                return isNaN(d.getTime()) ? null : d;
-            } catch (e) {
-                return null;
-            }
+        // Text search
+        if (searchTerm) {
+            filteredOrders = filteredOrders.filter(o => {
+                const fields = [
+                    o[ORDER_FIELDS.orderId],
+                    o[ORDER_FIELDS.customerPhone],
+                    o[ORDER_FIELDS.company],
+                    o[ORDER_FIELDS.package],
+                    o[ORDER_FIELDS.notes],
+                    o[ORDER_FIELDS.paymentProof]
+                ];
+                return fields.some(f => String(f || '').toLowerCase().includes(searchTerm));
+            });
         }
 
-        function renderOrdersPage() {
-            const tbody = document.getElementById('ordersTableBody');
-            const start = (currentPage - 1) * itemsPerPage;
-            const paginated = filteredOrders.slice(start, start + itemsPerPage);
+        // Sort by date descending
+        filteredOrders.sort((a, b) => {
+            const da = parseDate(a[ORDER_FIELDS.date] || '');
+            const db = parseDate(b[ORDER_FIELDS.date] || '');
+            return (db || 0) - (da || 0);
+        });
 
-            if (paginated.length === 0) {
-                tbody.innerHTML = `
-              <tr>
-                <td colspan="9">
-                  <div class="empty-state">
-                    <div class="empty-icon">📭</div>
-                    <p>لا توجد طلبات مطابقة لمعايير البحث</p>
-                  </div>
-                </td>
-              </tr>`;
-                document.getElementById('pagination').innerHTML = '';
-                return;
-            }
+        currentPage = 1;
+        document.getElementById('filteredCount').textContent = `(${filteredOrders.length} طلب)`;
+        renderOrdersPage();
+    }
 
-            tbody.innerHTML = paginated.map(o => {
-                const orderId = esc(o.orderId || o.id || '-');
-                const name = esc(o.customerName || o.name || 'غير معروف');
-                const phone = esc(o.phone || o.mobile || '-');
-                const company = esc(o.company || '-');
-                const pkg = esc(o.package || '-');
-                const priceRaw = String(o.price || '0');
-                const price = esc(priceRaw);
-                const rawDate = o.date || o.orderDate || o.createdAt || o.timestamp || '';
-                let dateDisplay = '-';
-                if (rawDate) {
-                    const parsed = parseDate(rawDate);
-                    if (parsed) {
-                        dateDisplay = parsed.toLocaleDateString('ar-EG', { year: 'numeric', month: 'short',
-                            day: 'numeric' });
-                    } else {
-                        dateDisplay = esc(String(rawDate).substring(0, 10));
-                    }
-                }
-                const status = String(o.status || 'معلق').trim();
-                const statusHtml = statusBadge(status);
-                return `
-              <tr>
+    function renderOrdersPage() {
+        const tbody = document.getElementById('ordersTableBody');
+        const start = (currentPage - 1) * itemsPerPage;
+        const paginated = filteredOrders.slice(start, start + itemsPerPage);
+
+        if (paginated.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="10"><div class="empty-state"><div class="empty-icon">📭</div><p>لا توجد طلبات مطابقة</p></div></td></tr>`;
+            document.getElementById('pagination').innerHTML = '';
+            return;
+        }
+
+        tbody.innerHTML = paginated.map(o => {
+            const orderId = esc(o[ORDER_FIELDS.orderId] || '-');
+            const phone = esc(o[ORDER_FIELDS.customerPhone] || '-');
+            const company = esc(o[ORDER_FIELDS.company] || '-');
+            const pkg = esc(o[ORDER_FIELDS.package] || '-');
+            const price = esc(String(o[ORDER_FIELDS.price] || '0'));
+            const paymentProof = esc(String(o[ORDER_FIELDS.paymentProof] || '-'));
+            const status = String(o[ORDER_FIELDS.status] || 'معلق').trim();
+            const activationDate = esc(String(o[ORDER_FIELDS.activationDate] || '-'));
+            const notes = esc(String(o[ORDER_FIELDS.notes] || '-'));
+            const statusBadgeHtml = statusBadge(status);
+
+            return `<tr>
                 <td><strong>#${orderId}</strong></td>
-                <td><strong>${name}</strong></td>
-                <td><a href="https://wa.me/2${phone.replace(/[^0-9]/g,'')}" target="_blank" rel="noopener" style="color:var(--green2);text-decoration:none;font-weight:600;">📱 ${phone}</a></td>
+                <td><a href="https://wa.me/2${phone.replace(/[^0-9]/g,'')}" target="_blank" style="color:var(--green2);text-decoration:none;font-weight:600;">📱 ${phone}</a></td>
                 <td>${company}</td>
                 <td>${pkg}</td>
                 <td style="color:var(--green2);font-weight:700;">${price} ج</td>
-                <td>${dateDisplay}</td>
-                <td>${statusHtml}</td>
-                <td>
-                  <button class="btn btn-ghost btn-xs" onclick="openStatusModal('${esc(orderId)}','${esc(status)}')">✏️ تعديل</button>
-                </td>
-              </tr>`;
-            }).join('');
+                <td>${paymentProof}</td>
+                <td>${statusBadgeHtml}</td>
+                <td>${activationDate}</td>
+                <td>${notes}</td>
+                <td><button class="btn btn-ghost btn-xs" onclick="openStatusModal('${esc(orderId)}','${esc(status)}')">✏️ تعديل</button></td>
+            </tr>`;
+        }).join('');
 
-            // Pagination
-            renderPagination();
+        renderPagination();
+    }
+
+    function renderPagination() {
+        const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+        const container = document.getElementById('pagination');
+        if (totalPages <= 1) { container.innerHTML = ''; return; }
+
+        let html = `<button ${currentPage === 1 ? 'disabled' : ''} onclick="goToPage(${currentPage - 1})" style="opacity:${currentPage === 1 ? '0.4' : '1'}">⬅️ السابق</button>`;
+        const maxVisible = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+
+        if (startPage > 1) {
+            html += `<button onclick="goToPage(1)">1</button>`;
+            if (startPage > 2) html += `<span style="padding:8px;color:var(--muted);">…</span>`;
         }
 
-        function renderPagination() {
-            const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
-            const container = document.getElementById('pagination');
-            if (totalPages <= 1) {
-                container.innerHTML = '';
-                return;
-            }
-            let html = '';
-            html +=
-                `<button ${currentPage===1?'disabled':''} onclick="goToPage(${currentPage-1})" style="opacity:${currentPage===1?'0.4':'1'}">⬅️ السابق</button>`;
-
-            const maxVisible = 5;
-            let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
-            let endPage = Math.min(totalPages, startPage + maxVisible - 1);
-            if (endPage - startPage < maxVisible - 1) {
-                startPage = Math.max(1, endPage - maxVisible + 1);
-            }
-
-            if (startPage > 1) {
-                html += `<button onclick="goToPage(1)">1</button>`;
-                if (startPage > 2) html += `<span style="padding:8px;color:var(--muted);">…</span>`;
-            }
-
-            for (let i = startPage; i <= endPage; i++) {
-                html +=
-                    `<button class="${i===currentPage?'active-page':''}" onclick="goToPage(${i})">${i}</button>`;
-            }
-
-            if (endPage < totalPages) {
-                if (endPage < totalPages - 1) html +=
-                    `<span style="padding:8px;color:var(--muted);">…</span>`;
-                html += `<button onclick="goToPage(${totalPages})">${totalPages}</button>`;
-            }
-
-            html +=
-                `<button ${currentPage===totalPages?'disabled':''} onclick="goToPage(${currentPage+1})" style="opacity:${currentPage===totalPages?'0.4':'1'}">التالي ➡️</button>`;
-            container.innerHTML = html;
+        for (let i = startPage; i <= endPage; i++) {
+            html += `<button class="${i === currentPage ? 'active-page' : ''}" onclick="goToPage(${i})">${i}</button>`;
         }
 
-        function goToPage(page) {
-            const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
-            if (page < 1 || page > totalPages) return;
-            currentPage = page;
-            renderOrdersPage();
-            // Scroll to top of table
-            document.getElementById('ordersTableBody').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) html += `<span style="padding:8px;color:var(--muted);">…</span>`;
+            html += `<button onclick="goToPage(${totalPages})">${totalPages}</button>`;
         }
 
-        function statusBadge(s) {
-            if (s.includes('تم') || s.includes('تفعيل')) return `<span class="badge-done">✅ ${esc(s)}</span>`;
-            if (s.includes('ملغ')) return `<span class="badge-cancel">❌ ${esc(s)}</span>`;
-            return `<span class="badge-pending">⏳ ${esc(s)}</span>`;
-        }
+        html += `<button ${currentPage === totalPages ? 'disabled' : ''} onclick="goToPage(${currentPage + 1})" style="opacity:${currentPage === totalPages ? '0.4' : '1'}">التالي ➡️</button>`;
+        container.innerHTML = html;
+    }
 
-        function updateSidebarPending() {
-            const pending = allOrders.filter(o => {
-                const s = String(o.status || '').trim();
-                return s.includes('معلق');
-            }).length;
-            const badge = document.getElementById('sidebarPending');
-            if (pending > 0) {
-                badge.style.display = 'inline';
-                badge.textContent = pending;
-            } else {
-                badge.style.display = 'none';
-            }
-        }
+    function goToPage(page) {
+        const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderOrdersPage();
+    }
 
-        // ==================== ORDER STATUS MODAL ====================
-        function openStatusModal(orderId, currentStatus) {
-            currentOrderId = orderId;
-            selectedStatus = null;
-            document.getElementById('modalOrderId').innerHTML = `
-            رقم الطلب: <strong>#${esc(orderId)}</strong><br>
-            الحالة الحالية: ${statusBadge(currentStatus || 'معلق')}
-          `;
-            document.getElementById('statusNote').value = '';
-            // Reset selection styling
-            document.querySelectorAll('.status-opt').forEach(el => el.classList.remove('selected'));
-            document.getElementById('statusModal').classList.add('show');
-            resetLogoutTimer();
-        }
+    function statusBadge(s) {
+        if (s.includes('تم') || s.includes('تفعيل')) return `<span class="badge-done">✅ ${esc(s)}</span>`;
+        if (s.includes('ملغ')) return `<span class="badge-cancel">❌ ${esc(s)}</span>`;
+        return `<span class="badge-pending">⏳ ${esc(s)}</span>`;
+    }
 
-        function selectNewStatus(status) {
-            selectedStatus = status;
-            document.querySelectorAll('.status-opt').forEach(el => {
-                el.classList.remove('selected');
-                if (el.dataset.status === status) el.classList.add('selected');
+    function updateSidebarPending() {
+        const pending = allOrders.filter(o => {
+            const s = String(o[ORDER_FIELDS.status] || '').trim();
+            return s.includes('معلق');
+        }).length;
+        const badge = document.getElementById('sidebarPending');
+        if (pending > 0) {
+            badge.style.display = 'inline';
+            badge.textContent = pending;
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
+    // ==================== ORDER STATUS MODAL ====================
+    function openStatusModal(orderId, currentStatus) {
+        currentOrderId = orderId;
+        selectedStatus = null;
+        document.getElementById('modalOrderId').innerHTML = `رقم الطلب: <strong>#${esc(orderId)}</strong><br>الحالة الحالية: ${statusBadge(currentStatus || 'معلق')}`;
+        document.getElementById('statusNote').value = '';
+        document.querySelectorAll('.status-opt').forEach(el => el.classList.remove('selected'));
+        document.getElementById('statusModal').classList.add('show');
+        resetLogoutTimer();
+    }
+
+    function selectNewStatus(status) {
+        selectedStatus = status;
+        document.querySelectorAll('.status-opt').forEach(el => {
+            el.classList.remove('selected');
+            if (el.dataset.status === status) el.classList.add('selected');
+        });
+    }
+
+    async function saveOrderStatus() {
+        if (!selectedStatus) return showToast('⚠️ اختر حالة جديدة');
+        if (!currentOrderId) return showToast('⚠️ لا يوجد طلب محدد');
+        const note = document.getElementById('statusNote').value.trim();
+        try {
+            const res = await gPost({
+                action: 'updateOrderStatus',
+                orderId: currentOrderId,
+                status: selectedStatus,
+                note
             });
-        }
-
-        async function saveOrderStatus() {
-            if (!selectedStatus) return showToast('⚠️ الرجاء اختيار حالة جديدة');
-            if (!currentOrderId) return showToast('⚠️ خطأ: لا يوجد طلب محدد');
-
-            const note = document.getElementById('statusNote').value.trim();
-
-            try {
-                const res = await gPost({
-                    action: 'updateOrderStatus',
-                    orderId: currentOrderId,
-                    status: selectedStatus,
-                    note: note
-                });
-
-                if (res.success) {
-                    showToast(`✅ تم تغيير حالة الطلب #${currentOrderId} إلى "${selectedStatus}"`);
-                    closeModal('statusModal');
-                    // Update local data
-                    const order = allOrders.find(o =>
-                        String(o.orderId || o.id || '').trim() === String(currentOrderId).trim()
-                    );
-                    if (order) order.status = selectedStatus;
-                    applyFilters();
-                    updateSidebarPending();
-                    // Refresh stats
-                    const statsRes = await gGet({ action: 'stats' });
-                    renderStats(statsRes);
-                    renderCharts();
-                    renderTopPackages();
-                } else {
-                    showToast('❌ ' + (res.message || 'فشل تحديث الحالة'));
-                }
-            } catch (e) {
-                showToast('❌ فشل الاتصال بالسيرفر');
+            if (res.success) {
+                showToast(`✅ تم تغيير حالة الطلب #${currentOrderId} إلى "${selectedStatus}"`);
+                closeModal('statusModal');
+                const order = allOrders.find(o => String(o[ORDER_FIELDS.orderId] || '').trim() === String(currentOrderId).trim());
+                if (order) order[ORDER_FIELDS.status] = selectedStatus;
+                applyFilters();
+                updateSidebarPending();
+                const statsRes = await gGet({ action: 'stats' });
+                renderStats(statsRes);
+                renderCharts();
+                renderTopPackages();
+            } else {
+                showToast('❌ ' + (res.message || 'فشل تحديث الحالة'));
             }
+        } catch (e) {
+            showToast('❌ فشل الاتصال بالسيرفر');
         }
+    }
 
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('show');
-            resetLogoutTimer();
+    function closeModal(id) {
+        document.getElementById(id).classList.remove('show');
+        resetLogoutTimer();
+    }
+
+    // ==================== PACKAGES MANAGEMENT ====================
+    function renderPackages() {
+        const grid = document.getElementById('pkgGrid');
+        if (!grid) return;
+        if (allPkgs.length === 0) {
+            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">📦</div><p>لا توجد باقات مضافة بعد</p><button class="btn btn-primary btn-sm" style="margin-top:16px;" onclick="openPkgModal(null)">➕ أضف أول باقة</button></div>`;
+            return;
         }
-
-        // ==================== PACKAGES MANAGEMENT ====================
-        function renderPackages() {
-            const grid = document.getElementById('pkgGrid');
-            if (!grid) return;
-            if (allPkgs.length === 0) {
-                grid.innerHTML = `
-              <div class="empty-state" style="grid-column:1/-1;">
-                <div class="empty-icon">📦</div>
-                <p>لا توجد باقات مضافة بعد</p>
-                <button class="btn btn-primary btn-sm" style="margin-top:16px;" onclick="openPkgModal(null)">➕ أضف أول باقة</button>
-              </div>`;
-                return;
-            }
-            grid.innerHTML = allPkgs.map((p, i) => {
-                const name = esc(p.name || p.packageName || 'باقة');
-                const price = esc(String(p.price || '0'));
-                const desc = esc(p.description || p.desc || '');
-                const id = esc(String(p.id || p.packageId || i));
-                return `
-              <div class="pkg-card">
+        grid.innerHTML = allPkgs.map((p, i) => {
+            const name = esc(p[PKG_FIELDS.name] || 'باقة');
+            const company = esc(p[PKG_FIELDS.company] || '');
+            const price = esc(String(p[PKG_FIELDS.price] || '0'));
+            const type = esc(p[PKG_FIELDS.type] || '');
+            const status = esc(p[PKG_FIELDS.status] || 'متاح');
+            const notes = esc(p[PKG_FIELDS.notes] || '');
+            const id = esc(String(p[PKG_FIELDS.id] || p.id || i));
+            return `<div class="pkg-card">
                 <div class="pkg-name">📦 ${name}</div>
+                <div style="color:var(--muted);">${company} | ${type}</div>
                 <div class="pkg-price">💰 ${price} ج.م</div>
-                <div class="pkg-desc">${desc || 'بدون وصف'}</div>
+                <div class="pkg-meta">📌 ${status} | ${notes}</div>
                 <div class="pkg-actions">
-                  <button class="btn btn-ghost btn-xs" onclick="openPkgModal('${id}')">✏️ تعديل</button>
-                  <button class="btn btn-danger btn-xs" onclick="deletePackage('${id}','${name}')">🗑️ حذف</button>
+                    <button class="btn btn-ghost btn-xs" onclick="openPkgModal('${id}')">✏️ تعديل</button>
+                    <button class="btn btn-danger btn-xs" onclick="deletePackage('${id}','${name}')">🗑️ حذف</button>
                 </div>
-              </div>`;
-            }).join('');
-        }
+            </div>`;
+        }).join('');
+    }
 
-        function openPkgModal(pkgId) {
-            const modal = document.getElementById('pkgModal');
-            const title = document.getElementById('pkgModalTitle');
-            document.getElementById('pkgEditId').value = pkgId || '';
-            document.getElementById('pkgName').value = '';
-            document.getElementById('pkgPrice').value = '';
-            document.getElementById('pkgDesc').value = '';
+    function openPkgModal(pkgId) {
+        const modal = document.getElementById('pkgModal');
+        const title = document.getElementById('pkgModalTitle');
+        document.getElementById('pkgEditId').value = pkgId || '';
+        document.getElementById('pkgName').value = '';
+        document.getElementById('pkgPrice').value = '';
+        document.getElementById('pkgType').value = '';
+        document.getElementById('pkgStatus').value = 'متاح';
+        document.getElementById('pkgNotes').value = '';
 
-            if (pkgId) {
-                title.textContent = '✏️ تعديل باقة';
-                const pkg = allPkgs.find(p => String(p.id || p.packageId || '') === String(pkgId));
-                if (pkg) {
-                    document.getElementById('pkgName').value = pkg.name || pkg.packageName || '';
-                    document.getElementById('pkgPrice').value = pkg.price || '';
-                    document.getElementById('pkgDesc').value = pkg.description || pkg.desc || '';
-                }
-            } else {
-                title.textContent = '➕ إضافة باقة جديدة';
+        if (pkgId) {
+            title.textContent = '✏️ تعديل باقة';
+            const pkg = allPkgs.find(p => String(p[PKG_FIELDS.id] || p.id || '') === String(pkgId));
+            if (pkg) {
+                document.getElementById('pkgName').value = pkg[PKG_FIELDS.name] || '';
+                document.getElementById('pkgPrice').value = pkg[PKG_FIELDS.price] || '';
+                document.getElementById('pkgType').value = pkg[PKG_FIELDS.type] || '';
+                document.getElementById('pkgStatus').value = pkg[PKG_FIELDS.status] || 'متاح';
+                document.getElementById('pkgNotes').value = pkg[PKG_FIELDS.notes] || '';
             }
-            modal.classList.add('show');
+        } else {
+            title.textContent = '➕ إضافة باقة جديدة';
+        }
+        modal.classList.add('show');
+        resetLogoutTimer();
+    }
+
+    async function savePackage() {
+        const editId = document.getElementById('pkgEditId').value.trim();
+        const name = document.getElementById('pkgName').value.trim();
+        const price = document.getElementById('pkgPrice').value.trim();
+        if (!name) return showToast('⚠️ أدخل اسم الباقة');
+        if (!price || isNaN(parseFloat(price))) return showToast('⚠️ أدخل سعر صحيح');
+
+        const payload = {
+            action: editId ? 'updatePackage' : 'addPackage',
+            name,
+            price: parseFloat(price),
+            type: document.getElementById('pkgType').value.trim(),
+            status: document.getElementById('pkgStatus').value.trim(),
+            notes: document.getElementById('pkgNotes').value.trim()
+        };
+        if (editId) payload.packageId = editId;
+
+        try {
+            const res = await gPost(payload);
+            if (res.success) {
+                showToast(editId ? '✅ تم تحديث الباقة بنجاح' : '✅ تمت إضافة الباقة بنجاح');
+                closeModal('pkgModal');
+                const pkgsRes = await gGet({ action: 'packages' });
+                allPkgs = Array.isArray(pkgsRes) ? pkgsRes : (pkgsRes.packages || pkgsRes.data || []);
+                renderPackages();
+            } else {
+                showToast('❌ ' + (res.message || 'فشلت العملية'));
+            }
+        } catch (e) {
+            showToast('❌ فشل الاتصال بالسيرفر');
+        }
+    }
+
+    async function deletePackage(pkgId, pkgName) {
+        if (!confirm(`هل أنت متأكد من حذف الباقة "${pkgName}"؟`)) return;
+        try {
+            const res = await gPost({ action: 'deletePackage', packageId: pkgId });
+            if (res.success) {
+                showToast('🗑️ تم حذف الباقة بنجاح');
+                allPkgs = allPkgs.filter(p => String(p[PKG_FIELDS.id] || p.id || '') !== String(pkgId));
+                renderPackages();
+            } else {
+                showToast('❌ ' + (res.message || 'فشل حذف الباقة'));
+            }
+        } catch (e) {
+            showToast('❌ فشل الاتصال');
+        }
+    }
+
+    // ==================== ACTIVITY LOG ====================
+    function renderActivityLog() {
+        const container = document.getElementById('activityLog');
+        if (!container) return;
+        if (activityLogData.length === 0) {
+            container.innerHTML = `<div class="empty-state"><div class="empty-icon">📜</div><p>لا توجد نشاطات مسجلة بعد</p></div>`;
+            return;
+        }
+        container.innerHTML = activityLogData.map(item => {
+            const action = esc(item.action || item.event || 'نشاط');
+            const details = esc(item.details || item.description || '');
+            const timeRaw = item.timestamp || item.time || item.date || '';
+            let timeDisplay = '-';
+            if (timeRaw) {
+                const d = parseDate(timeRaw);
+                timeDisplay = d ? d.toLocaleString('ar-EG', { dateStyle: 'medium', timeStyle: 'short' }) : esc(String(timeRaw));
+            }
+            const dotColor = action.includes('خطأ') || action.includes('فشل') ? 'var(--red)' : (action.includes('تم') || action.includes('نجح') ? 'var(--green)' : 'var(--accent2)');
+            return `<div class="activity-item"><div class="activity-dot" style="background:${dotColor};"></div><div style="flex:1;"><strong>${action}</strong><div style="color:var(--muted);font-size:0.82rem;">${details}</div></div><div class="activity-time">${timeDisplay}</div></div>`;
+        }).join('');
+    }
+
+    // ==================== AUTO REFRESH ====================
+    function toggleAutoRefresh() {
+        autoRefreshEnabled = !autoRefreshEnabled;
+        const btn = document.getElementById('autoBtn');
+        if (autoRefreshEnabled) {
+            btn.style.background = 'rgba(34,197,94,0.2)';
+            btn.style.borderColor = 'rgba(34,197,94,0.5)';
+            btn.style.color = 'var(--green2)';
+            btn.textContent = '🟢 تلقائي (30ث)';
+            autoRefreshInterval = setInterval(() => { loadAllData().catch(() => {}); }, 30000);
+            showToast('✅ تم تفعيل التحديث التلقائي');
+        } else {
+            clearInterval(autoRefreshInterval);
+            autoRefreshInterval = null;
+            btn.style.background = '';
+            btn.style.borderColor = '';
+            btn.style.color = '';
+            btn.textContent = '🔄 تلقائي';
+            showToast('⏹️ تم إيقاف التحديث التلقائي');
+        }
+    }
+
+    // ==================== EXPORT CSV ====================
+    function exportOrdersCSV() {
+        if (filteredOrders.length === 0) return showToast('⚠️ لا توجد طلبات لتصديرها');
+        const headers = ['رقم الطلب', 'رقم العميل', 'الشركة', 'الباقة', 'السعر', 'إثبات الدفع', 'الحالة', 'تاريخ التفعيل', 'ملاحظات'];
+        const rows = filteredOrders.map(o => [
+            o[ORDER_FIELDS.orderId] || '',
+            o[ORDER_FIELDS.customerPhone] || '',
+            o[ORDER_FIELDS.company] || '',
+            o[ORDER_FIELDS.package] || '',
+            String(o[ORDER_FIELDS.price] || '').replace(/[^0-9.]/g, ''),
+            o[ORDER_FIELDS.paymentProof] || '',
+            o[ORDER_FIELDS.status] || '',
+            o[ORDER_FIELDS.activationDate] || '',
+            o[ORDER_FIELDS.notes] || ''
+        ]);
+        const csvContent = [headers, ...rows].map(row => row.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+        const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `orders_export_${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('📥 تم تصدير الطلبات بنجاح');
+    }
+
+    // ==================== EVENT LISTENERS ====================
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('modal-overlay')) {
+            e.target.classList.remove('show');
             resetLogoutTimer();
         }
+    });
 
-        async function savePackage() {
-            const editId = document.getElementById('pkgEditId').value.trim();
-            const name = document.getElementById('pkgName').value.trim();
-            const price = document.getElementById('pkgPrice').value.trim();
-            const desc = document.getElementById('pkgDesc').value.trim();
-
-            if (!name) return showToast('⚠️ الرجاء إدخال اسم الباقة');
-            if (!price || isNaN(parseFloat(price))) return showToast('⚠️ الرجاء إدخال سعر صحيح');
-
-            const payload = {
-                action: editId ? 'updatePackage' : 'addPackage',
-                name,
-                price: parseFloat(price),
-                description: desc
-            };
-            if (editId) payload.packageId = editId;
-
-            try {
-                const res = await gPost(payload);
-                if (res.success) {
-                    showToast(editId ? '✅ تم تحديث الباقة بنجاح' : '✅ تمت إضافة الباقة بنجاح');
-                    closeModal('pkgModal');
-                    // Refresh packages
-                    const pkgsRes = await gGet({ action: 'packages' });
-                    if (Array.isArray(pkgsRes)) allPkgs = pkgsRes;
-                    else if (pkgsRes.packages) allPkgs = pkgsRes.packages;
-                    else if (pkgsRes.data) allPkgs = pkgsRes.data;
-                    renderPackages();
-                } else {
-                    showToast('❌ ' + (res.message || 'فشلت العملية'));
-                }
-            } catch (e) {
-                showToast('❌ فشل الاتصال بالسيرفر');
-            }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.querySelectorAll('.modal-overlay.show').forEach(m => m.classList.remove('show'));
+            resetLogoutTimer();
         }
+    });
 
-        async function deletePackage(pkgId, pkgName) {
-            if (!confirm(`هل أنت متأكد من حذف الباقة "${pkgName}"؟\nلا يمكن التراجع عن هذا الإجراء.`)) return;
-            try {
-                const res = await gPost({
-                    action: 'deletePackage',
-                    packageId: pkgId
-                });
-                if (res.success) {
-                    showToast('🗑️ تم حذف الباقة بنجاح');
-                    allPkgs = allPkgs.filter(p => String(p.id || p.packageId || '') !== String(pkgId));
-                    renderPackages();
-                } else {
-                    showToast('❌ ' + (res.message || 'فشل حذف الباقة'));
-                }
-            } catch (e) {
-                showToast('❌ فشل الاتصال بالسيرفر');
-            }
-        }
+    // ==================== INITIALIZATION ====================
+    window.addEventListener('DOMContentLoaded', () => {
+        const isLoggedIn = sessionStorage.getItem('aw_admin');
+        const loginTime = sessionStorage.getItem('aw_login_time');
 
-        // ==================== ACTIVITY LOG ====================
-        function renderActivityLog() {
-            const container = document.getElementById('activityLog');
-            if (!container) return;
-            if (activityLogData.length === 0) {
-                container.innerHTML = `
-              <div class="empty-state">
-                <div class="empty-icon">📜</div>
-                <p>لا توجد نشاطات مسجلة بعد</p>
-              </div>`;
-                return;
-            }
-            container.innerHTML = activityLogData.map(item => {
-                const action = esc(item.action || item.event || 'نشاط');
-                const details = esc(item.details || item.description || '');
-                const timeRaw = item.timestamp || item.time || item.date || '';
-                let timeDisplay = '-';
-                if (timeRaw) {
-                    const d = parseDate(timeRaw);
-                    if (d) timeDisplay = d.toLocaleString('ar-EG', { dateStyle: 'medium',
-                        timeStyle: 'short' });
-                    else timeDisplay = esc(String(timeRaw));
-                }
-                const dotColor = action.includes('خطأ') || action.includes('فشل') ? 'var(--red)' :
-                    action.includes('تم') || action.includes('نجح') ? 'var(--green)' : 'var(--accent2)';
-                return `
-              <div class="activity-item">
-                <div class="activity-dot" style="background:${dotColor};"></div>
-                <div style="flex:1;">
-                  <strong>${action}</strong>
-                  <div style="color:var(--muted);font-size:0.82rem;">${details}</div>
-                </div>
-                <div class="activity-time">${timeDisplay}</div>
-              </div>`;
-            }).join('');
-        }
-
-        // ==================== AUTO REFRESH ====================
-        function toggleAutoRefresh() {
-            autoRefreshEnabled = !autoRefreshEnabled;
-            const btn = document.getElementById('autoBtn');
-            if (autoRefreshEnabled) {
-                btn.style.background = 'rgba(34,197,94,0.2)';
-                btn.style.borderColor = 'rgba(34,197,94,0.5)';
-                btn.style.color = 'var(--green2)';
-                btn.textContent = '🟢 تلقائي (30ث)';
-                autoRefreshInterval = setInterval(() => {
-                    loadAllData().catch(() => {});
-                }, 30000);
-                showToast('✅ تم تفعيل التحديث التلقائي كل 30 ثانية');
-            } else {
-                clearInterval(autoRefreshInterval);
-                autoRefreshInterval = null;
-                btn.style.background = '';
-                btn.style.borderColor = '';
-                btn.style.color = '';
-                btn.textContent = '🔄 تلقائي';
-                showToast('⏹️ تم إيقاف التحديث التلقائي');
-            }
-        }
-
-        // ==================== EXPORT CSV ====================
-        function exportOrdersCSV() {
-            if (filteredOrders.length === 0) {
-                showToast('⚠️ لا توجد طلبات لتصديرها');
-                return;
-            }
-            const headers = ['رقم الطلب', 'الاسم', 'الواتساب', 'الشركة', 'الباقة', 'السعر', 'التاريخ', 'الحالة'];
-            const rows = filteredOrders.map(o => [
-                o.orderId || o.id || '',
-                o.customerName || o.name || '',
-                o.phone || o.mobile || '',
-                o.company || '',
-                o.package || '',
-                String(o.price || '0').replace(/[^0-9.]/g, ''),
-                o.date || o.orderDate || o.createdAt || '',
-                o.status || ''
-            ]);
-            const csvContent = [headers, ...rows]
-                .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
-                .join('\n');
-            const BOM = '\uFEFF';
-            const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
-            const url = URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = `orders_export_${new Date().toISOString().split('T')[0]}.csv`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(url);
-            showToast('📥 تم تصدير الطلبات بنجاح');
-        }
-
-        // ==================== CLOSE MODALS ON OVERLAY CLICK ====================
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('modal-overlay')) {
-                e.target.classList.remove('show');
-                resetLogoutTimer();
-            }
-        });
-
-        // ==================== KEYBOARD SHORTCUTS ====================
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.modal-overlay.show').forEach(m => m.classList.remove(
-                'show'));
-                resetLogoutTimer();
-            }
-        });
-
-        // ==================== INITIALIZATION ====================
-        window.addEventListener('DOMContentLoaded', () => {
-            const isLoggedIn = sessionStorage.getItem('aw_admin');
-            const loginTime = sessionStorage.getItem('aw_login_time');
-
-            if (isLoggedIn && loginTime) {
-                const elapsed = Date.now() - parseInt(loginTime);
-                if (elapsed < SESSION_DURATION) {
-                    document.getElementById('loginPage').style.display = 'none';
-                    document.getElementById('adminPanel').style.display = 'block';
-                    resetLogoutTimer();
-                    loadAllData();
-                    return;
-                } else {
-                    // Session expired
-                    sessionStorage.removeItem('aw_admin');
-                    sessionStorage.removeItem('aw_login_time');
-                }
-            }
-            // Show login page
+        if (isLoggedIn && loginTime && (Date.now() - parseInt(loginTime)) < SESSION_DURATION) {
+            document.getElementById('loginPage').style.display = 'none';
+            document.getElementById('adminPanel').style.display = 'block';
+            resetLogoutTimer();
+            loadAllData();
+        } else {
+            sessionStorage.removeItem('aw_admin');
+            sessionStorage.removeItem('aw_login_time');
             document.getElementById('loginPage').style.display = 'flex';
             document.getElementById('adminPanel').style.display = 'none';
             document.getElementById('adminPass').focus();
-        });
+        }
+    });
 
-        // Handle window resize for charts
-        let resizeDebounce = null;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeDebounce);
-            resizeDebounce = setTimeout(() => {
-                if (barChartInstance) barChartInstance.resize();
-                if (pieChartInstance) pieChartInstance.resize();
-            }, 250);
-        });
+    let resizeDebounce;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeDebounce);
+        resizeDebounce = setTimeout(() => {
+            if (barChartInstance) barChartInstance.resize();
+            if (pieChartInstance) pieChartInstance.resize();
+        }, 250);
+    });
 
-        // Cleanup on page unload
-        window.addEventListener('beforeunload', () => {
-            clearInterval(autoRefreshInterval);
-            clearTimeout(logoutTimer);
-        });
-
-        console.log('🚀 لوحة تحكم عالم العروض v2.0 — جاهزة | جميع البيانات حقيقية 100%');
-    </script>
+    window.addEventListener('beforeunload', () => {
+        clearInterval(autoRefreshInterval);
+        clearTimeout(logoutTimer);
+    });
+</script>
 </body>
 </html>
