@@ -599,16 +599,9 @@
     <div class="order-summary" id="orderSummary"></div>
     <div class="section-title">👤 بيانات الحجز</div>
     <input type="text" id="customerName" placeholder="اسمك الكامل" class="rtl-input" autocomplete="name">
-    <div class="input-group">
-      <label class="input-label">📱 رقم الواتساب</label>
-      <input type="tel" id="phone" placeholder="01012345678" class="rtl-input number-input" autocomplete="tel-national">
-    </div>
     <div class="input-group" style="margin-top:12px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px;">
-        <label class="input-label" style="margin:0;">📡 رقم التفعيل</label>
-        <label class="same-number-check"><input type="checkbox" id="sameAsWhatsapp"><span>نفس رقم الواتساب</span></label>
-      </div>
-      <input type="tel" id="activationPhone" placeholder="اكتب الرقم" class="rtl-input number-input">
+      <label class="input-label">📡 رقم التفعيل</label>
+      <input type="tel" id="activationPhone" placeholder="01012345678" class="rtl-input number-input">
     </div>
     <div class="section-title" style="margin-top:18px;">💳 طريقة الدفع</div>
     <div class="payment-hint">حوّل المبلغ ثم ارفع صورة الإيصال</div>
@@ -846,10 +839,8 @@
     showConfirm() {
       this.clearError();
       const name = document.getElementById('customerName').value.trim();
-      const phone = this.normalizePhone(document.getElementById('phone').value.trim());
       const activationPhone = this.normalizePhone(document.getElementById('activationPhone').value.trim());
       if (!name) { this.showError('برجاء كتابة الاسم'); return; }
-      if (!this.validatePhone(phone)) { this.showError('رقم الواتساب غير صحيح'); return; }
       if (!this.validatePhone(activationPhone)) { this.showError('رقم التفعيل غير صحيح'); return; }
       if (!this.selectedPackage) { this.showError('اختر الباقة'); return; }
       if (!this.selectedPaymentMethod) { this.showError('اختر طريقة الدفع'); return; }
@@ -863,15 +854,14 @@
       if (this.isSubmitting) return;
       this.isSubmitting = true;
       const name = document.getElementById('customerName').value.trim();
-      const phone = this.normalizePhone(document.getElementById('phone').value.trim());
       const activationPhone = this.normalizePhone(document.getElementById('activationPhone').value.trim());
       const localOrderId = 'ORD-' + Date.now();
       this.currentOrderId = localOrderId;
       const formData = {
         orderId: localOrderId,
         customerName: name,
-        phone,
-        activationPhone,
+        phone: activationPhone,
+        activationPhone: activationPhone,
         company: this.selectedCompanyName,
         package: this.selectedPackage.name,
         price: this.selectedPackage.price,
@@ -907,12 +897,6 @@
     restart() { location.reload(); }
 
     init() {
-      document.getElementById('sameAsWhatsapp').addEventListener('change', function() {
-        const activationInput = document.getElementById('activationPhone');
-        if (this.checked) { activationInput.value = document.getElementById('phone').value; activationInput.setAttribute('readonly', true); activationInput.style.opacity = '0.7'; }
-        else { activationInput.removeAttribute('readonly'); activationInput.style.opacity = '1'; activationInput.value = ''; }
-      });
-      document.getElementById('phone').addEventListener('input', function() { if (document.getElementById('sameAsWhatsapp').checked) document.getElementById('activationPhone').value = this.value; });
       document.querySelectorAll('.filter-tab').forEach(tab => tab.addEventListener('click', () => this.filterPackages(tab.dataset.filter)));
       document.getElementById('confirmSubmitBtn').addEventListener('click', () => this.submitOrder());
     }
