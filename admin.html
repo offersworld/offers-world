@@ -715,7 +715,7 @@
         <h2>لوحة التحكم</h2>
         <p>عالم العروض — دخول الأدمن فقط</p>
         <div class="input-wrap">
-            <input type="password" id="adminPass" placeholder="كلمة المرور" autocomplete="off" onkeydown="if(event.key==='Enter')doLogin()">
+            <input type="password" id="adminPass" placeholder="كلمة المرور" autocomplete="off" onkeydown="if(event.key==='Enter')()">
             <button class="eye-btn" onclick="togglePass()" type="button" tabindex="-1">👁️</button>
         </div>
         <button class="btn-login" id="loginBtn" onclick="doLogin()">🔐 دخول</button>
@@ -1002,7 +1002,7 @@
         inp.type = (inp.type === 'password' ? 'text' : 'password');
     }
 
-    async function doLogin() {
+   async function doLogin() {
     const pass = document.getElementById('adminPass').value.trim();
     if (!pass) return showToast('⚠️ أدخل كلمة المرور');
     const btn = document.getElementById('loginBtn');
@@ -1012,7 +1012,7 @@
     errEl.style.display = 'none';
 
     try {
-        // تعديل: استخدام gPost بدلاً من gGet لتجنب مشاكل الـ CORS
+        // تغيير هام: استخدمنا gPost هنا لتجنب حظر المتصفح (CORS)
         const data = await gPost({ action: 'checkPassword', pass: pass });
         
         if (data.success) {
@@ -1024,7 +1024,8 @@
             await loadAllData();
         } else {
             errEl.style.display = 'block';
-            errEl.textContent = '❌ ' + (data.message || 'كلمة المرور غير صحيحة');
+            // عرض رسالة الخطأ القادمة من السيرفر أو الرسالة الافتراضية
+            errEl.textContent = '❌ ' + (data.error || data.message || 'كلمة المرور غير صحيحة');
         }
     } catch (e) {
         console.error(e);
@@ -1035,6 +1036,7 @@
         btn.textContent = '🔐 دخول';
     }
 }
+
 
 
     function logout() {
