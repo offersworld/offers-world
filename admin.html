@@ -1002,40 +1002,43 @@
         inp.type = (inp.type === 'password' ? 'text' : 'password');
     }
 
-   async function doLogin() {
-    const pass = document.getElementById('adminPass').value.trim();
-    if (!pass) return showToast('⚠️ أدخل كلمة المرور');
-    const btn = document.getElementById('loginBtn');
-    const errEl = document.getElementById('loginError');
-    btn.disabled = true;
-    btn.textContent = '⏳ جاري التحقق...';
-    errEl.style.display = 'none';
+       async function doLogin() {
+        const pass = document.getElementById('adminPass').value.trim();
+        if (!pass) return showToast('⚠️ أدخل كلمة المرور');
+        const btn = document.getElementById('loginBtn');
+        const errEl = document.getElementById('loginError');
+        btn.disabled = true;
+        btn.textContent = '⏳ جاري التحقق...';
+        errEl.style.display = 'none';
 
-    try {
-        // تغيير هام: استخدمنا gPost هنا لتجنب حظر المتصفح (CORS)
-        const data = await gPost({ action: 'checkPassword', pass: pass });
-        
-        if (data.success) {
-            sessionStorage.setItem('aw_admin', 'true');
-            sessionStorage.setItem('aw_login_time', Date.now());
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'block';
-            resetLogoutTimer();
-            await loadAllData();
-        } else {
+        try {
+            // نستخدم gPost للتحقق
+            const data = await gPost({ action: 'checkPassword', pass: pass });
+            
+            // ملاحظة هامة: إذا كانت كلمة المرور في السكريبت هي 01225949346
+            // والسكريبت يرجع success: true
+            if (data && data.success) {
+                sessionStorage.setItem('aw_admin', 'true');
+                sessionStorage.setItem('aw_login_time', Date.now());
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('adminPanel').style.display = 'block';
+                resetLogoutTimer();
+                await loadAllData();
+            } else {
+                errEl.style.display = 'block';
+                errEl.textContent = '❌ ' + (data.message || 'كلمة المرور غير صحيحة');
+            }
+        } catch (e) {
+            console.error("Login Error:", e);
+            // في حالة فشل الـ fetch تماماً بسبب CORS، يمكننا تجربة حل بديل هنا
             errEl.style.display = 'block';
-            // عرض رسالة الخطأ القادمة من السيرفر أو الرسالة الافتراضية
-            errEl.textContent = '❌ ' + (data.error || data.message || 'كلمة المرور غير صحيحة');
+            errEl.textContent = '❌ فشل الاتصال بالسيرفر، تأكد من إعدادات CORS';
+        } finally {
+            btn.disabled = false;
+            btn.textContent = '🔐 دخول';
         }
-    } catch (e) {
-        console.error(e);
-        errEl.style.display = 'block';
-        errEl.textContent = '❌ فشل الاتصال بالسيرفر';
-    } finally {
-        btn.disabled = false;
-        btn.textContent = '🔐 دخول';
     }
-}
+
 
 
 
