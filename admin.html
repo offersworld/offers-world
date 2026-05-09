@@ -727,6 +727,40 @@
                 grid-template-columns: 1fr;
             }
         }
+        .company-filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .comp-filter-btn {
+            padding: 10px 20px;
+            border-radius: 14px;
+            background: var(--card2);
+            border: 2px solid transparent;
+            color: var(--muted);
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+        .comp-filter-btn:hover {
+            background: var(--card3);
+            color: #fff;
+            transform: translateY(-2px);
+        }
+        .comp-filter-btn.active {
+            color: #fff;
+        }
+        .comp-filter-btn[data-comp="all"].active { background: rgba(139,60,247,0.15); border-color: var(--accent); box-shadow: var(--glow); }
+        .comp-filter-btn[data-comp="فودافون"].active { background: rgba(230,0,0,0.15); border-color: #E60000; box-shadow: 0 0 20px rgba(230,0,0,0.2); }
+        .comp-filter-btn[data-comp="أورانج"].active { background: rgba(255,107,43,0.15); border-color: #FF6B2B; box-shadow: 0 0 20px rgba(255,107,43,0.2); }
+        .comp-filter-btn[data-comp="وي"].active { background: rgba(139,0,255,0.15); border-color: #8B00FF; box-shadow: 0 0 20px rgba(139,0,255,0.2); }
+        .comp-filter-btn[data-comp="اتصالات"].active { background: rgba(0,166,81,0.15); border-color: #00A651; box-shadow: 0 0 20px rgba(0,166,81,0.2); }
     </style>
 </head>
 <body>
@@ -851,6 +885,13 @@
                     <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:20px;">
                         <h3 style="margin:0;">📦 جميع الباقات</h3>
                         <button class="btn btn-primary btn-sm" onclick="openPkgModal(null)">➕ إضافة باقة جديدة</button>
+                    </div>
+                    <div class="company-filters">
+                        <button class="comp-filter-btn active" data-comp="all" onclick="filterPkgs('all', this)">🌐 الكل</button>
+                        <button class="comp-filter-btn" data-comp="فودافون" onclick="filterPkgs('فودافون', this)">🔴 فودافون</button>
+                        <button class="comp-filter-btn" data-comp="أورانج" onclick="filterPkgs('أورانج', this)">🟠 أورانج</button>
+                        <button class="comp-filter-btn" data-comp="اتصالات" onclick="filterPkgs('اتصالات', this)">🟢 اتصالات</button>
+                        <button class="comp-filter-btn" data-comp="وي" onclick="filterPkgs('وي', this)">🟣 وي</button>
                     </div>
                     <div class="pkg-grid" id="pkgGrid"></div>
                 </div>
@@ -1561,14 +1602,38 @@
     }
 
     // ==================== PACKAGES MANAGEMENT ====================
+    let currentPkgFilter = 'all';
+
+    function filterPkgs(comp, el) {
+        currentPkgFilter = comp;
+        document.querySelectorAll('.comp-filter-btn').forEach(b => b.classList.remove('active'));
+        if (el) el.classList.add('active');
+        renderPackages();
+    }
+
     function renderPackages() {
         const grid = document.getElementById('pkgGrid');
         if (!grid) return;
+
         if (allPkgs.length === 0) {
             grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">📦</div><p>لا توجد باقات مضافة بعد</p><button class="btn btn-primary btn-sm" style="margin-top:16px;" onclick="openPkgModal(null)">➕ أضف أول باقة</button></div>`;
             return;
         }
-        grid.innerHTML = allPkgs.map((p, i) => {
+
+        let filteredPkgs = allPkgs;
+        if (currentPkgFilter !== 'all') {
+            filteredPkgs = allPkgs.filter(p => {
+                const comp = String(p[PKG_FIELDS.company] || '').trim();
+                return comp === currentPkgFilter || (currentPkgFilter === 'أورانج' && comp === 'اورنج');
+            });
+        }
+
+        if (filteredPkgs.length === 0) {
+            grid.innerHTML = `<div class="empty-state" style="grid-column:1/-1;"><div class="empty-icon">📦</div><p>لا توجد باقات لهذه الشركة</p></div>`;
+            return;
+        }
+
+        grid.innerHTML = filteredPkgs.map((p, i) => {
             const name = esc(p[PKG_FIELDS.name] || 'باقة');
             const company = esc(p[PKG_FIELDS.company] || '');
             const price = esc(String(p[PKG_FIELDS.price] || '0'));
