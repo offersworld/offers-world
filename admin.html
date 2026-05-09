@@ -1267,14 +1267,30 @@
         if (pieData.some(v => v > 0) && pieLabels.length > 0) {
             pieEmpty.style.display = 'none';
             pieCanvas.style.display = 'block';
-            const colors = ['#FF6B2B', '#E60000', '#00A651', '#8B00FF', '#F59E0B', '#3B82F6', '#EC4899', '#14B8A6'];
+            const companyColors = {
+                'وي': '#8B00FF',
+                'we': '#8B00FF',
+                'أورانج': '#FF6B2B',
+                'اورنج': '#FF6B2B',
+                'فودافون': '#E60000',
+                'اتصالات': '#00A651'
+            };
+            
+            const pieColors = pieLabels.map(label => {
+                const lowerLabel = label.toLowerCase();
+                for (const [key, color] of Object.entries(companyColors)) {
+                    if (lowerLabel.includes(key)) return color;
+                }
+                return '#3B82F6'; // Default blue for unknown
+            });
+
             pieChartInstance = new Chart(pieCanvas.getContext('2d'), {
                 type: 'doughnut',
                 data: {
                     labels: pieLabels,
                     datasets: [{
                         data: pieData,
-                        backgroundColor: colors.slice(0, pieLabels.length),
+                        backgroundColor: pieColors,
                         borderColor: 'rgba(17,17,34,0.8)',
                         borderWidth: 3
                     }]
