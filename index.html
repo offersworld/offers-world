@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>عالم العروض — احجز باقتك باحترافية</title>
   <link rel="preload" as="image" href="logo.png" fetchpriority="high">
-  <link rel="preload" as="image" href="vodafone_logo.png">
   <link rel="preload" as="image" href="Orange_logo.svg.png">
-  <link rel="preload" as="image" href="Eand_Logo_EN.svg.png">
   <link rel="preload" as="image" href="We_logo.svg.png">
+  <link rel="preload" as="image" href="Eand_Logo_EN.svg.png">
+  <link rel="preload" as="image" href="vodafone_logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
@@ -547,7 +547,7 @@
   <div class="why-us-strip">
     <div class="why-us-title">✨ ليه تختارنا؟</div>
     <div class="why-us-grid">
-      <div class="why-item"><span class="wi-icon">💕</span><div class="wi-text">خدمة كل الشركات<br>اتصالات · فودافون · أورنج · وي</div></div>
+      <div class="why-item"><span class="wi-icon">💕</span><div class="wi-text">خدمة كل الشركات<br>أورنج · وي · اتصالات · فودافون</div></div>
       <div class="why-item"><span class="wi-icon">⚡</span><div class="wi-text">تفعيل سريع<br>في أقل وقت ممكن</div></div>
       <div class="why-item"><span class="wi-icon">🔒</span><div class="wi-text">ضمان على كل طلب<br>أمان 100%</div></div>
       <div class="why-item"><span class="wi-icon">🙋‍♂️</span><div class="wi-text">دعم فوري<br>ردّ في أي وقت</div></div>
@@ -716,10 +716,10 @@
 
     createCompanyCards() {
       const companies = [
-        { id: 'vodafone', name: 'فودافون', logo: 'vodafone_logo.png' },
         { id: 'orange', name: 'أورانج', logo: 'Orange_logo.svg.png' },
+        { id: 'we', name: 'وي', logo: 'We_logo.svg.png' },
         { id: 'etisalat', name: 'اتصالات', logo: 'Eand_Logo_EN.svg.png' },
-        { id: 'we', name: 'وي', logo: 'We_logo.svg.png' }
+        { id: 'vodafone', name: 'فودافون', logo: 'vodafone_logo.png' }
       ];
       const grid = document.getElementById('companyGrid');
       grid.innerHTML = '';
