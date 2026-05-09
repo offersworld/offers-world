@@ -19,7 +19,6 @@
     .stars::before{content:'';position:absolute;inset:0;background-image:radial-gradient(white 1px,transparent 1px);background-size:80px 80px;opacity:0.07;animation:twinkle 6s infinite alternate;}
     @keyframes twinkle{0%{opacity:.04}100%{opacity:.12}}
     
-    /* باقي الـ CSS كما هو (لم يتغير) */
     #loginPage{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0A0A14,#1A0B2E);}
     .login-card{background:var(--card);border:1px solid var(--border);border-radius:28px;padding:48px 36px;width:100%;max-width:400px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,0.6);position:relative;overflow:hidden;}
     .login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--orange),var(--accent));background-size:200%;animation:shimmer 3s linear infinite;}
@@ -35,7 +34,7 @@
     .btn-login:hover{opacity:.9;transform:translateY(-2px);}
     .btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none;}
     .login-error{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:10px 14px;color:#f87171;font-size:.88rem;margin-top:12px;display:none;}
-    
+
     .layout{display:flex;min-height:100vh;}
     .sidebar{width:240px;background:var(--card);border-left:1px solid var(--border);padding:24px 0;position:fixed;top:0;right:0;height:100vh;z-index:50;display:flex;flex-direction:column;}
     .sidebar-logo{padding:0 20px 24px;border-bottom:1px solid var(--border);margin-bottom:16px;}
@@ -67,10 +66,6 @@
     .stat-card::after{content:attr(data-icon);position:absolute;bottom:-8px;left:-4px;font-size:4rem;opacity:.06;}
     .stat-label{color:var(--muted);font-size:.82rem;margin-bottom:8px;}
     .stat-value{font-size:2rem;font-weight:900;}
-    .stat-card.orange .stat-value{color:var(--orange);}
-    .stat-card.green .stat-value{color:var(--green);}
-    .stat-card.yellow .stat-value{color:var(--yellow);}
-    .stat-card.purple .stat-value{color:#A855F7;}
     .table-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:24px;}
     .table-header{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
     .table-header h3{font-size:1rem;font-weight:700;}
@@ -133,6 +128,8 @@
     .status-opt.opt-cancel:hover,.status-opt.opt-cancel.selected{background:rgba(239,68,68,.12);border-color:#f87171;}
     .skeleton{background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.09) 50%,rgba(255,255,255,.04) 75%);background-size:200% 100%;animation:skeleton-wave 1.5s infinite;border-radius:8px;}
     @keyframes skeleton-wave{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .skeleton-row td{padding:14px 16px;}
+    .skeleton-cell{height:16px;border-radius:6px;}
     .empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
     .empty-state div{font-size:3rem;margin-bottom:12px;}
     .spinner{width:20px;height:20px;border:2px solid rgba(255,255,255,.2);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-left:8px;}
@@ -195,7 +192,7 @@
         <button class="mobile-nav-btn" onclick="logout()" style="color:#f87171;">🚪 خروج</button>
       </div>
 
-      <!-- DASHBOARD TAB -->
+      <!-- DASHBOARD -->
       <div id="tab-dashboard">
         <div class="topbar">
           <div class="page-title">📊 الرئيسية</div>
@@ -221,8 +218,41 @@
         </div>
       </div>
 
-      <!-- ORDERS & PACKAGES TABS (مختصرة للتوفير) -->
-      <div id="tab-orders" style="display:none;"> ... (كود الطلبات كما هو) ... </div>
+      <!-- ORDERS TAB -->
+      <div id="tab-orders" style="display:none;">
+        <div class="topbar">
+          <div class="page-title">📋 الطلبات</div>
+          <button class="btn btn-ghost" onclick="loadAllData()">🔄 تحديث</button>
+        </div>
+        <div class="table-card">
+          <div class="table-header">
+            <h3>كل الطلبات</h3>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+              <input type="text" class="search-input" id="searchInput" placeholder="🔍 بحث..." oninput="filterOrders()">
+              <select class="filter-select" id="statusFilter" onchange="filterOrders()">
+                <option value="">كل الحالات</option>
+                <option value="معلق">معلق</option>
+                <option value="تم">تم التفعيل</option>
+                <option value="ملغ">ملغي</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>رقم الطلب</th><th>الاسم</th><th>الواتساب</th><th>رقم التفعيل</th>
+                  <th>الشركة</th><th>الباقة</th><th>السعر</th><th>الدفع</th>
+                  <th>الحالة</th><th>الإيصال</th><th>إجراء</th>
+                </tr>
+              </thead>
+              <tbody id="allOrdersBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- PACKAGES TAB -->
       <div id="tab-packages" style="display:none;">
         <div class="topbar">
           <div class="page-title">📦 الباقات</div>
@@ -303,18 +333,49 @@
   </div>
 </div>
 
-<!-- باقي المودالات (Confirm + Order Status) -->
-<!-- ... (نفس الكود السابق) ... -->
+<!-- Confirm Delete Modal -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal confirm-modal">
+    <div class="confirm-icon">🗑️</div>
+    <div class="modal-title" style="justify-content:center;">تأكيد الحذف</div>
+    <div class="confirm-msg" id="confirmMsg"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('confirmModal')">إلغاء</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn">🗑️ حذف</button>
+    </div>
+  </div>
+</div>
+
+<!-- Order Status Modal -->
+<div class="modal-overlay" id="orderStatusModal">
+  <div class="modal" style="max-width:440px;">
+    <button class="modal-close" onclick="closeModal('orderStatusModal')">✕</button>
+    <div class="modal-title">📋 تغيير حالة الطلب</div>
+    <div style="color:var(--muted);font-size:.88rem;margin-bottom:4px;">رقم الطلب:</div>
+    <div style="font-weight:700;margin-bottom:4px;" id="osOrderId"></div>
+    <div style="color:var(--muted);font-size:.85rem;margin-bottom:16px;" id="osCurrentStatus"></div>
+    <div class="status-options">
+      <button class="status-opt opt-pending" onclick="selectStatus('معلق')">⏳<br>معلق</button>
+      <button class="status-opt opt-done" onclick="selectStatus('تم التفعيل')">✅<br>تم التفعيل</button>
+      <button class="status-opt opt-cancel" onclick="selectStatus('ملغي')">❌<br>ملغي</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">ملاحظة (اختياري)</label>
+      <input type="text" class="form-input" id="osNote" placeholder="مثال: تم التفعيل الساعة 3 عصراً">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('orderStatusModal')">إلغاء</button>
+      <button class="btn btn-success" id="osSaveBtn" onclick="saveOrderStatus()">✅ حفظ الحالة</button>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════
 // CONFIG
-// ═══════════════════════════════════════
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
 
-// Helpers
 function esc(str) {
   return String(str == null ? '' : str)
     .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
@@ -339,7 +400,7 @@ async function gGet(params) {
 let allOrders = [], allPkgs = [], currentPkgFilter = 'all';
 let currentOrderId = null, selectedNewStatus = null;
 
-// Login & Panel
+// Login
 function togglePass() {
   const i = document.getElementById('adminPass');
   i.type = i.type === 'password' ? 'text' : 'password';
@@ -351,6 +412,7 @@ async function doLogin() {
   const btn = document.getElementById('loginBtn');
   btn.disabled = true;
   btn.innerHTML = 'جاري التحقق... <span class="spinner"></span>';
+  document.getElementById('loginError').style.display = 'none';
 
   try {
     const data = await gGet({ action: 'checkPassword', pass });
@@ -378,16 +440,22 @@ function logout() {
 // Tabs
 function switchTab(name) {
   ['dashboard','orders','packages'].forEach(t => {
-    const tab = document.getElementById('tab-'+t);
-    if (tab) tab.style.display = t === name ? 'block' : 'none';
+    document.getElementById('tab-'+t).style.display = t === name ? 'block' : 'none';
     document.getElementById('nav-'+t)?.classList.toggle('active', t === name);
     document.getElementById('mnav-'+t)?.classList.toggle('active', t === name);
   });
 }
 
-// Load Data
+function skeletonRows(cols, count = 5) {
+  return Array.from({length: count}, () =>
+    `<tr class="skeleton-row">${
+      Array.from({length: cols}, () => `<td><div class="skeleton skeleton-cell" style="width:${60+Math.random()*30}%"></div></td>`).join('')
+    }</tr>`
+  ).join('');
+}
+
+// Load All Data
 async function loadAllData() {
-  // Skeleton...
   document.getElementById('latestOrdersBody').innerHTML = skeletonRows(6);
   document.getElementById('allOrdersBody').innerHTML = skeletonRows(11);
 
@@ -409,6 +477,7 @@ async function loadAllData() {
     renderLatestOrders();
     renderAllOrders();
     renderPackages();
+
     document.getElementById('lastUpdate').textContent = 'آخر تحديث: ' + new Date().toLocaleTimeString('ar-EG');
     showToast('✅ تم تحديث البيانات');
   } catch(e) {
@@ -416,14 +485,130 @@ async function loadAllData() {
   }
 }
 
-// Package Functions (الجزء المُصلح)
-function renderPackages() { filterPkgs(currentPkgFilter); }
+// Orders Functions
+function statusBadge(s) {
+  s = String(s || 'معلق');
+  if (s.includes('تم') || s.includes('مفعل')) return `<span class="badge badge-done">✅ ${esc(s)}</span>`;
+  if (s.includes('ملغ')) return `<span class="badge badge-cancel">❌ ${esc(s)}</span>`;
+  return `<span class="badge badge-pending">⏳ ${esc(s)}</span>`;
+}
+
+function renderLatestOrders() {
+  const tbody = document.getElementById('latestOrdersBody');
+  const latest = [...allOrders].reverse().slice(0, 5);
+  if (!latest.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div>📭</div>لا يوجد طلبات بعد</td></tr>';
+    return;
+  }
+  tbody.innerHTML = latest.map(o => `
+    <tr>
+      <td style="font-size:.78rem;color:var(--muted);">${esc(o.orderId||'-')}</td>
+      <td><strong>${esc(o.customerName||'-')}</strong></td>
+      <td>${esc(o.company||'-')}</td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;">${esc(o.package||'-')}</td>
+      <td style="color:var(--green);font-weight:700;">${esc(o.price||0)} ج</td>
+      <td>${statusBadge(o.status)}</td>
+    </tr>`).join('');
+}
+
+function renderAllOrders(data) {
+  const orders = data || allOrders;
+  const tbody = document.getElementById('allOrdersBody');
+  if (!orders.length) {
+    tbody.innerHTML = '<tr><td colspan="11" class="empty-state"><div>📭</div>لا يوجد طلبات</td></tr>';
+    return;
+  }
+  tbody.innerHTML = [...orders].reverse().map(o => {
+    const phone = esc(o.phone || '');
+    const actPhone = esc(o.activationPhone || o.phone || '-');
+    const proofCell = o.proofImage ? `<a class="proof-link" href="${esc(o.proofImage)}" target="_blank">🧾 فتح</a>` : '<span style="color:var(--muted)">—</span>';
+    return `
+    <tr>
+      <td style="font-size:.75rem;color:var(--muted);">${esc(o.orderId||'-')}</td>
+      <td><strong>${esc(o.customerName||'-')}</strong></td>
+      <td><a class="phone-link" href="https://wa.me/2${phone}" target="_blank">📱 ${phone}</a></td>
+      <td><span style="direction:ltr;">${actPhone}</span></td>
+      <td>${esc(o.company||'-')}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;" title="${esc(o.package||'')}">${esc(o.package||'-')}</td>
+      <td style="color:var(--green);font-weight:700;">${esc(o.price||0)} ج</td>
+      <td>${esc(o.payment||'-')}</td>
+      <td>${statusBadge(o.status)}</td>
+      <td>${proofCell}</td>
+      <td>
+        <button class="btn btn-ghost btn-sm" data-order-id="${esc(o.orderId)}" data-order-status="${esc(o.status||'')}" onclick="openOrderStatus(this.dataset.orderId, this.dataset.orderStatus)">✏️ حالة</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function filterOrders() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const st = document.getElementById('statusFilter').value;
+  const filtered = allOrders.filter(o => {
+    const matchQ = !q || 
+      (o.customerName || '').toLowerCase().includes(q) ||
+      (o.phone || '').includes(q) ||
+      (o.orderId || '').toLowerCase().includes(q);
+    const matchS = !st || String(o.status || '').includes(st);
+    return matchQ && matchS;
+  });
+  renderAllOrders(filtered);
+}
+
+// Order Status
+function openOrderStatus(orderId, currentStatus) {
+  currentOrderId = orderId;
+  selectedNewStatus = null;
+  document.getElementById('osOrderId').textContent = orderId;
+  document.getElementById('osCurrentStatus').textContent = 'الحالة الحالية: ' + (currentStatus || 'معلق');
+  document.getElementById('osNote').value = '';
+  document.querySelectorAll('.status-opt').forEach(b => b.classList.remove('selected'));
+  document.getElementById('orderStatusModal').classList.add('show');
+}
+
+function selectStatus(s) {
+  selectedNewStatus = s;
+  document.querySelectorAll('.status-opt').forEach(b => b.classList.remove('selected'));
+  const map = { 'معلق': 'pending', 'تم التفعيل': 'done', 'ملغي': 'cancel' };
+  document.querySelector('.opt-' + map[s])?.classList.add('selected');
+}
+
+async function saveOrderStatus() {
+  if (!selectedNewStatus) return showToast('⚠️ اختار الحالة أولاً');
+  const btn = document.getElementById('osSaveBtn');
+  btn.disabled = true;
+  btn.innerHTML = 'جاري الحفظ... <span class="spinner"></span>';
+
+  try {
+    const data = await gPost({
+      action: 'updateOrderStatus',
+      orderId: currentOrderId,
+      status: selectedNewStatus,
+      note: document.getElementById('osNote').value
+    });
+    if (data.success) {
+      closeModal('orderStatusModal');
+      showToast('✅ تم تحديث الحالة');
+      loadAllData();
+    } else {
+      showToast('❌ فشل التحديث');
+    }
+  } catch(e) {
+    showToast('❌ خطأ في الاتصال');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '✅ حفظ الحالة';
+  }
+}
+
+// Packages
+function renderPackages() {
+  filterPkgs(currentPkgFilter);
+}
 
 function filterPkgs(co) {
   currentPkgFilter = co;
-  document.querySelectorAll('.filter-chip').forEach(b => 
-    b.classList.toggle('active', b.dataset.co === co)
-  );
+  document.querySelectorAll('.filter-chip').forEach(b => b.classList.toggle('active', b.dataset.co === co));
 
   const pkgs = co === 'all' ? allPkgs : allPkgs.filter(p => (p.company || '').includes(co));
   document.getElementById('pkgCount').textContent = pkgs.length + ' باقة' + (co === 'all' ? '' : ' في ' + co);
@@ -451,13 +636,13 @@ function filterPkgs(co) {
     </div>`).join('');
 }
 
-// **الدالة المُحسنة** (الحل الرئيسي)
+// **الدالة المحسنة** (الحل الرئيسي لمشكلتك)
 function openPkgModal(rowIndex = null) {
-  const titleEl = document.getElementById('pkgModalTitle');
+  const title = document.getElementById('pkgModalTitle');
   document.getElementById('pkgRowIndex').value = rowIndex || '';
 
   if (rowIndex) {
-    titleEl.innerHTML = `✏️ تعديل الباقة <small style="font-weight:400; color:#94A3B8; font-size:0.9rem;">#${rowIndex}</small>`;
+    title.innerHTML = `✏️ تعديل الباقة <small style="font-weight:400;color:#94A3B8;">#${rowIndex}</small>`;
     
     const pkg = allPkgs.find(p => String(p.rowIndex) === String(rowIndex));
     
@@ -470,13 +655,12 @@ function openPkgModal(rowIndex = null) {
       document.getElementById('pkgNotes').value = pkg.notes || '';
     } else {
       showToast('⚠️ لم يتم العثور على الباقة');
-      console.error('Package not found for rowIndex:', rowIndex);
     }
   } else {
-    titleEl.textContent = '➕ إضافة باقة جديدة';
-    ['pkgCompany','pkgName','pkgPrice','pkgType','pkgNotes'].forEach(id => 
-      document.getElementById(id).value = ''
-    );
+    title.textContent = '➕ إضافة باقة جديدة';
+    ['pkgCompany','pkgName','pkgPrice','pkgType','pkgNotes'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
     document.getElementById('pkgStatus').value = 'متاح';
   }
 
@@ -484,21 +668,84 @@ function openPkgModal(rowIndex = null) {
 }
 
 async function savePackage() {
-  // ... (نفس الكود السابق) ...
-  // (يمكنك إضافته من الملف القديم)
+  const company = document.getElementById('pkgCompany').value.trim();
+  const name = document.getElementById('pkgName').value.trim();
+  const price = document.getElementById('pkgPrice').value.trim();
+
+  if (!company) return showToast('⚠️ اختار الشركة');
+  if (!name) return showToast('⚠️ اكتب اسم الباقة');
+  if (!price || isNaN(Number(price))) return showToast('⚠️ السعر لازم يكون رقم');
+
+  const btn = document.getElementById('pkgSaveBtn');
+  btn.disabled = true;
+  btn.innerHTML = 'جاري الحفظ... <span class="spinner"></span>';
+
+  const rowIndex = document.getElementById('pkgRowIndex').value;
+
+  try {
+    const data = await gPost({
+      action: rowIndex ? 'updatePackage' : 'addPackage',
+      rowIndex: rowIndex ? parseInt(rowIndex) : null,
+      company, name, price,
+      type: document.getElementById('pkgType').value,
+      status: document.getElementById('pkgStatus').value,
+      notes: document.getElementById('pkgNotes').value
+    });
+
+    if (data.success) {
+      closeModal('pkgModal');
+      showToast(rowIndex ? '✅ تم تعديل الباقة' : '✅ تمت إضافة الباقة');
+      loadAllData();
+    } else {
+      showToast('❌ فشل الحفظ');
+    }
+  } catch(e) {
+    showToast('❌ خطأ في الاتصال');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '💾 حفظ';
+  }
 }
 
-// باقي الدوال (skeletonRows, renderLatestOrders, renderAllOrders, showToast, closeModal, ...)
+function confirmDelete(rowIndex, name) {
+  document.getElementById('confirmMsg').innerHTML = `هل أنت متأكد من حذف الباقة؟<br><strong>${esc(name)}</strong>`;
+  const delBtn = document.getElementById('confirmDeleteBtn');
+  delBtn.dataset.rowIndex = rowIndex;
+  delBtn.onclick = () => deletePackage(parseInt(delBtn.dataset.rowIndex));
+  document.getElementById('confirmModal').classList.add('show');
+}
+
+async function deletePackage(rowIndex) {
+  const btn = document.getElementById('confirmDeleteBtn');
+  btn.disabled = true;
+  btn.innerHTML = 'جاري الحذف... <span class="spinner"></span>';
+
+  try {
+    const data = await gPost({ action: 'deletePackage', rowIndex });
+    if (data.success) {
+      closeModal('confirmModal');
+      showToast('🗑️ تم حذف الباقة');
+      loadAllData();
+    } else {
+      showToast('❌ فشل الحذف');
+    }
+  } catch(e) {
+    showToast('❌ خطأ في الاتصال');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🗑️ حذف';
+  }
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
 
 function showToast(msg) {
   const t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove('show');
 }
 
 // Initialize
