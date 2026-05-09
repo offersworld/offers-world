@@ -15,8 +15,9 @@ const CONFIG = {
   }
 };
 
-// ✅ كلمة مرور واحدة فقط هنا — احذف Admin.gs خالص
-const ADMIN_PASSWORD = '01225949346';
+// ✅ قراءة كلمة المرور من إعدادات السكربت (PropertiesService) للحماية
+// يجب إضافتها من خلال: Project Settings -> Script Properties -> ADMIN_PASSWORD
+const ADMIN_PASSWORD = PropertiesService.getScriptProperties().getProperty('ADMIN_PASSWORD') || '01225949346';
 
 // ============================================================
 // doGet — مع CORS
@@ -60,7 +61,11 @@ function doGet(e) {
 // doPost — مع جميع الإجراءات
 // ============================================================
 function doPost(e) {
+  var lock = LockService.getScriptLock();
   try {
+    // 🔒 منع التزامن (Race condition) عن طريق قفل السكربت لمدة تصل لـ 10 ثوانٍ
+    lock.waitLock(10000); 
+    
     var data = JSON.parse(e.postData.contents);
     var action = data.action;
 
@@ -93,6 +98,9 @@ function doPost(e) {
   } catch (err) {
     logError('doPost', err.toString());
     return respond({ success: false, error: err.toString() });
+  } finally {
+    // 🔓 تحرير القفل ليسمح للطلبات الأخرى بالمرور
+    lock.releaseLock();
   }
 }
 
@@ -206,15 +214,12 @@ function updateOrderStatus(orderId, newStatus, note) {
   try {
     var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     var sheet = ss.getSheetByName(CONFIG.SHEETS.ORDERS);
-    var data = sheet.getDataRange().getValues();
-    var rowIndex = -1;
-    for (var i = 2; i < data.length; i++) {
-      if (String(data[i][0]).trim() === String(orderId).trim()) {
-        rowIndex = i + 1;
-        break;
-      }
-    }
-    if (rowIndex === -1) return { success: false, message: 'الطلب غير موجود' };
+    
+    // ⚡ تسريع البحث باستخدام TextFinder بدلاً من الـ for loop
+    var findResult = sheet.getRange("A:A").createTextFinder(String(orderId).trim()).matchEntireCell(true).findNext();
+    if (!findResult) return { success: false, message: 'الطلب غير موجود' };
+    
+    var rowIndex = findResult.getRow();
 
     sheet.getRange(rowIndex, 10).setValue(newStatus);   // col J = status
 
@@ -267,15 +272,12 @@ function updatePackage(pkg) {
   try {
     var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     var sheet = ss.getSheetByName(CONFIG.SHEETS.PACKAGES);
-    var data = sheet.getDataRange().getValues();
-    var rowIndex = -1;
-    for (var i = 2; i < data.length; i++) {
-      if (String(data[i][0]).trim() === String(pkg.packageId).trim()) {
-        rowIndex = i + 1;
-        break;
-      }
-    }
-    if (rowIndex === -1) return { success: false, message: 'الباقة غير موجودة' };
+    
+    // ⚡ تسريع البحث باستخدام TextFinder
+    var findResult = sheet.getRange("A:A").createTextFinder(String(pkg.packageId).trim()).matchEntireCell(true).findNext();
+    if (!findResult) return { success: false, message: 'الباقة غير موجودة' };
+    
+    var rowIndex = findResult.getRow();
 
     sheet.getRange(rowIndex, 2).setValue(pkg.company || '');
     sheet.getRange(rowIndex, 3).setValue(pkg.name);
@@ -294,15 +296,12 @@ function deletePackage(packageId) {
   try {
     var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     var sheet = ss.getSheetByName(CONFIG.SHEETS.PACKAGES);
-    var data = sheet.getDataRange().getValues();
-    var rowIndex = -1;
-    for (var i = 2; i < data.length; i++) {
-      if (String(data[i][0]).trim() === String(packageId).trim()) {
-        rowIndex = i + 1;
-        break;
-      }
-    }
-    if (rowIndex === -1) return { success: false, message: 'الباقة غير موجودة' };
+    
+    // ⚡ تسريع البحث باستخدام TextFinder
+    var findResult = sheet.getRange("A:A").createTextFinder(String(packageId).trim()).matchEntireCell(true).findNext();
+    if (!findResult) return { success: false, message: 'الباقة غير موجودة' };
+    
+    var rowIndex = findResult.getRow();
     sheet.deleteRow(rowIndex);
     addLog('حذف باقة', packageId, '');
     return { success: true };
