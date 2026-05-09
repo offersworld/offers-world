@@ -1413,9 +1413,14 @@
             const notes = esc(String(o[ORDER_FIELDS.notes] || '-'));
             const statusBadgeHtml = statusBadge(status);
 
+            // Formatting the phone number correctly for WhatsApp API
+            let cleanPhone = phone.replace(/[^0-9]/g, '');
+            if (cleanPhone.startsWith('0')) cleanPhone = '2' + cleanPhone; // Convert 011... to 2011...
+            if (!cleanPhone.startsWith('20')) cleanPhone = '20' + cleanPhone; // Fallback if number lacks 20
+
             return `<tr>
                 <td><strong>#${orderId}</strong></td>
-                <td><a href="https://wa.me/2${phone.replace(/[^0-9]/g,'')}" target="_blank" style="color:var(--green2);text-decoration:none;font-weight:600;">📱 ${phone}</a></td>
+                <td><a href="https://wa.me/${cleanPhone}" target="_blank" style="color:var(--green2);text-decoration:none;font-weight:600;direction:ltr;display:inline-block;">📱 +${cleanPhone}</a></td>
                 <td>${company}</td>
                 <td>${pkg}</td>
                 <td style="color:var(--green2);font-weight:700;">${price} ج</td>
