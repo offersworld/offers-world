@@ -4,14 +4,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <title>عالم العروض — احجز باقتك</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -24,11 +20,7 @@
       --muted: #94A3B8;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       background: linear-gradient(135deg, #0A0A14 0%, #1A0B2E 100%);
@@ -43,48 +35,28 @@
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      background: #0A0A14;
       overflow: hidden;
     }
-
-    .stars::before,
-    .stars::after {
+    .stars::before, .stars::after {
       content: '';
       position: absolute;
       inset: 0;
       animation: twinkle 8s infinite alternate;
     }
-
     .stars::before {
-      background-image:
-        radial-gradient(white 1px, transparent 1px),
-        radial-gradient(white 1px, transparent 1px);
-
+      background-image: radial-gradient(white 1px, transparent 1px), radial-gradient(white 1px, transparent 1px);
       background-position: 0 0, 50px 50px;
       background-size: 80px 80px;
       opacity: 0.15;
     }
-
     .stars::after {
-      background-image:
-        radial-gradient(white 1px, transparent 1px),
-        radial-gradient(white 1px, transparent 1px);
-
+      background-image: radial-gradient(white 1px, transparent 1px), radial-gradient(white 1px, transparent 1px);
       background-position: 30px 30px, 80px 80px;
       background-size: 100px 100px;
       opacity: 0.1;
       animation-delay: 3s;
     }
-
-    @keyframes twinkle {
-      0% {
-        opacity: 0.08
-      }
-
-      100% {
-        opacity: 0.25
-      }
-    }
+    @keyframes twinkle { 0%{opacity:0.08} 100%{opacity:0.25} }
 
     .container {
       position: relative;
@@ -94,290 +66,274 @@
       padding: 20px 16px;
     }
 
+    /* ============ HERO HEADER ============ */
+    .hero-header {
+      text-align: center;
+      padding: 30px 0 10px;
+    }
+
     .logo {
-      width: 110px;
-      height: 110px;
-      margin: 30px auto 10px;
-
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 14px;
       background: linear-gradient(135deg, var(--accent), var(--orange));
-
       border-radius: 50%;
-
       display: flex;
       align-items: center;
       justify-content: center;
-
-      font-size: 52px;
-
+      font-size: 46px;
       box-shadow: 0 0 60px rgba(123, 47, 190, 0.7);
-
       animation: float 3s ease-in-out infinite;
     }
-
-    @keyframes float {
-
-      0%,
-      100% {
-        transform: translateY(0)
-      }
-
-      50% {
-        transform: translateY(-15px)
-      }
-    }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-12px)} }
 
     h1 {
-      text-align: center;
       font-size: 2.2rem;
-      margin-bottom: 6px;
-
+      margin-bottom: 4px;
       background: linear-gradient(90deg, #fff, #c4b5fd);
-
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
 
     .subtitle {
-      text-align: center;
       color: var(--muted);
-      margin-bottom: 25px;
-      font-size: 1.05rem;
-      line-height: 1.8;
+      margin-bottom: 22px;
+      font-size: 1rem;
     }
 
-    .card {
-      background: var(--card);
-
-      border-radius: 24px;
-
-      padding: 24px;
-
-      margin-bottom: 20px;
-
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-
-      border: 1px solid rgba(123, 47, 190, 0.2);
+    /* ============ WHY US STRIP ============ */
+    .why-us-strip {
+      background: linear-gradient(135deg, rgba(123,47,190,0.15), rgba(255,107,0,0.10));
+      border: 1px solid rgba(123,47,190,0.3);
+      border-radius: 20px;
+      padding: 18px 16px;
+      margin-bottom: 22px;
+      overflow: hidden;
+      position: relative;
     }
+    .why-us-strip::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), var(--orange), var(--accent));
+      background-size: 200% 100%;
+      animation: shimmerLine 3s linear infinite;
+    }
+    @keyframes shimmerLine { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
-    .section-title {
-      color: #ddd;
-      font-size: 1.1rem;
-      margin-bottom: 16px;
+    .why-us-title {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
     }
 
-    .company-grid {
+    .why-us-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 10px;
     }
 
-    .company-card {
-      background: #1A1A2E;
-
-      border: 2px solid #333;
-
-      border-radius: 20px;
-
-      padding: 22px 12px;
-
+    .why-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      padding: 12px 10px;
       text-align: center;
-
-      cursor: pointer;
-
-      transition: 0.35s;
-
-      font-weight: 600;
-
-      font-size: 1.1rem;
+      transition: 0.3s;
     }
-
-    .company-card:hover {
-      border-color: var(--orange);
-      transform: scale(1.03);
+    .why-item:hover {
+      background: rgba(123,47,190,0.15);
+      border-color: rgba(123,47,190,0.4);
+      transform: translateY(-2px);
     }
+    .why-item .wi-icon { font-size: 1.6rem; margin-bottom: 6px; display: block; }
+    .why-item .wi-text { font-size: 0.82rem; color: #ddd; font-weight: 600; line-height: 1.4; }
 
-    .company-card.selected {
-      border-color: var(--orange);
-
-      background: rgba(255, 107, 0, 0.12);
-
-      box-shadow: 0 0 30px rgba(255, 107, 0, 0.4);
-    }
-
-    .filter-tabs {
+    /* Contact info row */
+    .contact-row {
       display: flex;
-      gap: 8px;
-      margin-bottom: 18px;
+      gap: 10px;
+      margin-top: 14px;
       flex-wrap: wrap;
     }
-
-    .filter-tab {
-      padding: 9px 18px;
-
-      background: #1A1A2E;
-
-      border: 1px solid #444;
-
-      border-radius: 30px;
-
-      cursor: pointer;
-
-      font-size: 0.95rem;
-
-      transition: 0.3s;
-    }
-
-    .filter-tab.active {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: white;
-    }
-
-    .packages-list {
+    .contact-btn {
+      flex: 1;
+      min-width: 120px;
       display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .pkg-item {
-      background: #1A1A2E;
-
-      border: 1px solid #444;
-
-      border-radius: 18px;
-
-      padding: 18px;
-
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: rgba(34,197,94,0.12);
+      border: 1px solid rgba(34,197,94,0.35);
+      border-radius: 12px;
+      padding: 10px 8px;
+      color: #22C55E;
+      font-size: 0.82rem;
+      font-weight: 700;
+      font-family: 'Cairo', sans-serif;
+      text-decoration: none;
       cursor: pointer;
-
       transition: 0.3s;
     }
-
-    .pkg-item:hover {
-      border-color: var(--green);
-      transform: translateX(6px);
+    .contact-btn:hover {
+      background: rgba(34,197,94,0.22);
+      transform: translateY(-1px);
+    }
+    .contact-btn.whatsapp-group {
+      background: rgba(255,107,0,0.1);
+      border-color: rgba(255,107,0,0.35);
+      color: var(--orange);
+    }
+    .contact-btn.whatsapp-group:hover {
+      background: rgba(255,107,0,0.2);
     }
 
-    .pkg-item.selected {
-      border-color: var(--green);
-      background: rgba(34, 197, 94, 0.1);
-    }
-
-    #imagePreview {
-      max-width: 100%;
-      max-height: 280px;
-
-      border-radius: 16px;
-
-      border: 2px solid var(--green);
-
-      display: none;
-
-      margin-top: 10px;
-    }
-
-    .progress-header {
-      margin-bottom: 28px;
-    }
-
+    /* ============ PROGRESS ============ */
+    .progress-header { margin-bottom: 22px; }
     .progress-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       gap: 12px;
     }
-
-    .progress-title {
-      font-size: 1rem;
-      font-weight: 800;
-      color: white;
-    }
-
-    .progress-counter {
-      font-size: 0.85rem;
-      color: var(--muted);
-    }
-
+    .progress-title { font-size: 1rem; font-weight: 800; color: white; }
+    .progress-counter { font-size: 0.85rem; color: var(--muted); }
     .progress-bar {
       width: 100%;
-      height: 10px;
+      height: 8px;
       background: #1B1B2D;
       border-radius: 999px;
       overflow: hidden;
       border: 1px solid rgba(255,255,255,0.06);
     }
-
     .progress-fill {
       width: 33%;
       height: 100%;
       border-radius: 999px;
-
-      background: linear-gradient(
-        90deg,
-        var(--accent),
-        var(--orange)
-      );
-
-      transition: 0.35s ease;
-
-      box-shadow:
-        0 0 18px rgba(123,47,190,0.35);
+      background: linear-gradient(90deg, var(--accent), var(--orange));
+      transition: 0.4s ease;
+      box-shadow: 0 0 14px rgba(123,47,190,0.4);
     }
 
-    input,
-    textarea {
-      width: 100%;
+    /* ============ CARDS & STEPS ============ */
+    .card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+      border: 1px solid rgba(123,47,190,0.2);
+    }
 
-      padding: 14px 16px;
+    .section-title {
+      color: #ddd;
+      font-size: 1.05rem;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+    }
 
-      margin: 10px 0;
+    .company-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
 
+    .company-card {
       background: #1A1A2E;
-
-      border: 1px solid #444;
-
-      border-radius: 12px;
-
-      color: white;
-
-      font-size: 1rem;
-
-      font-family: 'Cairo', sans-serif;
-
-      transition: 0.25s;
+      border: 2px solid #333;
+      border-radius: 20px;
+      padding: 20px 10px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.35s;
+      font-weight: 700;
+      font-size: 1.05rem;
+    }
+    .company-card:hover { border-color: var(--orange); transform: scale(1.03); }
+    .company-card.selected {
+      border-color: var(--orange);
+      background: rgba(255,107,0,0.12);
+      box-shadow: 0 0 28px rgba(255,107,0,0.35);
     }
 
-    input::placeholder,
-    textarea::placeholder {
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .filter-tab {
+      padding: 8px 16px;
+      background: #1A1A2E;
+      border: 1px solid #444;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: 0.3s;
+      font-family: 'Cairo', sans-serif;
       color: var(--muted);
     }
+    .filter-tab.active { background: var(--accent); border-color: var(--accent); color: white; }
 
-    input:focus,
-    textarea:focus {
+    .packages-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .pkg-item {
+      background: #1A1A2E;
+      border: 1px solid #444;
+      border-radius: 16px;
+      padding: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .pkg-item:hover { border-color: var(--green); transform: translateX(5px); }
+    .pkg-item.selected { border-color: var(--green); background: rgba(34,197,94,0.1); }
+
+    #imagePreview {
+      max-width: 100%;
+      max-height: 260px;
+      border-radius: 14px;
+      border: 2px solid var(--green);
+      display: none;
+      margin-top: 10px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 13px 15px;
+      margin: 8px 0;
+      background: #1A1A2E;
+      border: 1px solid #444;
+      border-radius: 12px;
+      color: white;
+      font-size: 0.97rem;
+      font-family: 'Cairo', sans-serif;
+      transition: 0.25s;
+    }
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+    input:focus, textarea:focus {
       outline: none;
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(123, 47, 190, 0.12);
+      box-shadow: 0 0 0 3px rgba(123,47,190,0.12);
     }
-
-    .rtl-input {
-      direction: rtl;
-      text-align: right;
-    }
-
-    .number-input {
-      direction: ltr;
-      text-align: right;
-    }
+    .rtl-input { direction: rtl; text-align: right; }
+    .number-input { direction: ltr; text-align: right; }
 
     .input-label {
       display: block;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       color: #ddd;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 600;
     }
 
@@ -385,111 +341,49 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       color: var(--muted);
       cursor: pointer;
       user-select: none;
     }
-
-    .same-number-check input {
-      width: auto;
-      margin: 0;
-      accent-color: var(--accent);
-    }
+    .same-number-check input { width: auto; margin: 0; accent-color: var(--accent); }
 
     .btn {
       width: 100%;
-
-      padding: 16px;
-
-      font-size: 1.05rem;
-
+      padding: 15px;
+      font-size: 1rem;
       font-weight: 700;
-
       border: none;
-
-      border-radius: 16px;
-
+      border-radius: 14px;
       cursor: pointer;
-
-      margin-top: 12px;
-
+      margin-top: 10px;
       transition: 0.3s;
-
       font-family: 'Cairo', sans-serif;
     }
+    .btn-primary { background: linear-gradient(90deg, var(--accent), #A855F7); color: white; }
+    .btn-primary:hover { opacity: 0.9; transform: translateY(-2px); }
+    .btn-success { background: linear-gradient(90deg, #22C55E, #86EFAC); color: black; }
+    .btn-back { background: #1A1A2E; color: var(--muted); border: 1px solid #444; }
 
-    .btn-primary {
-      background: linear-gradient(90deg, var(--accent), #A855F7);
-      color: white;
-    }
-
-    .btn-primary:hover {
-      opacity: 0.92;
-      transform: translateY(-2px);
-    }
-
-    .btn-success {
-      background: linear-gradient(90deg, #22C55E, #86EFAC);
-      color: black;
-    }
-
-    .btn-back {
-      background: #1A1A2E;
-      color: var(--muted);
-      border: 1px solid #444;
-    }
-
-    .skeleton-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
+    .skeleton-wrapper { display: flex; flex-direction: column; gap: 14px; }
     .skeleton-card {
-      height: 90px;
-      border-radius: 18px;
-
-      background:
-        linear-gradient(90deg,
-          #171727 25%,
-          #23233a 50%,
-          #171727 75%);
-
+      height: 80px;
+      border-radius: 16px;
+      background: linear-gradient(90deg, #171727 25%, #23233a 50%, #171727 75%);
       background-size: 200% 100%;
-
-      animation: shimmer 1.2s infinite;
+      animation: shimmerBg 1.2s infinite;
     }
-
-    @keyframes shimmer {
-      0% {
-        background-position: 200% 0;
-      }
-
-      100% {
-        background-position: -200% 0;
-      }
-    }
+    @keyframes shimmerBg { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
 
     .payment-hint {
-      background: linear-gradient(135deg,
-          rgba(123, 47, 190, 0.12),
-          rgba(255, 107, 0, 0.08));
-
-      border: 1px solid rgba(123, 47, 190, 0.25);
-
-      border-radius: 14px;
-
-      padding: 12px 16px;
-
-      font-size: 0.88rem;
-
+      background: linear-gradient(135deg, rgba(123,47,190,0.12), rgba(255,107,0,0.08));
+      border: 1px solid rgba(123,47,190,0.25);
+      border-radius: 12px;
+      padding: 11px 14px;
+      font-size: 0.86rem;
       color: var(--muted);
-
       margin-bottom: 14px;
-
       text-align: center;
-
       line-height: 1.7;
     }
 
@@ -497,1296 +391,547 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
 
     .payment-card {
       position: relative;
-
-      border-radius: 18px;
-
-      padding: 20px 12px 16px;
-
+      border-radius: 16px;
+      padding: 18px 12px 14px;
       cursor: pointer;
-
-      border: 2px solid rgba(255, 255, 255, 0.06);
-
+      border: 2px solid rgba(255,255,255,0.06);
       transition: all 0.3s ease;
-
       text-align: center;
-
       overflow: hidden;
     }
-
-    .pay-instapay {
-      background: linear-gradient(145deg,
-          rgba(255, 107, 0, 0.08),
-          rgba(255, 107, 0, 0.03));
-    }
-
-    .pay-cash {
-      background: linear-gradient(145deg,
-          rgba(34, 197, 94, 0.08),
-          rgba(34, 197, 94, 0.03));
-    }
-
-    .payment-card.selected {
-      transform: scale(1.02);
-    }
-
-    .pay-instapay.selected {
-      border-color: #FF6B00;
-    }
-
-    .pay-cash.selected {
-      border-color: #22C55E;
-    }
+    .pay-instapay { background: linear-gradient(145deg, rgba(255,107,0,0.08), rgba(255,107,0,0.03)); }
+    .pay-cash { background: linear-gradient(145deg, rgba(34,197,94,0.08), rgba(34,197,94,0.03)); }
+    .payment-card.selected { transform: scale(1.02); }
+    .pay-instapay.selected { border-color: #FF6B00; }
+    .pay-cash.selected { border-color: #22C55E; }
 
     .pay-check {
       position: absolute;
-      top: 10px;
-      left: 10px;
-
-      width: 24px;
-      height: 24px;
-
+      top: 9px; left: 9px;
+      width: 22px; height: 22px;
       border-radius: 50%;
-
       display: flex;
       align-items: center;
       justify-content: center;
-
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 900;
-
       opacity: 0;
       transition: 0.3s;
-
       color: white;
     }
-
-    .pay-instapay .pay-check {
-      background: #FF6B00;
-    }
-
-    .pay-cash .pay-check {
-      background: #22C55E;
-    }
-
-    .payment-card.selected .pay-check {
-      opacity: 1;
-    }
-
-    .pay-icon {
-      font-size: 2.4rem;
-      display: block;
-      margin-bottom: 10px;
-    }
-
-    .pay-name {
-      font-size: 1.05rem;
-      font-weight: 800;
-      display: block;
-      margin-bottom: 10px;
-    }
-
-    .pay-number {
-      font-size: 0.8rem;
-      direction: ltr;
-      display: block;
-      line-height: 1.8;
-      font-weight: 600;
-    }
-
-    .pay-number span {
-      display: block;
-    }
+    .pay-instapay .pay-check { background: #FF6B00; }
+    .pay-cash .pay-check { background: #22C55E; }
+    .payment-card.selected .pay-check { opacity: 1; }
+    .pay-icon { font-size: 2.2rem; display: block; margin-bottom: 8px; }
+    .pay-name { font-size: 1rem; font-weight: 800; display: block; margin-bottom: 8px; }
+    .pay-number { font-size: 0.78rem; direction: ltr; display: block; line-height: 1.8; font-weight: 600; }
+    .pay-number span { display: block; }
 
     .sending-overlay {
       display: none;
-
       position: fixed;
-
       inset: 0;
-
       z-index: 999;
-
-      background: rgba(10, 10, 20, 0.85);
-
+      background: rgba(10,10,20,0.85);
       backdrop-filter: blur(6px);
-
       align-items: center;
       justify-content: center;
       flex-direction: column;
       gap: 16px;
     }
-
-    .sending-overlay.show {
-      display: flex;
-    }
-
+    .sending-overlay.show { display: flex; }
     .spinner {
-      width: 60px;
-      height: 60px;
-
+      width: 56px; height: 56px;
       border: 5px solid #333;
-
       border-top-color: var(--accent);
-
       border-radius: 50%;
-
       animation: spin 0.8s linear infinite;
     }
+    @keyframes spin { to{transform:rotate(360deg)} }
+    .sending-text { color: white; font-size: 1.1rem; }
 
-    @keyframes spin {
-      to {
-        transform: rotate(360deg)
-      }
-    }
-
-    .sending-text {
-      color: white;
-      font-size: 1.2rem;
-    }
-
-    .step {
-      display: none;
-    }
-
-    .step.active {
-      display: block;
-      animation: fadeIn 0.45s ease;
-    }
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(18px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+    .step { display: none; }
+    .step.active { display: block; animation: fadeIn 0.4s ease; }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
 
     .success-screen {
       text-align: center;
-      padding: 50px 20px;
+      padding: 45px 20px;
       background: var(--card);
       border-radius: 24px;
     }
-
-    .success-screen h2 {
-      color: var(--green);
-      margin: 20px 0;
-      font-size: 1.8rem;
-    }
-
-    .success-icon {
-      font-size: 80px;
-    }
+    .success-screen h2 { color: var(--green); margin: 18px 0; font-size: 1.7rem; }
+    .success-icon { font-size: 72px; }
 
     .order-summary {
       background: #1A1A2E;
-
       border: 1px solid #333;
-
-      border-radius: 16px;
-
-      padding: 18px;
-
-      margin-bottom: 16px;
-
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 14px;
       text-align: right;
     }
+    .order-summary p { margin: 6px 0; color: var(--muted); font-size: 0.93rem; }
+    .order-summary span { color: white; font-weight: 600; }
 
-    .order-summary p {
-      margin: 6px 0;
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .order-summary span {
-      color: white;
-      font-weight: 600;
-    }
-
-    .company-title {
-      text-align: center;
-      margin-bottom: 16px;
-      color: #fff;
-      font-size: 1.1rem;
-      font-weight: 700;
-    }
+    .company-title { text-align: center; margin-bottom: 14px; color: #fff; font-size: 1.05rem; font-weight: 700; }
   </style>
 </head>
 
 <body>
 
   <div class="sending-overlay" id="sendingOverlay">
-
     <div class="spinner"></div>
-
-    <div class="sending-text">
-      جاري إرسال طلبك...
-    </div>
-
+    <div class="sending-text">جاري إرسال طلبك...</div>
   </div>
 
   <div class="stars"></div>
 
   <div class="container">
 
-    <div class="logo">🌟</div>
-
-    <h1>عالم العروض</h1>
-
-    <p class="subtitle">
-      احجز باقتك بسهولة وسرعة
-    </p>
-
-    <div class="progress-header">
-
-      <div class="progress-top">
-
-        <div class="progress-title" id="progressTitle">
-          📡 اختيار الشركة
-        </div>
-
-        <div class="progress-counter" id="progressCounter">
-          خطوة 1 من 3
-        </div>
-
-      </div>
-
-      <div class="progress-bar">
-
-        <div class="progress-fill" id="progressFill"></div>
-
-      </div>
-
+    <!-- HERO -->
+    <div class="hero-header">
+      <div class="logo">🌟</div>
+      <h1>عالم العروض</h1>
+      <p class="subtitle">احجز باقتك بسهولة وسرعة</p>
     </div>
 
+    <!-- WHY US SECTION -->
+    <div class="why-us-strip">
+      <div class="why-us-title">✨ ليه تختارنا؟</div>
+
+      <div class="why-us-grid">
+        <div class="why-item">
+          <span class="wi-icon">💕</span>
+          <div class="wi-text">خدمة كل الشركات<br>اتصالات · فودافون · أورنج · وي</div>
+        </div>
+        <div class="why-item">
+          <span class="wi-icon">⚡</span>
+          <div class="wi-text">تفعيل سريع<br>في أقل وقت ممكن</div>
+        </div>
+        <div class="why-item">
+          <span class="wi-icon">🔒</span>
+          <div class="wi-text">ضمان على كل طلب<br>أمان 100%</div>
+        </div>
+        <div class="why-item">
+          <span class="wi-icon">🙋‍♂️</span>
+          <div class="wi-text">دعم فوري<br>ردّ في أي وقت</div>
+        </div>
+      </div>
+
+      <!-- Contact Row -->
+      <div class="contact-row">
+        <a class="contact-btn" href="https://wa.me/201555435556" target="_blank">
+          📞 رحمه: 01555435556
+        </a>
+        <a class="contact-btn" href="https://wa.me/201208666900" target="_blank">
+          📞 رجب: 01208666900
+        </a>
+      </div>
+      <div class="contact-row">
+        <a class="contact-btn whatsapp-group" href="https://chat.whatsapp.com/JEqN0H09qFZBn9XSEMTKGB?mode=ac_t" target="_blank">
+          🔥 انضم لجروب العروض على واتساب
+        </a>
+      </div>
+      <div style="text-align:center;margin-top:10px;">
+        <a href="https://www.facebook.com/share/p/17p4v3smpQ/" target="_blank"
+          style="font-size:0.78rem;color:var(--muted);text-decoration:none;">
+          📋 بوست الضمان ← اضغط هنا
+        </a>
+      </div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="progress-header">
+      <div class="progress-top">
+        <div class="progress-title" id="progressTitle">📡 اختيار الشركة</div>
+        <div class="progress-counter" id="progressCounter">خطوة 1 من 3</div>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+    </div>
+
+    <!-- LOADING -->
     <div id="loading" class="skeleton-wrapper">
-
       <div class="skeleton-card"></div>
       <div class="skeleton-card"></div>
       <div class="skeleton-card"></div>
-
     </div>
 
     <!-- STEP 1 -->
-
     <div id="step1" class="step card">
-
-      <div class="section-title">
-        📡 اختر الشركة
-      </div>
-
+      <div class="section-title">📡 اختر الشركة</div>
       <div class="company-grid" id="companyGrid"></div>
-
     </div>
 
     <!-- STEP 2 -->
-
     <div id="step2" class="step card">
-
-      <div class="section-title">
-        📦 اختر الباقة
-      </div>
-
+      <div class="section-title">📦 اختر الباقة</div>
       <div class="company-title" id="selectedCompanyTitle"></div>
-
       <div class="filter-tabs">
-
-        <div class="filter-tab active" data-filter="all">
-          الكل
-        </div>
-
-        <div class="filter-tab" data-filter="جيجا">
-          جيجا
-        </div>
-
-        <div class="filter-tab" data-filter="دقايق">
-          دقايق
-        </div>
-
-        <div class="filter-tab" data-filter="ميكس">
-          ميكس
-        </div>
-
+        <div class="filter-tab active" data-filter="all">الكل</div>
+        <div class="filter-tab" data-filter="جيجا">جيجا</div>
+        <div class="filter-tab" data-filter="دقايق">دقايق</div>
+        <div class="filter-tab" data-filter="ميكس">ميكس</div>
       </div>
-
       <div class="packages-list" id="packagesList"></div>
-
-      <button class="btn btn-back" onclick="backToCompanies()">
-        ← رجوع للشركات
-      </button>
-
+      <button class="btn btn-back" onclick="backToCompanies()">← رجوع للشركات</button>
     </div>
 
     <!-- STEP 3 -->
-
     <div id="step3" class="step card">
-
-      <div class="section-title">
-        📋 ملخص طلبك
-      </div>
-
+      <div class="section-title">📋 ملخص طلبك</div>
       <div class="order-summary" id="orderSummary"></div>
 
-      <div class="section-title">
-        👤 بيانات الحجز
-      </div>
+      <div class="section-title">👤 بيانات الحجز</div>
 
-      <input
-        type="text"
-        id="customerName"
-        placeholder="اسمك الكامل"
-        class="rtl-input">
+      <input type="text" id="customerName" placeholder="اسمك الكامل" class="rtl-input">
 
       <div class="input-group">
-
-        <label class="input-label">
-          📱 رقم الواتساب
-        </label>
-
-        <input
-          type="tel"
-          id="phone"
-          placeholder="01012345678"
-          class="rtl-input number-input">
-
+        <label class="input-label">📱 رقم الواتساب</label>
+        <input type="tel" id="phone" placeholder="01012345678" class="rtl-input number-input">
       </div>
 
-      <div class="input-group" style="margin-top:14px;">
-
-        <div style="
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:10px;
-            flex-wrap:wrap;
-            margin-bottom:8px;
-          ">
-
-          <label class="input-label" style="margin:0;">
-            📡 رقم التفعيل
-          </label>
-
+      <div class="input-group" style="margin-top:12px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:6px;">
+          <label class="input-label" style="margin:0;">📡 رقم التفعيل</label>
           <label class="same-number-check">
-
             <input type="checkbox" id="sameAsWhatsapp">
-
             <span>نفس رقم الواتساب</span>
-
           </label>
-
         </div>
-
-        <input
-          type="tel"
-          id="activationPhone"
-          placeholder="اكتب الرقم"
-          class="rtl-input number-input">
-
+        <input type="tel" id="activationPhone" placeholder="اكتب الرقم" class="rtl-input number-input">
       </div>
 
-      <div class="section-title" style="margin-top:20px;">
-        💳 طريقة الدفع
-      </div>
+      <div class="section-title" style="margin-top:18px;">💳 طريقة الدفع</div>
 
-      <div class="payment-hint">
-        حوّل المبلغ ثم ارفع صورة الإيصال
-      </div>
+      <div class="payment-hint">حوّل المبلغ ثم ارفع صورة الإيصال</div>
 
       <div class="payment-methods-grid">
-
-        <div class="payment-card pay-instapay"
-          onclick="selectPayment('إنستا باي', this)">
-
+        <div class="payment-card pay-instapay" onclick="selectPayment('إنستا باي', this)">
           <div class="pay-check">✓</div>
-
           <span class="pay-icon">🏧</span>
-
           <span class="pay-name">إنستا باي</span>
-
-          <span class="pay-number">
-            <span>01284277707</span>
-          </span>
-
+          <span class="pay-number"><span>01284277707</span></span>
         </div>
-
-        <div class="payment-card pay-cash"
-          onclick="selectPayment('كاش', this)">
-
+        <div class="payment-card pay-cash" onclick="selectPayment('كاش', this)">
           <div class="pay-check">✓</div>
-
           <span class="pay-icon">💲</span>
-
           <span class="pay-name">كاش</span>
-
-          <span class="pay-number">
-            <span>01284277707</span>
-            <span>01120228568</span>
-          </span>
-
+          <span class="pay-number"><span>01284277707</span><span>01120228568</span></span>
         </div>
-
       </div>
 
-      <input
-        type="text"
-        id="transferRef"
-        placeholder="اكتب آخر 4 أرقام من رقم التحويل"
-        class="rtl-input">
+      <input type="text" id="transferRef" placeholder="اكتب آخر 4 أرقام من رقم التحويل" class="rtl-input">
+      <textarea id="notes" rows="2" placeholder="ملاحظات إضافية" class="rtl-input"></textarea>
 
-      <textarea
-        id="notes"
-        rows="2"
-        placeholder="ملاحظات"
-        class="rtl-input"></textarea>
-
-      <div class="section-title">
-        🧾 إيصال الدفع
-      </div>
-
-      <input
-        type="file"
-        id="proofUpload"
-        accept="image/*"
-        onchange="previewImage(event)">
-
+      <div class="section-title">🧾 إيصال الدفع</div>
+      <input type="file" id="proofUpload" accept="image/*" onchange="previewImage(event)">
       <img id="imagePreview" alt="معاينة">
 
-      <button
-        class="btn btn-primary"
-        id="submitBtn"
-        onclick="submitOrder()">
-
-        ✅ تأكيد وإرسال الطلب
-
-      </button>
-
-      <button class="btn btn-back" onclick="showStep(2)">
-        ← رجوع
-      </button>
-
+      <button class="btn btn-primary" id="submitBtn" onclick="submitOrder()">✅ تأكيد وإرسال الطلب</button>
+      <button class="btn btn-back" onclick="showStep(2)">← رجوع</button>
     </div>
 
     <!-- SUCCESS -->
-
     <div id="successScreen" class="step success-screen">
-
-      <div class="success-icon">
-        🎉
-      </div>
-
-      <h2>
-        تم استلام طلبك بنجاح
-      </h2>
-
-      <p id="orderIdDisplay"
-        style="
-          font-size:1.4rem;
-          color:var(--green);
-          margin:15px 0;
-          font-weight:700;
-        ">
-      </p>
-
-      <p style="color:var(--muted);margin-bottom:30px;">
-        سيتم مراجعة طلبك خلال دقائق
-      </p>
-
-      <button class="btn btn-success" onclick="restart()">
-        📦 طلب جديد
-      </button>
-
+      <div class="success-icon">🎉</div>
+      <h2>تم استلام طلبك بنجاح</h2>
+      <p id="orderIdDisplay" style="font-size:1.3rem;color:var(--green);margin:14px 0;font-weight:700;"></p>
+      <p style="color:var(--muted);margin-bottom:26px;">سيتم مراجعة طلبك خلال دقائق</p>
+      <button class="btn btn-success" onclick="restart()">📦 طلب جديد</button>
     </div>
 
   </div>
 
   <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
 
-const SCRIPT_URL =
-  'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
+    let allPackages = [];
+    let companyPackagesMap = {};
+    let selectedCompany = '';
+    let selectedCompanyName = '';
+    let selectedPackage = null;
+    let proofBase64 = '';
+    let selectedPaymentMethod = '';
+    let isSubmitting = false;
 
-let allPackages = [];
+    async function loadPackages() {
+      const loadingEl = document.getElementById('loading');
+      try {
+        const cachedData = localStorage.getItem('packages_cache');
+        const cachedTime = localStorage.getItem('packages_cache_time');
+        const CACHE_DURATION = 30 * 60 * 1000;
 
-let companyPackagesMap = {};
+        if (cachedData && cachedTime && (Date.now() - cachedTime < CACHE_DURATION)) {
+          allPackages = JSON.parse(cachedData);
+          preparePackagesMap();
+          loadingEl.style.display = 'none';
+          showStep(1);
+          createCompanyCards();
+          return;
+        }
 
-let selectedCompany = '';
+        if (!navigator.onLine) {
+          loadingEl.innerHTML = `<div style="text-align:center;color:#f87171;padding:40px;">❌ لا يوجد اتصال بالإنترنت</div>`;
+          return;
+        }
 
-let selectedCompanyName = '';
+        const res = await fetch(`${SCRIPT_URL}?action=packages`);
+        allPackages = await res.json();
 
-let selectedPackage = null;
+        localStorage.setItem('packages_cache', JSON.stringify(allPackages));
+        localStorage.setItem('packages_cache_time', Date.now());
 
-let proofBase64 = '';
+        preparePackagesMap();
+        loadingEl.style.display = 'none';
+        showStep(1);
+        createCompanyCards();
 
-let selectedPaymentMethod = '';
-
-let isSubmitting = false;
-
-/* تحميل الباقات */
-
-async function loadPackages() {
-
-  const loadingEl =
-    document.getElementById('loading');
-
-  try {
-
-    const cachedData =
-      localStorage.getItem('packages_cache');
-
-    const cachedTime =
-      localStorage.getItem('packages_cache_time');
-
-    const CACHE_DURATION =
-      30 * 60 * 1000;
-
-    if (
-      cachedData &&
-      cachedTime &&
-      (Date.now() - cachedTime < CACHE_DURATION)
-    ) {
-
-      allPackages = JSON.parse(cachedData);
-
-      preparePackagesMap();
-
-      loadingEl.style.display = 'none';
-
-      showStep(1);
-
-      createCompanyCards();
-
-      return;
+      } catch (e) {
+        console.error(e);
+        loadingEl.innerHTML = `<div style="text-align:center;color:#f87171;padding:40px;">❌ فشل تحميل الباقات</div>`;
+      }
     }
 
-    if (!navigator.onLine) {
+    function preparePackagesMap() {
+      companyPackagesMap = {};
+      allPackages.forEach(pkg => {
+        let company = (pkg.company || pkg['الشركة'] || '').toLowerCase().trim();
+        if (company.includes('فودافون') || company.includes('vodafone')) company = 'vodafone';
+        else if (company.includes('أورانج') || company.includes('اورنج') || company.includes('orange')) company = 'orange';
+        else if (company.includes('وي') || company === 'we') company = 'we';
+        else if (company.includes('اتصالات') || company.includes('etisalat')) company = 'etisalat';
 
-      loadingEl.innerHTML = `
-        <div style="
-          text-align:center;
-          color:#f87171;
-          padding:40px;
-        ">
-          ❌ لا يوجد اتصال بالإنترنت
-        </div>
+        if (!companyPackagesMap[company]) companyPackagesMap[company] = [];
+        companyPackagesMap[company].push({
+          name: pkg.name || pkg['اسم الباقة / التفاصيل'] || '',
+          price: pkg.price || pkg['السعر (جنيه)'] || '',
+          type: pkg.type || pkg['النوع'] || '',
+          company
+        });
+      });
+    }
+
+    function createCompanyCards() {
+      const companies = [
+        { id: 'orange', name: 'أورانج', emoji: '🟠' },
+        { id: 'we', name: 'وي', emoji: '🟣' },
+        { id: 'etisalat', name: 'اتصالات', emoji: '🟢' },
+        { id: 'vodafone', name: 'فودافون', emoji: '🔴' }
+      ];
+
+      const grid = document.getElementById('companyGrid');
+      grid.innerHTML = '';
+
+      companies.forEach(({ id, name, emoji }) => {
+        const div = document.createElement('div');
+        div.className = 'company-card';
+        div.innerHTML = `<div style="font-size:2rem;margin-bottom:8px;">${emoji}</div>${name}`;
+        div.onclick = () => selectCompany({ id, name }, div);
+        grid.appendChild(div);
+      });
+    }
+
+    function selectCompany(company, el) {
+      selectedCompany = company.id;
+      selectedCompanyName = company.name;
+      document.querySelectorAll('.company-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('selectedCompanyTitle').textContent = `باقات ${selectedCompanyName}`;
+      showStep(2);
+      filterPackages('all');
+    }
+
+    function filterPackages(type) {
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.classList.toggle('active', tab.dataset.filter === type);
+      });
+
+      const container = document.getElementById('packagesList');
+      container.innerHTML = '';
+
+      let filtered = companyPackagesMap[selectedCompany] || [];
+
+      if (type !== 'all') {
+        filtered = filtered.filter(pkg => {
+          const text = ((pkg.name || '') + ' ' + (pkg.type || '')).toLowerCase();
+          if (type === 'جيجا') return text.includes('جيجا') || text.includes('gb') || text.includes('giga');
+          if (type === 'دقايق') return text.includes('دقيقة') || text.includes('دقايق');
+          if (type === 'ميكس') return text.includes('ميكس');
+          return true;
+        });
+      }
+
+      if (!filtered.length) {
+        container.innerHTML = `<div style="text-align:center;padding:40px;color:#f59e0b;">⚠️ لا توجد باقات</div>`;
+        return;
+      }
+
+      filtered.forEach(pkg => {
+        const div = document.createElement('div');
+        div.className = 'pkg-item';
+        div.innerHTML = `
+          <strong style="font-size:1rem;">${pkg.name}</strong>
+          <div style="margin-top:8px;color:#22C55E;font-size:1.3rem;font-weight:700;">${pkg.price} جنيه</div>
+        `;
+        div.onclick = () => {
+          document.querySelectorAll('.pkg-item').forEach(i => i.classList.remove('selected'));
+          div.classList.add('selected');
+          selectedPackage = pkg;
+          updateOrderSummary();
+          setTimeout(() => showStep(3), 180);
+        };
+        container.appendChild(div);
+      });
+    }
+
+    function selectPayment(method, el) {
+      document.querySelectorAll('.payment-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+      selectedPaymentMethod = method;
+    }
+
+    function updateOrderSummary() {
+      if (!selectedPackage) return;
+      document.getElementById('orderSummary').innerHTML = `
+        <p>📡 الشركة: <span>${selectedCompanyName}</span></p>
+        <p>📦 الباقة: <span>${selectedPackage.name}</span></p>
+        <p>💰 السعر: <span style="color:var(--green)">${selectedPackage.price} جنيه</span></p>
       `;
-
-      return;
     }
 
-    const res =
-      await fetch(`${SCRIPT_URL}?action=packages`);
+    function showStep(step) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      const el = document.getElementById(step === 4 ? 'successScreen' : `step${step}`);
+      if (el) el.classList.add('active');
 
-    allPackages = await res.json();
+      const progressFill = document.getElementById('progressFill');
+      const progressTitle = document.getElementById('progressTitle');
+      const progressCounter = document.getElementById('progressCounter');
+      const progressHeader = document.querySelector('.progress-header');
 
-    localStorage.setItem(
-      'packages_cache',
-      JSON.stringify(allPackages)
-    );
+      progressHeader.style.display = step === 4 ? 'none' : 'block';
 
-    localStorage.setItem(
-      'packages_cache_time',
-      Date.now()
-    );
+      if (step === 1) { progressFill.style.width = '33%'; progressTitle.textContent = '📡 اختيار الشركة'; progressCounter.textContent = 'خطوة 1 من 3'; }
+      else if (step === 2) { progressFill.style.width = '66%'; progressTitle.textContent = '📦 اختيار الباقة'; progressCounter.textContent = 'خطوة 2 من 3'; }
+      else if (step === 3) { progressFill.style.width = '100%'; progressTitle.textContent = '👤 بيانات الحجز'; progressCounter.textContent = 'خطوة 3 من 3'; }
 
-    preparePackagesMap();
-
-    loadingEl.style.display = 'none';
-
-    showStep(1);
-
-    createCompanyCards();
-
-  } catch (e) {
-
-    console.error(e);
-
-    loadingEl.innerHTML = `
-      <div style="
-        text-align:center;
-        color:#f87171;
-        padding:40px;
-      ">
-        ❌ فشل تحميل الباقات
-      </div>
-    `;
-  }
-}
-
-/* تجهيز الشركات */
-
-function preparePackagesMap() {
-
-  companyPackagesMap = {};
-
-  allPackages.forEach(pkg => {
-
-    let company =
-      (
-        pkg.company ||
-        pkg['الشركة'] ||
-        ''
-      )
-        .toLowerCase()
-        .trim();
-
-    if (
-      company.includes('فودافون') ||
-      company.includes('vodafone')
-    ) {
-
-      company = 'vodafone';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    else if (
-      company.includes('أورانج') ||
-      company.includes('اورنج') ||
-      company.includes('orange')
-    ) {
+    function backToCompanies() { showStep(1); }
 
-      company = 'orange';
+    function previewImage(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (file.size > 3 * 1024 * 1024) { alert("❌ الصورة كبيرة جدًا"); return; }
+      const reader = new FileReader();
+      reader.onload = ev => {
+        proofBase64 = ev.target.result;
+        const img = document.getElementById('imagePreview');
+        img.src = proofBase64;
+        img.style.display = 'block';
+      };
+      reader.readAsDataURL(file);
     }
 
-    else if (
-      company.includes('وي') ||
-      company === 'we'
-    ) {
-
-      company = 'we';
+    function normalizePhone(phone) {
+      return phone.replace(/\s/g, '').replace('+2', '').replace(/^20/, '0');
     }
 
-    else if (
-      company.includes('اتصالات') ||
-      company.includes('etisalat')
-    ) {
+    async function submitOrder() {
+      if (isSubmitting) return;
+      isSubmitting = true;
 
-      company = 'etisalat';
-    }
+      const submitBtn = document.getElementById('submitBtn');
+      let name = document.getElementById('customerName').value.trim();
+      let phone = normalizePhone(document.getElementById('phone').value.trim());
+      let activationPhone = normalizePhone(document.getElementById('activationPhone').value.trim());
 
-    if (!companyPackagesMap[company]) {
+      if (!name) { alert("❌ برجاء كتابة الاسم"); isSubmitting = false; return; }
+      if (!phone) { alert("❌ برجاء كتابة رقم الواتساب"); isSubmitting = false; return; }
+      if (!activationPhone) { alert("❌ برجاء كتابة رقم التفعيل"); isSubmitting = false; return; }
+      if (!selectedPackage) { alert("❌ اختر الباقة"); isSubmitting = false; return; }
+      if (!selectedPaymentMethod) { alert("❌ اختر طريقة الدفع"); isSubmitting = false; return; }
 
-      companyPackagesMap[company] = [];
-    }
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = '0.7';
 
-    companyPackagesMap[company].push({
+      const localOrderId = 'ORD-' + Date.now();
+      const formData = {
+        orderId: localOrderId,
+        customerName: name,
+        phone,
+        activationPhone,
+        company: selectedCompanyName,
+        package: selectedPackage.name,
+        price: selectedPackage.price,
+        payment: selectedPaymentMethod,
+        transferRef: document.getElementById('transferRef').value || '',
+        notes: document.getElementById('notes').value || '',
+        proofBase64: proofBase64 || ''
+      };
 
-      name:
-        pkg.name ||
-        pkg['اسم الباقة / التفاصيل'] ||
-        '',
+      document.getElementById('sendingOverlay').classList.add('show');
 
-      price:
-        pkg.price ||
-        pkg['السعر (جنيه)'] ||
-        '',
+      try {
+        const res = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData)
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error('failed');
 
-      type:
-        pkg.type ||
-        pkg['النوع'] ||
-        '',
+        document.getElementById('sendingOverlay').classList.remove('show');
+        document.getElementById('orderIdDisplay').textContent = `رقم طلبك: ${localOrderId}`;
+        showStep(4);
 
-      company
-    });
-
-  });
-}
-
-/* الشركات */
-
-function createCompanyCards() {
-
-  const companies = [
-
-    {
-      id: 'orange',
-      name: 'أورانج',
-      emoji: '🟠'
-    },
-
-    {
-      id: 'we',
-      name: 'وي',
-      emoji: '🟣'
-    },
-
-    {
-      id: 'etisalat',
-      name: 'اتصالات',
-      emoji: '🟢'
-    },
-
-    {
-      id: 'vodafone',
-      name: 'فودافون',
-      emoji: '🔴'
-    }
-
-  ];
-
-  const grid =
-    document.getElementById('companyGrid');
-
-  grid.innerHTML = '';
-
-  companies.forEach(({ id, name, emoji }) => {
-
-    const div = document.createElement('div');
-
-    div.className = 'company-card';
-
-    div.innerHTML = `
-      <div style="
-        font-size:2rem;
-        margin-bottom:8px;
-      ">
-        ${emoji}
-      </div>
-
-      ${name}
-    `;
-
-    div.onclick = () =>
-      selectCompany({ id, name }, div);
-
-    grid.appendChild(div);
-
-  });
-}
-
-/* اختيار شركة */
-
-function selectCompany(company, el) {
-
-  selectedCompany = company.id;
-
-  selectedCompanyName = company.name;
-
-  document.querySelectorAll('.company-card')
-    .forEach(c =>
-      c.classList.remove('selected'));
-
-  el.classList.add('selected');
-
-  document.getElementById(
-    'selectedCompanyTitle'
-  ).textContent =
-    `باقات ${selectedCompanyName}`;
-
-  showStep(2);
-
-  filterPackages('all');
-}
-
-/* فلترة */
-
-function filterPackages(type) {
-
-  document.querySelectorAll('.filter-tab')
-    .forEach(tab => {
-
-      tab.classList.toggle(
-        'active',
-        tab.dataset.filter === type
-      );
-    });
-
-  const container =
-    document.getElementById('packagesList');
-
-  container.innerHTML = '';
-
-  let filtered =
-    companyPackagesMap[selectedCompany] || [];
-
-  if (type !== 'all') {
-
-    filtered = filtered.filter(pkg => {
-
-      const pkgName =
-        pkg.name || '';
-
-      const pkgType =
-        pkg.type || '';
-
-      const text =
-        (pkgName + ' ' + pkgType)
-          .toLowerCase();
-
-      if (type === 'جيجا') {
-
-        return (
-          text.includes('جيجا') ||
-          text.includes('gb') ||
-          text.includes('giga')
-        );
+      } catch (e) {
+        console.error(e);
+        submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        isSubmitting = false;
+        document.getElementById('sendingOverlay').classList.remove('show');
+        alert("❌ فشل إرسال الطلب");
       }
-
-      if (type === 'دقايق') {
-
-        return (
-          text.includes('دقيقة') ||
-          text.includes('دقايق')
-        );
-      }
-
-      if (type === 'ميكس') {
-
-        return text.includes('ميكس');
-      }
-
-      return true;
-    });
-  }
-
-  if (!filtered.length) {
-
-    container.innerHTML = `
-      <div style="
-        text-align:center;
-        padding:40px;
-        color:#f59e0b;
-      ">
-        ⚠️ لا توجد باقات
-      </div>
-    `;
-
-    return;
-  }
-
-  filtered.forEach(pkg => {
-
-    const div =
-      document.createElement('div');
-
-    div.className = 'pkg-item';
-
-    div.innerHTML = `
-      <strong style="font-size:1.05rem;">
-        ${pkg.name}
-      </strong>
-
-      <div style="
-        margin-top:10px;
-        color:#22C55E;
-        font-size:1.4rem;
-        font-weight:700;
-      ">
-        ${pkg.price} جنيه
-      </div>
-    `;
-
-    div.onclick = () => {
-
-      document
-        .querySelectorAll('.pkg-item')
-        .forEach(i =>
-          i.classList.remove('selected'));
-
-      div.classList.add('selected');
-
-      selectedPackage = pkg;
-
-      updateOrderSummary();
-
-      setTimeout(() => {
-
-        showStep(3);
-
-      }, 180);
-    };
-
-    container.appendChild(div);
-
-  });
-}
-
-/* الدفع */
-
-function selectPayment(method, el) {
-
-  document.querySelectorAll('.payment-card')
-    .forEach(c =>
-      c.classList.remove('selected'));
-
-  el.classList.add('selected');
-
-  selectedPaymentMethod = method;
-}
-
-/* ملخص الطلب */
-
-function updateOrderSummary() {
-
-  if (!selectedPackage) return;
-
-  document.getElementById('orderSummary')
-    .innerHTML = `
-      <p>
-        📡 الشركة:
-        <span>${selectedCompanyName}</span>
-      </p>
-
-      <p>
-        📦 الباقة:
-        <span>${selectedPackage.name}</span>
-      </p>
-
-      <p>
-        💰 السعر:
-        <span style="color:var(--green)">
-          ${selectedPackage.price} جنيه
-        </span>
-      </p>
-    `;
-}
-
-/* الخطوات */
-
-function showStep(step) {
-
-  document
-    .querySelectorAll('.step')
-    .forEach(s =>
-      s.classList.remove('active'));
-
-  const el =
-    document.getElementById(
-      step === 4
-        ? 'successScreen'
-        : `step${step}`
-    );
-
-  if (el)
-    el.classList.add('active');
-
-  const progressFill =
-    document.getElementById('progressFill');
-
-  const progressTitle =
-    document.getElementById('progressTitle');
-
-  const progressCounter =
-    document.getElementById('progressCounter');
-
-  const progressHeader =
-    document.querySelector('.progress-header');
-
-  progressHeader.style.display =
-    step === 4 ? 'none' : 'block';
-
-  if (step === 1) {
-
-    progressFill.style.width = '33%';
-
-    progressTitle.textContent =
-      '📡 اختيار الشركة';
-
-    progressCounter.textContent =
-      'خطوة 1 من 3';
-  }
-
-  else if (step === 2) {
-
-    progressFill.style.width = '66%';
-
-    progressTitle.textContent =
-      '📦 اختيار الباقة';
-
-    progressCounter.textContent =
-      'خطوة 2 من 3';
-  }
-
-  else if (step === 3) {
-
-    progressFill.style.width = '100%';
-
-    progressTitle.textContent =
-      '👤 بيانات الحجز';
-
-    progressCounter.textContent =
-      'خطوة 3 من 3';
-  }
-
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth'
-  });
-}
-
-/* رجوع */
-
-function backToCompanies() {
-
-  showStep(1);
-}
-
-/* رفع الصورة */
-
-function previewImage(e) {
-
-  const file = e.target.files[0];
-
-  if (!file) return;
-
-  if (file.size > 3 * 1024 * 1024) {
-
-    alert("❌ الصورة كبيرة جدًا");
-
-    return;
-  }
-
-  const reader = new FileReader();
-
-  reader.onload = ev => {
-
-    proofBase64 = ev.target.result;
-
-    const img =
-      document.getElementById('imagePreview');
-
-    img.src = proofBase64;
-
-    img.style.display = 'block';
-  };
-
-  reader.readAsDataURL(file);
-}
-
-/* تنظيف الرقم */
-
-function normalizePhone(phone) {
-
-  return phone
-    .replace(/\s/g, '')
-    .replace('+2', '')
-    .replace(/^20/, '0');
-}
-
-/* إرسال الطلب */
-
-async function submitOrder() {
-
-  if (isSubmitting) return;
-
-  isSubmitting = true;
-
-  const submitBtn =
-    document.getElementById('submitBtn');
-
-  let name =
-    document.getElementById('customerName')
-      .value.trim();
-
-  let phone =
-    normalizePhone(
-      document.getElementById('phone')
-        .value.trim()
-    );
-
-  let activationPhone =
-    normalizePhone(
-      document.getElementById('activationPhone')
-        .value.trim()
-    );
-
-  if (!name) {
-    alert("❌ برجاء كتابة الاسم");
-    isSubmitting = false;
-    return;
-  }
-
-  if (!phone) {
-    alert("❌ برجاء كتابة رقم الواتساب");
-    isSubmitting = false;
-    return;
-  }
-
-  if (!activationPhone) {
-    alert("❌ برجاء كتابة رقم التفعيل");
-    isSubmitting = false;
-    return;
-  }
-
-  if (!selectedPackage) {
-    alert("❌ اختر الباقة");
-    isSubmitting = false;
-    return;
-  }
-
-  if (!selectedPaymentMethod) {
-    alert("❌ اختر طريقة الدفع");
-    isSubmitting = false;
-    return;
-  }
-
-  submitBtn.disabled = true;
-
-  submitBtn.style.opacity = '0.7';
-
-  const localOrderId =
-    'ORD-' + Date.now();
-
-  const formData = {
-
-    orderId: localOrderId,
-
-    customerName: name,
-
-    phone: phone,
-
-    activationPhone: activationPhone,
-
-    company: selectedCompanyName,
-
-    package: selectedPackage.name,
-
-    price: selectedPackage.price,
-
-    payment: selectedPaymentMethod,
-
-    transferRef:
-      document.getElementById('transferRef')
-        .value || '',
-
-    notes:
-      document.getElementById('notes')
-        .value || '',
-
-    proofBase64: proofBase64 || ''
-  };
-
-  document.getElementById('sendingOverlay')
-    .classList.add('show');
-
-  try {
-
-    const res = await fetch(SCRIPT_URL, {
-
-      method: 'POST',
-
-      headers: {
-        'Content-Type': 'application/json'
-      },
-
-      body: JSON.stringify(formData)
-    });
-
-    const data = await res.json();
-
-    if (!data.success) {
-
-      throw new Error('failed');
     }
 
-    document.getElementById('sendingOverlay')
-      .classList.remove('show');
+    function restart() { location.reload(); }
 
-    document.getElementById('orderIdDisplay')
-      .textContent =
-      `رقم طلبك: ${localOrderId}`;
+    document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('sameAsWhatsapp').addEventListener('change', function () {
+        const activationInput = document.getElementById('activationPhone');
+        if (this.checked) {
+          activationInput.value = document.getElementById('phone').value;
+          activationInput.setAttribute('readonly', true);
+          activationInput.style.opacity = '0.7';
+        } else {
+          activationInput.removeAttribute('readonly');
+          activationInput.style.opacity = '1';
+          activationInput.value = '';
+        }
+      });
 
-    showStep(4);
+      document.getElementById('phone').addEventListener('input', function () {
+        if (document.getElementById('sameAsWhatsapp').checked) {
+          document.getElementById('activationPhone').value = this.value;
+        }
+      });
 
-  } catch (e) {
-
-    console.error(e);
-
-    submitBtn.disabled = false;
-
-    submitBtn.style.opacity = '1';
-
-    isSubmitting = false;
-
-    document.getElementById('sendingOverlay')
-      .classList.remove('show');
-
-    alert("❌ فشل إرسال الطلب");
-  }
-}
-
-/* إعادة */
-
-function restart() {
-
-  location.reload();
-}
-
-/* DOM */
-
-document.addEventListener('DOMContentLoaded', () => {
-
-  document
-    .getElementById('sameAsWhatsapp')
-    .addEventListener('change', function () {
-
-      const whatsappInput =
-        document.getElementById('phone');
-
-      const activationInput =
-        document.getElementById('activationPhone');
-
-      if (this.checked) {
-
-        activationInput.value =
-          whatsappInput.value;
-
-        activationInput.setAttribute(
-          'readonly',
-          true
-        );
-
-        activationInput.style.opacity = '0.7';
-
-      } else {
-
-        activationInput.removeAttribute(
-          'readonly'
-        );
-
-        activationInput.style.opacity = '1';
-
-        activationInput.value = '';
-      }
-    });
-
-  document
-    .getElementById('phone')
-    .addEventListener('input', function () {
-
-      const checkbox =
-        document.getElementById('sameAsWhatsapp');
-
-      if (checkbox.checked) {
-
-        document.getElementById(
-          'activationPhone'
-        ).value = this.value;
-      }
-    });
-
-  document.querySelectorAll('.filter-tab')
-    .forEach(tab => {
-
-      tab.addEventListener('click', () => {
-
-        filterPackages(tab.dataset.filter);
-
+      document.querySelectorAll('.filter-tab').forEach(tab => {
+        tab.addEventListener('click', () => filterPackages(tab.dataset.filter));
       });
     });
 
-});
-
-window.onload = loadPackages;
-
+    window.onload = loadPackages;
   </script>
-
 </body>
-
 </html>
