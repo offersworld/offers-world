@@ -8,428 +8,201 @@
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0A0A14;
-      --card: #12121F;
-      --card2: #1A1A2E;
-      --accent: #7B2FBE;
-      --orange: #FF6B00;
-      --green: #22C55E;
-      --red: #EF4444;
-      --yellow: #F59E0B;
-      --text: #E0E0FF;
-      --muted: #94A3B8;
-      --border: rgba(123,47,190,0.2);
+      --bg:#0A0A14; --card:#12121F; --card2:#1A1A2E;
+      --accent:#7B2FBE; --orange:#FF6B00; --green:#22C55E;
+      --red:#EF4444; --yellow:#F59E0B; --text:#E0E0FF; --muted:#94A3B8;
+      --border:rgba(123,47,190,0.2);
     }
+    *{margin:0;padding:0;box-sizing:border-box;}
+    body{background:linear-gradient(135deg,#0A0A14,#1A0B2E);color:var(--text);font-family:'Cairo',sans-serif;min-height:100vh;}
+    .stars{position:fixed;inset:0;z-index:0;pointer-events:none;}
+    .stars::before{content:'';position:absolute;inset:0;background-image:radial-gradient(white 1px,transparent 1px);background-size:80px 80px;opacity:0.07;animation:twinkle 6s infinite alternate;}
+    @keyframes twinkle{0%{opacity:.04}100%{opacity:.12}}
 
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* LOGIN */
+    #loginPage{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#0A0A14,#1A0B2E);}
+    .login-card{background:var(--card);border:1px solid var(--border);border-radius:28px;padding:48px 36px;width:100%;max-width:400px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,0.6);position:relative;overflow:hidden;}
+    .login-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--orange),var(--accent));background-size:200%;animation:shimmer 3s linear infinite;}
+    @keyframes shimmer{0%{background-position:200%}100%{background-position:-200%}}
+    .login-logo{width:72px;height:72px;background:linear-gradient(135deg,var(--accent),var(--orange));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 20px;box-shadow:0 8px 30px rgba(123,47,190,0.4);}
+    .login-card h2{font-size:1.5rem;font-weight:900;background:linear-gradient(90deg,#fff,var(--muted));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px;}
+    .login-card p{color:var(--muted);font-size:.88rem;margin-bottom:32px;}
+    .input-wrap{position:relative;margin-bottom:14px;}
+    .input-wrap input{width:100%;padding:14px 18px 14px 48px;background:var(--card2);border:1px solid #333;border-radius:14px;color:white;font-size:1rem;font-family:'Cairo',sans-serif;transition:.25s;direction:ltr;text-align:center;}
+    .input-wrap input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(123,47,190,.15);}
+    .eye-btn{position:absolute;left:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:1.1rem;padding:4px;}
+    .btn-login{width:100%;padding:15px;background:linear-gradient(90deg,var(--accent),var(--orange));border:none;border-radius:14px;color:white;font-size:1rem;font-weight:700;font-family:'Cairo',sans-serif;cursor:pointer;transition:.3s;margin-top:6px;box-shadow:0 6px 20px rgba(123,47,190,.3);}
+    .btn-login:hover{opacity:.9;transform:translateY(-2px);}
+    .btn-login:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+    .login-error{background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);border-radius:10px;padding:10px 14px;color:#f87171;font-size:.88rem;margin-top:12px;display:none;}
 
-    body {
-      background: linear-gradient(135deg, #0A0A14 0%, #1A0B2E 100%);
-      color: var(--text);
-      font-family: 'Cairo', sans-serif;
-      min-height: 100vh;
+    /* LAYOUT */
+    #adminPanel{display:none;position:relative;z-index:1;}
+    .layout{display:flex;min-height:100vh;}
+    .sidebar{width:240px;background:var(--card);border-left:1px solid var(--border);padding:24px 0;position:fixed;top:0;right:0;height:100vh;z-index:50;display:flex;flex-direction:column;}
+    .sidebar-logo{padding:0 20px 24px;border-bottom:1px solid var(--border);margin-bottom:16px;}
+    .sidebar-logo span{font-size:1.1rem;font-weight:900;background:linear-gradient(90deg,var(--accent),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .sidebar-logo small{display:block;color:var(--muted);font-size:.75rem;margin-top:2px;}
+    .nav-item{display:flex;align-items:center;gap:10px;padding:12px 20px;cursor:pointer;color:var(--muted);font-size:.92rem;font-weight:600;transition:.2s;border-right:3px solid transparent;}
+    .nav-item:hover{color:white;background:rgba(123,47,190,.08);}
+    .nav-item.active{color:white;background:rgba(123,47,190,.15);border-right-color:var(--accent);}
+    .nav-icon{font-size:1.1rem;width:22px;text-align:center;}
+    .sidebar-bottom{margin-top:auto;padding:16px 20px;border-top:1px solid var(--border);}
+    .btn-logout{width:100%;padding:11px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:12px;color:#f87171;font-family:'Cairo',sans-serif;font-weight:700;cursor:pointer;transition:.2s;}
+    .btn-logout:hover{background:rgba(239,68,68,.2);}
+    .main{margin-right:240px;padding:24px;width:calc(100% - 240px);min-height:100vh;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+    .page-title{font-size:1.4rem;font-weight:900;}
+
+    /* BUTTONS */
+    .btn{padding:10px 20px;border:none;border-radius:12px;font-family:'Cairo',sans-serif;font-weight:700;cursor:pointer;transition:.2s;font-size:.9rem;}
+    .btn:disabled{opacity:.5;cursor:not-allowed;}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),#A855F7);color:white;}
+    .btn-primary:hover:not(:disabled){opacity:.9;transform:translateY(-1px);}
+    .btn-success{background:linear-gradient(90deg,var(--green),#86EFAC);color:#0a0a0a;}
+    .btn-danger{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);color:#f87171;}
+    .btn-danger:hover:not(:disabled){background:rgba(239,68,68,.25);}
+    .btn-ghost{background:rgba(123,47,190,.15);border:1px solid rgba(123,47,190,.3);color:var(--accent);}
+    .btn-ghost:hover:not(:disabled){background:rgba(123,47,190,.25);}
+    .btn-sm{padding:6px 14px;font-size:.8rem;border-radius:8px;}
+
+    /* STATS */
+    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px;}
+    .stat-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:20px;position:relative;overflow:hidden;transition:.3s;}
+    .stat-card:hover{transform:translateY(-3px);border-color:rgba(123,47,190,.4);}
+    .stat-card::after{content:attr(data-icon);position:absolute;bottom:-8px;left:-4px;font-size:4rem;opacity:.06;}
+    .stat-label{color:var(--muted);font-size:.82rem;margin-bottom:8px;}
+    .stat-value{font-size:2rem;font-weight:900;}
+    .stat-card.orange .stat-value{color:var(--orange);}
+    .stat-card.green .stat-value{color:var(--green);}
+    .stat-card.yellow .stat-value{color:var(--yellow);}
+    .stat-card.purple .stat-value{color:#A855F7;}
+
+    /* TABLE */
+    .table-card{background:var(--card);border:1px solid var(--border);border-radius:20px;overflow:hidden;margin-bottom:24px;}
+    .table-header{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
+    .table-header h3{font-size:1rem;font-weight:700;}
+    .search-input{padding:9px 16px;background:var(--card2);border:1px solid #333;border-radius:10px;color:white;font-family:'Cairo',sans-serif;font-size:.88rem;width:200px;transition:.2s;}
+    .search-input:focus{outline:none;border-color:var(--accent);}
+    .filter-select{padding:9px 14px;background:var(--card2);border:1px solid #333;border-radius:10px;color:white;font-family:'Cairo',sans-serif;font-size:.88rem;cursor:pointer;}
+    .table-wrap{overflow-x:auto;}
+    table{width:100%;border-collapse:collapse;}
+    thead th{padding:13px 16px;text-align:right;color:var(--muted);font-size:.82rem;font-weight:600;background:rgba(255,255,255,.02);border-bottom:1px solid var(--border);white-space:nowrap;}
+    tbody td{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.04);font-size:.9rem;white-space:nowrap;}
+    tbody tr:last-child td{border-bottom:none;}
+    tbody tr:hover{background:rgba(123,47,190,.05);}
+
+    /* BADGES */
+    .badge{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;font-size:.78rem;font-weight:700;}
+    .badge-pending{background:rgba(245,158,11,.15);color:var(--yellow);border:1px solid rgba(245,158,11,.25);}
+    .badge-done{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25);}
+    .badge-cancel{background:rgba(239,68,68,.12);color:#f87171;border:1px solid rgba(239,68,68,.25);}
+    .badge-avail{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25);}
+    .badge-hidden{background:rgba(148,163,184,.12);color:var(--muted);border:1px solid rgba(148,163,184,.2);}
+    .proof-link{display:inline-block;padding:5px 14px;background:rgba(123,47,190,.15);border:1px solid rgba(123,47,190,.3);border-radius:8px;color:#c084fc;font-size:.8rem;text-decoration:none;transition:.2s;}
+    .proof-link:hover{background:rgba(123,47,190,.3);}
+    .phone-link{color:var(--green);text-decoration:none;direction:ltr;display:inline-block;}
+    .phone-link:hover{text-decoration:underline;}
+
+    /* PACKAGES */
+    .pkg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;}
+    .pkg-card{background:var(--card2);border:1px solid #2a2a3a;border-radius:16px;padding:18px;transition:.3s;position:relative;}
+    .pkg-card:hover{border-color:rgba(123,47,190,.4);}
+    .pkg-card.hidden-pkg{opacity:.5;}
+    .pkg-actions{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(255,255,255,.06);}
+    .pkg-company{font-size:.75rem;color:var(--muted);margin-bottom:4px;}
+    .pkg-name{font-weight:700;font-size:.95rem;margin-bottom:8px;line-height:1.4;}
+    .pkg-price{font-size:1.5rem;font-weight:900;color:var(--green);}
+    .pkg-type{display:inline-block;padding:3px 10px;background:rgba(123,47,190,.15);border-radius:20px;font-size:.75rem;color:#c084fc;margin-top:6px;}
+    .pkg-notes{font-size:.78rem;color:var(--muted);margin-top:6px;font-style:italic;}
+    .filter-chip{padding:7px 16px;background:var(--card2);border:1px solid #333;border-radius:20px;color:var(--muted);font-family:'Cairo',sans-serif;font-size:.85rem;cursor:pointer;transition:.2s;white-space:nowrap;}
+    .filter-chip.active{background:var(--accent);border-color:var(--accent);color:white;}
+    .filters-row{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;align-items:center;}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px;}
+    .modal-overlay.show{display:flex;}
+    .modal{background:var(--card);border:1px solid var(--border);border-radius:24px;padding:32px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 30px 80px rgba(0,0,0,.6);}
+    .modal-title{font-size:1.2rem;font-weight:900;margin-bottom:24px;display:flex;align-items:center;gap:10px;}
+    .modal-close{position:absolute;top:20px;left:20px;background:rgba(255,255,255,.06);border:none;border-radius:8px;color:var(--muted);cursor:pointer;font-size:1rem;padding:6px 10px;transition:.2s;}
+    .modal-close:hover{background:rgba(255,255,255,.12);color:white;}
+    .form-group{margin-bottom:16px;}
+    .form-label{display:block;color:#ddd;font-size:.88rem;font-weight:600;margin-bottom:6px;}
+    .form-input{width:100%;padding:12px 16px;background:var(--card2);border:1px solid #333;border-radius:12px;color:white;font-size:.95rem;font-family:'Cairo',sans-serif;transition:.25s;}
+    .form-input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(123,47,190,.12);}
+    .form-select{width:100%;padding:12px 16px;background:var(--card2);border:1px solid #333;border-radius:12px;color:white;font-size:.95rem;font-family:'Cairo',sans-serif;cursor:pointer;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+    .modal-actions{display:flex;gap:10px;margin-top:24px;}
+    .modal-actions .btn{flex:1;padding:13px;}
+    .confirm-modal{max-width:380px;text-align:center;}
+    .confirm-icon{font-size:3rem;margin-bottom:16px;}
+    .confirm-msg{color:var(--muted);font-size:.92rem;margin-bottom:24px;line-height:1.7;}
+    .status-options{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:20px 0;}
+    .status-opt{padding:14px 10px;border-radius:14px;border:2px solid transparent;cursor:pointer;text-align:center;font-size:.85rem;font-weight:700;transition:.2s;font-family:'Cairo',sans-serif;background:var(--card2);}
+    .status-opt.opt-pending{border-color:rgba(245,158,11,.3);color:var(--yellow);}
+    .status-opt.opt-pending:hover,.status-opt.opt-pending.selected{background:rgba(245,158,11,.15);border-color:var(--yellow);}
+    .status-opt.opt-done{border-color:rgba(34,197,94,.3);color:var(--green);}
+    .status-opt.opt-done:hover,.status-opt.opt-done.selected{background:rgba(34,197,94,.12);border-color:var(--green);}
+    .status-opt.opt-cancel{border-color:rgba(239,68,68,.3);color:#f87171;}
+    .status-opt.opt-cancel:hover,.status-opt.opt-cancel.selected{background:rgba(239,68,68,.12);border-color:#f87171;}
+
+    .empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
+    .empty-state div{font-size:3rem;margin-bottom:12px;}
+    .spinner{width:20px;height:20px;border:2px solid rgba(255,255,255,.2);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-left:8px;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px 24px;color:white;font-weight:600;font-size:.9rem;z-index:999;transition:.4s;box-shadow:0 10px 40px rgba(0,0,0,.5);opacity:0;}
+    .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+    @media(max-width:768px){
+      .sidebar{display:none;}
+      .main{margin-right:0;width:100%;padding:16px;}
+      .mobile-nav{display:flex;gap:8px;overflow-x:auto;margin-bottom:16px;padding-bottom:8px;}
+      .mobile-nav-btn{padding:8px 16px;white-space:nowrap;background:var(--card2);border:1px solid #333;border-radius:20px;color:var(--muted);font-family:'Cairo',sans-serif;font-size:.85rem;cursor:pointer;flex-shrink:0;transition:.2s;}
+      .mobile-nav-btn.active{background:var(--accent);border-color:var(--accent);color:white;}
+      .form-row{grid-template-columns:1fr;}
+      .status-options{grid-template-columns:1fr;}
     }
-
-    /* ===== STARS ===== */
-    .stars {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-    }
-    .stars::before {
-      content: '';
-      position: absolute; inset: 0;
-      background-image: radial-gradient(white 1px, transparent 1px);
-      background-size: 80px 80px;
-      opacity: 0.08;
-      animation: twinkle 6s infinite alternate;
-    }
-    @keyframes twinkle { 0%{opacity:0.05} 100%{opacity:0.14} }
-
-    /* ===== LOGIN PAGE ===== */
-    #loginPage {
-      position: fixed; inset: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: center;
-      background: linear-gradient(135deg, #0A0A14, #1A0B2E);
-    }
-
-    .login-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 28px;
-      padding: 48px 36px;
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-      box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(123,47,190,0.1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .login-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, var(--accent), var(--orange), var(--accent));
-      background-size: 200%; animation: shimmer 3s linear infinite;
-    }
-    @keyframes shimmer { 0%{background-position:200%} 100%{background-position:-200%} }
-
-    .login-logo {
-      width: 72px; height: 72px;
-      background: linear-gradient(135deg, var(--accent), var(--orange));
-      border-radius: 20px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 32px;
-      margin: 0 auto 20px;
-      box-shadow: 0 8px 30px rgba(123,47,190,0.4);
-    }
-
-    .login-card h2 {
-      font-size: 1.5rem; font-weight: 900;
-      background: linear-gradient(90deg, #fff, var(--muted));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      margin-bottom: 6px;
-    }
-
-    .login-card p { color: var(--muted); font-size: 0.88rem; margin-bottom: 32px; }
-
-    .input-wrap {
-      position: relative; margin-bottom: 14px;
-    }
-    .input-wrap input {
-      width: 100%; padding: 14px 18px 14px 48px;
-      background: var(--card2); border: 1px solid #333;
-      border-radius: 14px; color: white;
-      font-size: 1rem; font-family: 'Cairo', sans-serif;
-      transition: 0.25s; direction: ltr; text-align: center;
-    }
-    .input-wrap input:focus {
-      outline: none; border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(123,47,190,0.15);
-    }
-    .input-wrap .eye-btn {
-      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; color: var(--muted); cursor: pointer;
-      font-size: 1.1rem; padding: 4px;
-    }
-
-    .btn-login {
-      width: 100%; padding: 15px;
-      background: linear-gradient(90deg, var(--accent), var(--orange));
-      border: none; border-radius: 14px;
-      color: white; font-size: 1rem; font-weight: 700;
-      font-family: 'Cairo', sans-serif; cursor: pointer;
-      transition: 0.3s; margin-top: 6px;
-      box-shadow: 0 6px 20px rgba(123,47,190,0.3);
-    }
-    .btn-login:hover { opacity: 0.9; transform: translateY(-2px); }
-    .btn-login:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-    .login-error {
-      background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3);
-      border-radius: 10px; padding: 10px 14px;
-      color: #f87171; font-size: 0.88rem; margin-top: 12px;
-      display: none;
-    }
-
-    /* ===== ADMIN PANEL ===== */
-    #adminPanel { display: none; position: relative; z-index: 1; }
-
-    /* Sidebar */
-    .layout { display: flex; min-height: 100vh; }
-
-    .sidebar {
-      width: 240px; background: var(--card);
-      border-left: 1px solid var(--border);
-      padding: 24px 0; position: fixed; top: 0; right: 0;
-      height: 100vh; z-index: 50;
-      display: flex; flex-direction: column;
-    }
-
-    .sidebar-logo {
-      padding: 0 20px 24px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 16px;
-    }
-
-    .sidebar-logo span {
-      font-size: 1.1rem; font-weight: 900;
-      background: linear-gradient(90deg, var(--accent), var(--orange));
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-    .sidebar-logo small { display: block; color: var(--muted); font-size: 0.75rem; margin-top: 2px; }
-
-    .nav-item {
-      display: flex; align-items: center; gap: 10px;
-      padding: 12px 20px; cursor: pointer;
-      color: var(--muted); font-size: 0.92rem; font-weight: 600;
-      transition: 0.2s; border-radius: 0;
-      border-right: 3px solid transparent;
-    }
-    .nav-item:hover { color: white; background: rgba(123,47,190,0.08); }
-    .nav-item.active { color: white; background: rgba(123,47,190,0.15); border-right-color: var(--accent); }
-    .nav-item .nav-icon { font-size: 1.1rem; width: 22px; text-align: center; }
-
-    .sidebar-bottom {
-      margin-top: auto; padding: 16px 20px;
-      border-top: 1px solid var(--border);
-    }
-
-    .btn-logout {
-      width: 100%; padding: 11px;
-      background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25);
-      border-radius: 12px; color: #f87171;
-      font-family: 'Cairo', sans-serif; font-weight: 700;
-      cursor: pointer; transition: 0.2s;
-    }
-    .btn-logout:hover { background: rgba(239,68,68,0.2); }
-
-    /* Main content */
-    .main {
-      margin-right: 240px; padding: 24px;
-      width: calc(100% - 240px); min-height: 100vh;
-    }
-
-    .topbar {
-      display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 24px; flex-wrap: wrap; gap: 12px;
-    }
-
-    .page-title { font-size: 1.4rem; font-weight: 900; }
-    .page-title span { color: var(--muted); font-size: 0.85rem; font-weight: 400; margin-right: 8px; }
-
-    .btn-refresh {
-      padding: 10px 20px;
-      background: rgba(123,47,190,0.15); border: 1px solid rgba(123,47,190,0.3);
-      border-radius: 12px; color: var(--accent);
-      font-family: 'Cairo', sans-serif; font-weight: 700;
-      cursor: pointer; transition: 0.2s; font-size: 0.9rem;
-    }
-    .btn-refresh:hover { background: rgba(123,47,190,0.25); }
-
-    /* Stats */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px; margin-bottom: 24px;
-    }
-
-    .stat-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 20px; padding: 20px;
-      position: relative; overflow: hidden;
-      transition: 0.3s;
-    }
-    .stat-card:hover { transform: translateY(-3px); border-color: rgba(123,47,190,0.4); }
-    .stat-card::after {
-      content: attr(data-icon);
-      position: absolute; bottom: -8px; left: -4px;
-      font-size: 4rem; opacity: 0.06;
-    }
-
-    .stat-label { color: var(--muted); font-size: 0.82rem; margin-bottom: 8px; }
-    .stat-value { font-size: 2rem; font-weight: 900; }
-    .stat-card.orange .stat-value { color: var(--orange); }
-    .stat-card.green .stat-value { color: var(--green); }
-    .stat-card.yellow .stat-value { color: var(--yellow); }
-    .stat-card.purple .stat-value { color: #A855F7; }
-
-    /* Table card */
-    .table-card {
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 20px; overflow: hidden; margin-bottom: 24px;
-    }
-
-    .table-header {
-      padding: 18px 20px; border-bottom: 1px solid var(--border);
-      display: flex; align-items: center; justify-content: space-between; gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .table-header h3 { font-size: 1rem; font-weight: 700; }
-
-    .search-input {
-      padding: 9px 16px; background: var(--card2);
-      border: 1px solid #333; border-radius: 10px;
-      color: white; font-family: 'Cairo', sans-serif; font-size: 0.88rem;
-      width: 200px; transition: 0.2s;
-    }
-    .search-input:focus { outline: none; border-color: var(--accent); }
-
-    .filter-select {
-      padding: 9px 14px; background: var(--card2);
-      border: 1px solid #333; border-radius: 10px;
-      color: white; font-family: 'Cairo', sans-serif; font-size: 0.88rem;
-      cursor: pointer;
-    }
-
-    .table-wrap { overflow-x: auto; }
-
-    table { width: 100%; border-collapse: collapse; }
-    thead th {
-      padding: 13px 16px; text-align: right;
-      color: var(--muted); font-size: 0.82rem; font-weight: 600;
-      background: rgba(255,255,255,0.02);
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
-    }
-    tbody td {
-      padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.04);
-      font-size: 0.9rem; white-space: nowrap;
-    }
-    tbody tr:last-child td { border-bottom: none; }
-    tbody tr:hover { background: rgba(123,47,190,0.05); }
-
-    .badge {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 5px 12px; border-radius: 20px;
-      font-size: 0.78rem; font-weight: 700;
-    }
-    .badge-pending { background: rgba(245,158,11,0.15); color: var(--yellow); border: 1px solid rgba(245,158,11,0.25); }
-    .badge-done    { background: rgba(34,197,94,0.12);  color: var(--green);  border: 1px solid rgba(34,197,94,0.25); }
-    .badge-cancel  { background: rgba(239,68,68,0.12);  color: #f87171;       border: 1px solid rgba(239,68,68,0.25); }
-
-    .proof-link {
-      display: inline-block; padding: 5px 14px;
-      background: rgba(123,47,190,0.15); border: 1px solid rgba(123,47,190,0.3);
-      border-radius: 8px; color: #c084fc; font-size: 0.8rem;
-      text-decoration: none; transition: 0.2s;
-    }
-    .proof-link:hover { background: rgba(123,47,190,0.3); }
-
-    .phone-link {
-      color: var(--green); text-decoration: none; direction: ltr; display: inline-block;
-    }
-    .phone-link:hover { text-decoration: underline; }
-
-    /* Loading skeleton */
-    .skeleton {
-      background: linear-gradient(90deg, #171727 25%, #23233a 50%, #171727 75%);
-      background-size: 200%; animation: shimmerBg 1.2s infinite;
-      border-radius: 8px; height: 20px;
-    }
-    @keyframes shimmerBg { 0%{background-position:200%} 100%{background-position:-200%} }
-
-    /* Empty state */
-    .empty-state {
-      text-align: center; padding: 60px 20px; color: var(--muted);
-    }
-    .empty-state div { font-size: 3rem; margin-bottom: 12px; }
-
-    /* Toast */
-    .toast {
-      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px);
-      background: var(--card); border: 1px solid var(--border);
-      border-radius: 14px; padding: 12px 24px;
-      color: white; font-weight: 600; font-size: 0.9rem;
-      z-index: 999; transition: 0.4s; box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-      opacity: 0;
-    }
-    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
-    /* Packages tab */
-    .pkg-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 14px;
-    }
-
-    .pkg-card {
-      background: var(--card2); border: 1px solid #2a2a3a;
-      border-radius: 16px; padding: 18px;
-      transition: 0.3s;
-    }
-    .pkg-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-
-    .pkg-company { font-size: 0.75rem; color: var(--muted); margin-bottom: 6px; }
-    .pkg-name { font-weight: 700; font-size: 0.95rem; margin-bottom: 10px; }
-    .pkg-price { font-size: 1.4rem; font-weight: 900; color: var(--green); }
-    .pkg-type {
-      display: inline-block; padding: 3px 10px;
-      background: rgba(123,47,190,0.15); border-radius: 20px;
-      font-size: 0.75rem; color: #c084fc; margin-top: 8px;
-    }
-
-    /* Spinner */
-    .spinner {
-      width: 20px; height: 20px;
-      border: 2px solid rgba(255,255,255,0.2);
-      border-top-color: white;
-      border-radius: 50%; animation: spin 0.7s linear infinite;
-      display: inline-block; vertical-align: middle; margin-left: 8px;
-    }
-    @keyframes spin { to{transform:rotate(360deg)} }
-
-    /* Mobile */
-    @media (max-width: 768px) {
-      .sidebar { display: none; }
-      .main { margin-right: 0; width: 100%; padding: 16px; }
-      .mobile-nav {
-        display: flex; gap: 8px; overflow-x: auto;
-        margin-bottom: 16px; padding-bottom: 8px;
-      }
-      .mobile-nav-btn {
-        padding: 8px 16px; white-space: nowrap;
-        background: var(--card2); border: 1px solid #333;
-        border-radius: 20px; color: var(--muted);
-        font-family: 'Cairo', sans-serif; font-size: 0.85rem;
-        cursor: pointer; flex-shrink: 0; transition: 0.2s;
-      }
-      .mobile-nav-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
-    }
-    @media (min-width: 769px) { .mobile-nav { display: none; } }
+    @media(min-width:769px){.mobile-nav{display:none;}}
   </style>
 </head>
 <body>
 <div class="stars"></div>
 
-<!-- ====== LOGIN ====== -->
+<!-- LOGIN -->
 <div id="loginPage">
   <div class="login-card">
     <div class="login-logo">🌟</div>
     <h2>لوحة التحكم</h2>
     <p>عالم العروض — للأدمن فقط</p>
-
     <div class="input-wrap">
       <input type="password" id="adminPass" placeholder="••••••••••••" autocomplete="off">
-      <button class="eye-btn" onclick="togglePass()" id="eyeBtn">👁</button>
+      <button class="eye-btn" onclick="togglePass()">👁</button>
     </div>
-
     <button class="btn-login" id="loginBtn" onclick="doLogin()">دخول</button>
-    <div class="login-error" id="loginError">❌ كلمة المرور غلط، حاول تاني</div>
+    <div class="login-error" id="loginError">❌ كلمة المرور غلط</div>
   </div>
 </div>
 
-<!-- ====== ADMIN PANEL ====== -->
+<!-- ADMIN PANEL -->
 <div id="adminPanel">
   <div class="layout">
-
-    <!-- Sidebar -->
     <aside class="sidebar">
       <div class="sidebar-logo">
         <span>🌟 عالم العروض</span>
         <small>لوحة التحكم</small>
       </div>
-
       <nav>
-        <div class="nav-item active" onclick="switchTab('dashboard')" id="nav-dashboard">
-          <span class="nav-icon">📊</span> الرئيسية
-        </div>
-        <div class="nav-item" onclick="switchTab('orders')" id="nav-orders">
-          <span class="nav-icon">📋</span> الطلبات
-        </div>
-        <div class="nav-item" onclick="switchTab('packages')" id="nav-packages">
-          <span class="nav-icon">📦</span> الباقات
-        </div>
+        <div class="nav-item active" onclick="switchTab('dashboard')" id="nav-dashboard"><span class="nav-icon">📊</span>الرئيسية</div>
+        <div class="nav-item" onclick="switchTab('orders')" id="nav-orders"><span class="nav-icon">📋</span>الطلبات</div>
+        <div class="nav-item" onclick="switchTab('packages')" id="nav-packages"><span class="nav-icon">📦</span>الباقات</div>
       </nav>
-
       <div class="sidebar-bottom">
-        <div style="color:var(--muted);font-size:0.75rem;margin-bottom:10px;text-align:center;" id="lastUpdate"></div>
+        <div style="color:var(--muted);font-size:.75rem;margin-bottom:10px;text-align:center;" id="lastUpdate"></div>
         <button class="btn-logout" onclick="logout()">🚪 تسجيل الخروج</button>
       </div>
     </aside>
 
-    <!-- Main -->
     <main class="main">
-
-      <!-- Mobile nav -->
       <div class="mobile-nav">
         <button class="mobile-nav-btn active" onclick="switchTab('dashboard')" id="mnav-dashboard">📊 الرئيسية</button>
         <button class="mobile-nav-btn" onclick="switchTab('orders')" id="mnav-orders">📋 الطلبات</button>
@@ -440,47 +213,23 @@
       <!-- DASHBOARD TAB -->
       <div id="tab-dashboard">
         <div class="topbar">
-          <div class="page-title">📊 الرئيسية <span id="dateDisplay"></span></div>
-          <button class="btn-refresh" onclick="loadAllData()">🔄 تحديث</button>
+          <div class="page-title">📊 الرئيسية</div>
+          <button class="btn btn-ghost" onclick="loadAllData()">🔄 تحديث</button>
         </div>
-
         <div class="stats-grid">
-          <div class="stat-card purple" data-icon="📋">
-            <div class="stat-label">إجمالي الطلبات</div>
-            <div class="stat-value" id="s-total">—</div>
-          </div>
-          <div class="stat-card yellow" data-icon="⏳">
-            <div class="stat-label">طلبات معلقة</div>
-            <div class="stat-value" id="s-pending">—</div>
-          </div>
-          <div class="stat-card green" data-icon="✅">
-            <div class="stat-label">تم تفعيلها</div>
-            <div class="stat-value" id="s-active">—</div>
-          </div>
-          <div class="stat-card orange" data-icon="💰">
-            <div class="stat-label">إجمالي الإيرادات</div>
-            <div class="stat-value" id="s-revenue">—</div>
-          </div>
+          <div class="stat-card purple" data-icon="📋"><div class="stat-label">إجمالي الطلبات</div><div class="stat-value" id="s-total">—</div></div>
+          <div class="stat-card yellow" data-icon="⏳"><div class="stat-label">طلبات معلقة</div><div class="stat-value" id="s-pending">—</div></div>
+          <div class="stat-card green" data-icon="✅"><div class="stat-label">تم تفعيلها</div><div class="stat-value" id="s-active">—</div></div>
+          <div class="stat-card orange" data-icon="💰"><div class="stat-label">إجمالي الإيرادات</div><div class="stat-value" id="s-revenue">—</div></div>
         </div>
-
-        <!-- Latest 5 orders -->
         <div class="table-card">
           <div class="table-header">
             <h3>⚡ آخر الطلبات</h3>
-            <button class="btn-refresh" onclick="switchTab('orders')" style="font-size:0.82rem;padding:7px 14px;">عرض الكل</button>
+            <button class="btn btn-ghost btn-sm" onclick="switchTab('orders')">عرض الكل</button>
           </div>
           <div class="table-wrap">
             <table>
-              <thead>
-                <tr>
-                  <th>رقم الطلب</th>
-                  <th>الاسم</th>
-                  <th>الشركة</th>
-                  <th>الباقة</th>
-                  <th>السعر</th>
-                  <th>الحالة</th>
-                </tr>
-              </thead>
+              <thead><tr><th>رقم الطلب</th><th>الاسم</th><th>الشركة</th><th>الباقة</th><th>السعر</th><th>الحالة</th></tr></thead>
               <tbody id="latestOrdersBody"></tbody>
             </table>
           </div>
@@ -491,9 +240,8 @@
       <div id="tab-orders" style="display:none;">
         <div class="topbar">
           <div class="page-title">📋 الطلبات</div>
-          <button class="btn-refresh" onclick="loadAllData()">🔄 تحديث</button>
+          <button class="btn btn-ghost" onclick="loadAllData()">🔄 تحديث</button>
         </div>
-
         <div class="table-card">
           <div class="table-header">
             <h3>كل الطلبات</h3>
@@ -503,7 +251,7 @@
                 <option value="">كل الحالات</option>
                 <option value="معلق">معلق</option>
                 <option value="تم">تم التفعيل</option>
-                <option value="ملغي">ملغي</option>
+                <option value="ملغ">ملغي</option>
               </select>
             </div>
           </div>
@@ -511,15 +259,9 @@
             <table>
               <thead>
                 <tr>
-                  <th>رقم الطلب</th>
-                  <th>الاسم</th>
-                  <th>الواتساب</th>
-                  <th>الشركة</th>
-                  <th>الباقة</th>
-                  <th>السعر</th>
-                  <th>الدفع</th>
-                  <th>الحالة</th>
-                  <th>الإيصال</th>
+                  <th>رقم الطلب</th><th>الاسم</th><th>الواتساب</th><th>رقم التفعيل</th>
+                  <th>الشركة</th><th>الباقة</th><th>السعر</th><th>الدفع</th>
+                  <th>الحالة</th><th>الإيصال</th><th>إجراء</th>
                 </tr>
               </thead>
               <tbody id="allOrdersBody"></tbody>
@@ -531,256 +273,452 @@
       <!-- PACKAGES TAB -->
       <div id="tab-packages" style="display:none;">
         <div class="topbar">
-          <div class="page-title">📦 الباقات المتاحة</div>
-          <button class="btn-refresh" onclick="loadAllData()">🔄 تحديث</button>
+          <div class="page-title">📦 الباقات</div>
+          <button class="btn btn-primary" onclick="openPkgModal()">➕ إضافة باقة</button>
         </div>
-
         <div class="table-card" style="padding:20px;">
-          <div style="display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;">
-            <button class="filter-select" onclick="filterPkgs('all')" id="pf-all" style="border-radius:20px;cursor:pointer;background:var(--accent);border-color:var(--accent);">الكل</button>
-            <button class="filter-select" onclick="filterPkgs('orange')" id="pf-orange" style="border-radius:20px;cursor:pointer;">أورانج</button>
-            <button class="filter-select" onclick="filterPkgs('vodafone')" id="pf-vodafone" style="border-radius:20px;cursor:pointer;">فودافون</button>
-            <button class="filter-select" onclick="filterPkgs('etisalat')" id="pf-etisalat" style="border-radius:20px;cursor:pointer;">اتصالات</button>
-            <button class="filter-select" onclick="filterPkgs('we')" id="pf-we" style="border-radius:20px;cursor:pointer;">وي</button>
+          <div class="filters-row">
+            <button class="filter-chip active" onclick="filterPkgs('all')" data-co="all">الكل</button>
+            <button class="filter-chip" onclick="filterPkgs('أورانج')" data-co="أورانج">🟠 أورانج</button>
+            <button class="filter-chip" onclick="filterPkgs('فودافون')" data-co="فودافون">🔴 فودافون</button>
+            <button class="filter-chip" onclick="filterPkgs('اتصالات')" data-co="اتصالات">🟢 اتصالات</button>
+            <button class="filter-chip" onclick="filterPkgs('وي')" data-co="وي">🟣 وي</button>
           </div>
+          <div style="color:var(--muted);font-size:.82rem;margin-bottom:16px;" id="pkgCount"></div>
           <div class="pkg-grid" id="pkgGrid"></div>
         </div>
       </div>
-
     </main>
+  </div>
+</div>
+
+<!-- PACKAGE MODAL -->
+<div class="modal-overlay" id="pkgModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('pkgModal')">✕</button>
+    <div class="modal-title" id="pkgModalTitle">➕ إضافة باقة جديدة</div>
+    <input type="hidden" id="pkgRowIndex">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">الشركة *</label>
+        <select class="form-select" id="pkgCompany">
+          <option value="">اختر الشركة</option>
+          <option value="أورانج">أورانج</option>
+          <option value="فودافون">فودافون</option>
+          <option value="اتصالات (حكاية)">اتصالات (حكاية)</option>
+          <option value="اتصالات (&e ميكس)">اتصالات (&e ميكس)</option>
+          <option value="اتصالات (اميرالد)">اتصالات (اميرالد)</option>
+          <option value="وي">وي</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">النوع</label>
+        <select class="form-select" id="pkgType">
+          <option value="">اختر النوع</option>
+          <option value="جيجا+دقايق">جيجا+دقايق</option>
+          <option value="جيجا">جيجا فقط</option>
+          <option value="دقايق فقط">دقايق فقط</option>
+          <option value="ميكس">ميكس</option>
+          <option value="متغير">متغير</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">اسم / تفاصيل الباقة *</label>
+      <input type="text" class="form-input" id="pkgName" placeholder="مثال: 20 جيجا + 2000 دقيقة لأي شبكة">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">السعر (جنيه) *</label>
+        <input type="text" class="form-input" id="pkgPrice" placeholder="مثال: 370" style="direction:ltr;">
+      </div>
+      <div class="form-group">
+        <label class="form-label">الحالة</label>
+        <select class="form-select" id="pkgStatus">
+          <option value="متاح">متاح ✅</option>
+          <option value="مخفي">مخفي 🔒</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">ملاحظات</label>
+      <input type="text" class="form-input" id="pkgNotes" placeholder="مثال: التفعيل يوم 1 أو 16">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('pkgModal')">إلغاء</button>
+      <button class="btn btn-primary" id="pkgSaveBtn" onclick="savePackage()">💾 حفظ</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM DELETE MODAL -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="modal confirm-modal">
+    <div class="confirm-icon">🗑️</div>
+    <div class="modal-title" style="justify-content:center;">تأكيد الحذف</div>
+    <div class="confirm-msg" id="confirmMsg"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('confirmModal')">إلغاء</button>
+      <button class="btn btn-danger" id="confirmDeleteBtn">🗑️ حذف</button>
+    </div>
+  </div>
+</div>
+
+<!-- ORDER STATUS MODAL -->
+<div class="modal-overlay" id="orderStatusModal">
+  <div class="modal" style="max-width:440px;">
+    <button class="modal-close" onclick="closeModal('orderStatusModal')">✕</button>
+    <div class="modal-title">📋 تغيير حالة الطلب</div>
+    <div style="color:var(--muted);font-size:.88rem;margin-bottom:4px;">رقم الطلب:</div>
+    <div style="font-weight:700;margin-bottom:4px;" id="osOrderId"></div>
+    <div style="color:var(--muted);font-size:.85rem;margin-bottom:16px;" id="osCurrentStatus"></div>
+    <div class="status-options">
+      <button class="status-opt opt-pending" onclick="selectStatus('معلق')">⏳<br>معلق</button>
+      <button class="status-opt opt-done" onclick="selectStatus('تم التفعيل')">✅<br>تم التفعيل</button>
+      <button class="status-opt opt-cancel" onclick="selectStatus('ملغي')">❌<br>ملغي</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">ملاحظة (اختياري)</label>
+      <input type="text" class="form-input" id="osNote" placeholder="مثال: تم التفعيل الساعة 3 عصراً">
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('orderStatusModal')">إلغاء</button>
+      <button class="btn btn-success" id="osSaveBtn" onclick="saveOrderStatus()">✅ حفظ الحالة</button>
+    </div>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  // ============================================================
-  // CONFIG — غير الـ URL ده بالـ deployment URL بتاعك
-  // ============================================================
-  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
+// ═══════════════════════════════════════
+// ⚙️ CONFIG — غيّر الـ URL بالـ deployment URL بتاعك
+// ═══════════════════════════════════════
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
 
-  // ============================================================
-  let allOrders = [];
-  let allPkgs   = [];
-  let currentPkgFilter = 'all';
+let allOrders = [], allPkgs = [], currentPkgFilter = 'all';
+let currentOrderId = null, selectedNewStatus = null;
 
-  // ====== LOGIN ======
-  function togglePass() {
-    const inp = document.getElementById('adminPass');
-    inp.type = inp.type === 'password' ? 'text' : 'password';
-  }
+// ══ LOGIN ══
+function togglePass() {
+  const i = document.getElementById('adminPass');
+  i.type = i.type === 'password' ? 'text' : 'password';
+}
+document.getElementById('adminPass').addEventListener('keypress', e => { if(e.key==='Enter') doLogin(); });
 
-  document.getElementById('adminPass').addEventListener('keypress', e => {
-    if (e.key === 'Enter') doLogin();
-  });
-
-  async function doLogin() {
-    const pass = document.getElementById('adminPass').value.trim();
-    if (!pass) return;
-
-    const btn = document.getElementById('loginBtn');
-    btn.disabled = true;
-    btn.innerHTML = 'جاري التحقق... <span class="spinner"></span>';
-
-    try {
-      const res  = await fetch(`${SCRIPT_URL}?action=checkPassword&pass=${encodeURIComponent(pass)}`);
-      const data = await res.json();
-
-      if (data.success) {
-        sessionStorage.setItem('aw_admin', '1');
-        document.getElementById('loginPage').style.display  = 'none';
-        document.getElementById('adminPanel').style.display = 'block';
-        updateDateDisplay();
-        loadAllData();
-      } else {
-        document.getElementById('loginError').style.display = 'block';
-        btn.disabled = false;
-        btn.innerHTML = 'دخول';
-        document.getElementById('adminPass').value = '';
-        document.getElementById('adminPass').focus();
-      }
-    } catch (e) {
-      showToast('❌ فشل الاتصال بالسيرفر');
-      btn.disabled = false;
-      btn.innerHTML = 'دخول';
-    }
-  }
-
-  function logout() {
-    sessionStorage.removeItem('aw_admin');
-    location.reload();
-  }
-
-  // Auto-login if session exists
-  window.addEventListener('DOMContentLoaded', () => {
-    if (sessionStorage.getItem('aw_admin') === '1') {
-      document.getElementById('loginPage').style.display  = 'none';
+async function doLogin() {
+  const pass = document.getElementById('adminPass').value.trim();
+  if (!pass) return;
+  const btn = document.getElementById('loginBtn');
+  btn.disabled = true;
+  btn.innerHTML = 'جاري التحقق... <span class="spinner"></span>';
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=checkPassword&pass=${encodeURIComponent(pass)}`);
+    const data = await res.json();
+    if (data.success) {
+      sessionStorage.setItem('aw_admin','1');
+      document.getElementById('loginPage').style.display = 'none';
       document.getElementById('adminPanel').style.display = 'block';
-      updateDateDisplay();
       loadAllData();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+      btn.disabled = false; btn.innerHTML = 'دخول';
+      document.getElementById('adminPass').value = '';
     }
+  } catch(e) {
+    showToast('❌ فشل الاتصال');
+    btn.disabled = false; btn.innerHTML = 'دخول';
+  }
+}
+
+function logout() { sessionStorage.removeItem('aw_admin'); location.reload(); }
+
+window.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('aw_admin') === '1') {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('adminPanel').style.display = 'block';
+    loadAllData();
+  }
+});
+
+// ══ TABS ══
+function switchTab(name) {
+  ['dashboard','orders','packages'].forEach(t => {
+    document.getElementById('tab-'+t).style.display = t===name ? 'block' : 'none';
+    document.getElementById('nav-'+t)?.classList.toggle('active', t===name);
+    document.getElementById('mnav-'+t)?.classList.toggle('active', t===name);
   });
+}
 
-  // ====== TABS ======
-  function switchTab(name) {
-    ['dashboard','orders','packages'].forEach(t => {
-      document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
-      const nav = document.getElementById('nav-' + t);
-      const mnav = document.getElementById('mnav-' + t);
-      if (nav)  nav.classList.toggle('active',  t === name);
-      if (mnav) mnav.classList.toggle('active',  t === name);
+// ══ LOAD DATA ══
+async function loadAllData() {
+  try {
+    const [sR,oR,pR] = await Promise.all([
+      fetch(`${SCRIPT_URL}?action=stats`),
+      fetch(`${SCRIPT_URL}?action=orders`),
+      fetch(`${SCRIPT_URL}?action=packages`)
+    ]);
+    const stats = await sR.json();
+    allOrders   = await oR.json();
+    allPkgs     = await pR.json();
+
+    document.getElementById('s-total').textContent   = stats.total   || 0;
+    document.getElementById('s-pending').textContent = stats.pending || 0;
+    document.getElementById('s-active').textContent  = stats.active  || 0;
+    document.getElementById('s-revenue').textContent = (stats.revenue||0) + ' ج';
+
+    renderLatestOrders(); renderAllOrders(); renderPackages();
+    document.getElementById('lastUpdate').textContent =
+      'آخر تحديث: ' + new Date().toLocaleTimeString('ar-EG');
+    showToast('✅ تم تحديث البيانات');
+  } catch(e) { showToast('❌ فشل تحميل البيانات'); }
+}
+
+// ══ ORDERS ══
+function statusBadge(s) {
+  s = String(s||'معلق');
+  if (s.includes('تم')||s.includes('مفعل')) return `<span class="badge badge-done">✅ ${s}</span>`;
+  if (s.includes('ملغ'))                    return `<span class="badge badge-cancel">❌ ${s}</span>`;
+  return `<span class="badge badge-pending">⏳ ${s}</span>`;
+}
+
+function renderLatestOrders() {
+  const tbody = document.getElementById('latestOrdersBody');
+  const latest = [...allOrders].reverse().slice(0,5);
+  if (!latest.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div>📭</div>لا يوجد طلبات بعد</td></tr>';
+    return;
+  }
+  tbody.innerHTML = latest.map(o => `
+    <tr>
+      <td style="font-size:.78rem;color:var(--muted);">${o.orderId||'-'}</td>
+      <td><strong>${o.customerName||'-'}</strong></td>
+      <td>${o.company||'-'}</td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;">${o.package||'-'}</td>
+      <td style="color:var(--green);font-weight:700;">${o.price||0} ج</td>
+      <td>${statusBadge(o.status)}</td>
+    </tr>`).join('');
+}
+
+function renderAllOrders(data) {
+  const orders = data || allOrders;
+  const tbody  = document.getElementById('allOrdersBody');
+  if (!orders.length) {
+    tbody.innerHTML = '<tr><td colspan="11" class="empty-state"><div>📭</div>لا يوجد طلبات</td></tr>';
+    return;
+  }
+  tbody.innerHTML = [...orders].reverse().map(o => `
+    <tr>
+      <td style="font-size:.75rem;color:var(--muted);">${o.orderId||'-'}</td>
+      <td><strong>${o.customerName||'-'}</strong></td>
+      <td><a class="phone-link" href="https://wa.me/2${o.phone||''}" target="_blank">📱 ${o.phone||'-'}</a></td>
+      <td><span style="direction:ltr;display:inline-block;">${o.activationPhone||o.phone||'-'}</span></td>
+      <td>${o.company||'-'}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;" title="${o.package||''}">${o.package||'-'}</td>
+      <td style="color:var(--green);font-weight:700;">${o.price||0} ج</td>
+      <td>${o.payment||'-'}</td>
+      <td>${statusBadge(o.status)}</td>
+      <td>${o.proofImage?`<a class="proof-link" href="${o.proofImage}" target="_blank">🧾 فتح</a>`:'<span style="color:var(--muted)">—</span>'}</td>
+      <td><button class="btn btn-ghost btn-sm" onclick="openOrderStatus('${o.orderId}','${String(o.status||'').replace(/'/g,"\\'")}')">✏️ حالة</button></td>
+    </tr>`).join('');
+}
+
+function filterOrders() {
+  const q  = document.getElementById('searchInput').value.toLowerCase();
+  const st = document.getElementById('statusFilter').value;
+  renderAllOrders(allOrders.filter(o => {
+    const mQ = !q
+      || (o.customerName||'').toLowerCase().includes(q)
+      || (o.phone||'').includes(q)
+      || (o.orderId||'').toLowerCase().includes(q)
+      || (o.company||'').toLowerCase().includes(q);
+    const mS = !st || String(o.status||'').includes(st);
+    return mQ && mS;
+  }));
+}
+
+// ══ ORDER STATUS MODAL ══
+function openOrderStatus(orderId, currentStatus) {
+  currentOrderId   = orderId;
+  selectedNewStatus = null;
+  document.getElementById('osOrderId').textContent       = orderId;
+  document.getElementById('osCurrentStatus').textContent = 'الحالة الحالية: ' + (currentStatus||'معلق');
+  document.getElementById('osNote').value = '';
+  document.querySelectorAll('.status-opt').forEach(b => b.classList.remove('selected'));
+  document.getElementById('orderStatusModal').classList.add('show');
+}
+
+function selectStatus(s) {
+  selectedNewStatus = s;
+  document.querySelectorAll('.status-opt').forEach(b => b.classList.remove('selected'));
+  const map = {'معلق':'pending','تم التفعيل':'done','ملغي':'cancel'};
+  document.querySelector('.opt-'+map[s])?.classList.add('selected');
+}
+
+async function saveOrderStatus() {
+  if (!selectedNewStatus) { showToast('⚠️ اختار الحالة الأول'); return; }
+  const btn = document.getElementById('osSaveBtn');
+  btn.disabled = true;
+  btn.innerHTML = 'جاري الحفظ... <span class="spinner"></span>';
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        action:'updateOrderStatus',
+        orderId: currentOrderId,
+        status:  selectedNewStatus,
+        note:    document.getElementById('osNote').value
+      })
     });
+    const data = await res.json();
+    if (data.success) {
+      closeModal('orderStatusModal');
+      showToast('✅ تم تحديث الحالة');
+      await loadAllData();
+    } else { showToast('❌ فشل التحديث'); }
+  } catch(e) { showToast('❌ خطأ في الاتصال'); }
+  finally { btn.disabled=false; btn.innerHTML='✅ حفظ الحالة'; }
+}
+
+// ══ PACKAGES ══
+function renderPackages() { filterPkgs(currentPkgFilter); }
+
+function filterPkgs(co) {
+  currentPkgFilter = co;
+  document.querySelectorAll('.filter-chip').forEach(b =>
+    b.classList.toggle('active', b.dataset.co===co)
+  );
+  const pkgs = co==='all' ? allPkgs
+    : allPkgs.filter(p => (p.company||'').includes(co));
+
+  document.getElementById('pkgCount').textContent =
+    pkgs.length + ' باقة' + (co==='all' ? '' : ' في ' + co);
+
+  const grid = document.getElementById('pkgGrid');
+  if (!pkgs.length) {
+    grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><div>📭</div>لا توجد باقات</div>';
+    return;
   }
-
-  // ====== LOAD DATA ======
-  async function loadAllData() {
-    try {
-      const [statsRes, ordersRes, pkgsRes] = await Promise.all([
-        fetch(`${SCRIPT_URL}?action=stats`),
-        fetch(`${SCRIPT_URL}?action=orders`),
-        fetch(`${SCRIPT_URL}?action=packages`)
-      ]);
-
-      const stats  = await statsRes.json();
-      allOrders    = await ordersRes.json();
-      allPkgs      = await pkgsRes.json();
-
-      // Stats
-      document.getElementById('s-total').textContent   = stats.total   || 0;
-      document.getElementById('s-pending').textContent = stats.pending || 0;
-      document.getElementById('s-active').textContent  = stats.active  || 0;
-      document.getElementById('s-revenue').textContent = (stats.revenue || 0) + ' ج';
-
-      // Tables
-      renderLatestOrders();
-      renderAllOrders();
-      renderPackages();
-
-      // Last update
-      const now = new Date();
-      document.getElementById('lastUpdate').textContent = 'آخر تحديث: ' + now.toLocaleTimeString('ar-EG');
-
-      showToast('✅ تم تحديث البيانات');
-
-    } catch (e) {
-      showToast('❌ فشل تحميل البيانات');
-    }
-  }
-
-  // ====== RENDER ORDERS ======
-  function statusBadge(status) {
-    const s = String(status);
-    if (s.includes('تم') || s.includes('مفعل')) return `<span class="badge badge-done">✅ ${s}</span>`;
-    if (s.includes('ملغ')) return `<span class="badge badge-cancel">❌ ${s}</span>`;
-    return `<span class="badge badge-pending">⏳ ${s}</span>`;
-  }
-
-  function renderLatestOrders() {
-    const tbody = document.getElementById('latestOrdersBody');
-    const latest = [...allOrders].reverse().slice(0, 5);
-    if (!latest.length) {
-      tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div>📭</div>لا يوجد طلبات بعد</td></tr>';
-      return;
-    }
-    tbody.innerHTML = latest.map(o => `
-      <tr>
-        <td style="font-size:0.78rem;color:var(--muted);">${o.orderId||'-'}</td>
-        <td><strong>${o.customerName||'-'}</strong></td>
-        <td>${o.company||'-'}</td>
-        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;">${o.package||'-'}</td>
-        <td style="color:var(--green);font-weight:700;">${o.price||0} ج</td>
-        <td>${statusBadge(o.status)}</td>
-      </tr>
-    `).join('');
-  }
-
-  function renderAllOrders(data) {
-    const orders = data || allOrders;
-    const tbody  = document.getElementById('allOrdersBody');
-    if (!orders.length) {
-      tbody.innerHTML = '<tr><td colspan="9" class="empty-state"><div>📭</div>لا يوجد طلبات</td></tr>';
-      return;
-    }
-    tbody.innerHTML = [...orders].reverse().map(o => `
-      <tr>
-        <td style="font-size:0.75rem;color:var(--muted);">${o.orderId||'-'}</td>
-        <td><strong>${o.customerName||'-'}</strong></td>
-        <td><a class="phone-link" href="https://wa.me/2${o.phone||''}" target="_blank">📱 ${o.phone||'-'}</a></td>
-        <td>${o.company||'-'}</td>
-        <td style="max-width:150px;overflow:hidden;text-overflow:ellipsis;" title="${o.package||''}">${o.package||'-'}</td>
-        <td style="color:var(--green);font-weight:700;">${o.price||0} ج</td>
-        <td>${o.payment||'-'}</td>
-        <td>${statusBadge(o.status)}</td>
-        <td>${o.proofImage ? `<a class="proof-link" href="${o.proofImage}" target="_blank">🧾 فتح</a>` : '<span style="color:var(--muted)">—</span>'}</td>
-      </tr>
-    `).join('');
-  }
-
-  function filterOrders() {
-    const q      = document.getElementById('searchInput').value.toLowerCase();
-    const status = document.getElementById('statusFilter').value;
-    let filtered = allOrders.filter(o => {
-      const matchQ = !q
-        || (o.customerName||'').toLowerCase().includes(q)
-        || (o.phone||'').includes(q)
-        || (o.orderId||'').toLowerCase().includes(q)
-        || (o.company||'').toLowerCase().includes(q);
-      const matchS = !status || String(o.status).includes(status);
-      return matchQ && matchS;
-    });
-    renderAllOrders(filtered);
-  }
-
-  // ====== RENDER PACKAGES ======
-  function renderPackages() {
-    filterPkgs(currentPkgFilter);
-  }
-
-  function filterPkgs(company) {
-    currentPkgFilter = company;
-    ['all','orange','vodafone','etisalat','we'].forEach(id => {
-      const btn = document.getElementById('pf-' + id);
-      if (btn) {
-        btn.style.background = id === company ? 'var(--accent)' : 'var(--card2)';
-        btn.style.borderColor = id === company ? 'var(--accent)' : '#333';
-      }
-    });
-
-    const grid = document.getElementById('pkgGrid');
-    let pkgs = company === 'all' ? allPkgs : allPkgs.filter(p =>
-      (p.company||'').toLowerCase().includes(company === 'we' ? 'وي' : company)
-      || (p.company||'').toLowerCase().includes(company)
-    );
-
-    if (!pkgs.length) {
-      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><div>📭</div>لا توجد باقات</div>';
-      return;
-    }
-
-    grid.innerHTML = pkgs.map(p => `
-      <div class="pkg-card">
+  grid.innerHTML = pkgs.map(p => `
+    <div class="pkg-card ${p.status==='مخفي'?'hidden-pkg':''}">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
         <div class="pkg-company">${p.company||''}</div>
-        <div class="pkg-name">${p.name||''}</div>
-        <div class="pkg-price">${p.price||0} جنيه</div>
-        ${p.type ? `<span class="pkg-type">${p.type}</span>` : ''}
+        <span class="badge ${p.status==='مخفي'?'badge-hidden':'badge-avail'}" style="font-size:.7rem;">
+          ${p.status==='مخفي'?'🔒 مخفي':'✅ متاح'}
+        </span>
       </div>
-    `).join('');
-  }
+      <div class="pkg-name">${p.name||''}</div>
+      <div class="pkg-price">${p.price||0} جنيه</div>
+      ${p.type?`<span class="pkg-type">${p.type}</span>`:''}
+      ${p.notes?`<div class="pkg-notes">📝 ${p.notes}</div>`:''}
+      <div class="pkg-actions">
+        <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="openPkgModal(${p.rowIndex})">✏️ تعديل</button>
+        <button class="btn btn-danger btn-sm" onclick="confirmDelete(${p.rowIndex},'${String(p.name||'').replace(/'/g,"\\'")}')">🗑️</button>
+      </div>
+    </div>`).join('');
+}
 
-  // ====== HELPERS ======
-  function updateDateDisplay() {
-    const d = new Date();
-    document.getElementById('dateDisplay').textContent = d.toLocaleDateString('ar-EG', {
-      weekday:'long', year:'numeric', month:'long', day:'numeric'
+// Package Modal
+function openPkgModal(rowIndex) {
+  document.getElementById('pkgModalTitle').textContent =
+    rowIndex ? '✏️ تعديل الباقة' : '➕ إضافة باقة جديدة';
+  document.getElementById('pkgRowIndex').value = rowIndex || '';
+
+  if (rowIndex) {
+    const p = allPkgs.find(x => x.rowIndex === rowIndex);
+    if (p) {
+      document.getElementById('pkgCompany').value = p.company || '';
+      document.getElementById('pkgName').value    = p.name    || '';
+      document.getElementById('pkgPrice').value   = p.price   || '';
+      document.getElementById('pkgType').value    = p.type    || '';
+      document.getElementById('pkgStatus').value  = p.status  || 'متاح';
+      document.getElementById('pkgNotes').value   = p.notes   || '';
+    }
+  } else {
+    ['pkgCompany','pkgName','pkgPrice','pkgType','pkgNotes'].forEach(id =>
+      document.getElementById(id).value = ''
+    );
+    document.getElementById('pkgStatus').value = 'متاح';
+  }
+  document.getElementById('pkgModal').classList.add('show');
+}
+
+async function savePackage() {
+  const company = document.getElementById('pkgCompany').value.trim();
+  const name    = document.getElementById('pkgName').value.trim();
+  const price   = document.getElementById('pkgPrice').value.trim();
+  if (!company) { showToast('⚠️ اختار الشركة'); return; }
+  if (!name)    { showToast('⚠️ اكتب اسم الباقة'); return; }
+  if (!price)   { showToast('⚠️ اكتب السعر'); return; }
+
+  const btn = document.getElementById('pkgSaveBtn');
+  btn.disabled = true;
+  btn.innerHTML = 'جاري الحفظ... <span class="spinner"></span>';
+
+  const rowIndex = document.getElementById('pkgRowIndex').value;
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        action:   rowIndex ? 'updatePackage' : 'addPackage',
+        rowIndex: rowIndex ? parseInt(rowIndex) : null,
+        company, name, price,
+        type:   document.getElementById('pkgType').value,
+        status: document.getElementById('pkgStatus').value,
+        notes:  document.getElementById('pkgNotes').value
+      })
     });
-  }
+    const data = await res.json();
+    if (data.success) {
+      closeModal('pkgModal');
+      showToast(rowIndex ? '✅ تم تعديل الباقة' : '✅ تمت إضافة الباقة');
+      await loadAllData();
+    } else { showToast('❌ فشل الحفظ'); }
+  } catch(e) { showToast('❌ خطأ في الاتصال'); }
+  finally { btn.disabled=false; btn.innerHTML='💾 حفظ'; }
+}
 
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
+function confirmDelete(rowIndex, name) {
+  document.getElementById('confirmMsg').innerHTML =
+    `هل أنت متأكد من حذف الباقة؟<br><strong style="color:white;">${name}</strong><br>
+     <span style="color:#f87171;font-size:.82rem;">هذا الإجراء لا يمكن التراجع عنه</span>`;
+  document.getElementById('confirmDeleteBtn').onclick = () => deletePackage(rowIndex);
+  document.getElementById('confirmModal').classList.add('show');
+}
+
+async function deletePackage(rowIndex) {
+  const btn = document.getElementById('confirmDeleteBtn');
+  btn.disabled = true;
+  btn.innerHTML = 'جاري الحذف... <span class="spinner"></span>';
+  try {
+    const res = await fetch(SCRIPT_URL, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ action:'deletePackage', rowIndex })
+    });
+    const data = await res.json();
+    if (data.success) {
+      closeModal('confirmModal');
+      showToast('🗑️ تم حذف الباقة');
+      await loadAllData();
+    } else { showToast('❌ فشل الحذف'); }
+  } catch(e) { showToast('❌ خطأ في الاتصال'); }
+  finally { btn.disabled=false; btn.innerHTML='🗑️ حذف'; }
+}
+
+// ══ MODAL HELPERS ══
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('.modal-overlay').forEach(o =>
+  o.addEventListener('click', e => { if(e.target===o) o.classList.remove('show'); })
+);
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
 </script>
 </body>
 </html>
