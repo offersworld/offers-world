@@ -146,6 +146,12 @@
     .status-opt.opt-cancel{border-color:rgba(239,68,68,.3);color:#f87171;}
     .status-opt.opt-cancel:hover,.status-opt.opt-cancel.selected{background:rgba(239,68,68,.12);border-color:#f87171;}
 
+    /* SKELETON LOADER */
+    .skeleton{background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.09) 50%,rgba(255,255,255,.04) 75%);background-size:200% 100%;animation:skeleton-wave 1.5s infinite;border-radius:8px;}
+    @keyframes skeleton-wave{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .skeleton-row td{padding:14px 16px;}
+    .skeleton-cell{height:16px;border-radius:6px;}
+
     .empty-state{text-align:center;padding:60px 20px;color:var(--muted);}
     .empty-state div{font-size:3rem;margin-bottom:12px;}
     .spinner{width:20px;height:20px;border:2px solid rgba(255,255,255,.2);border-top-color:white;border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:middle;margin-left:8px;}
@@ -396,6 +402,33 @@
 // ═══════════════════════════════════════
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyiNBnJDCgGUVzIG9IZ0CZDgivsEZtl5sXsw7GI7S0jq6Njoyo9hkbYOPI2T0JzdtgR/exec';
 
+// ══ HELPERS ══
+function esc(str) {
+  return String(str == null ? '' : str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+// POST helper — بيبعت كـ text/plain عشان يتجاوز CORS preflight مع Google Apps Script
+async function gPost(payload) {
+  const res = await fetch(SCRIPT_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+// GET helper
+async function gGet(params) {
+  const qs = new URLSearchParams(params).toString();
+  const res = await fetch(`${SCRIPT_URL}?${qs}`);
+  return res.json();
+}
+
 let allOrders = [], allPkgs = [], currentPkgFilter = 'all';
 let currentOrderId = null, selectedNewStatus = null;
 
@@ -404,7 +437,9 @@ function togglePass() {
   const i = document.getElementById('adminPass');
   i.type = i.type === 'password' ? 'text' : 'password';
 }
-document.getElementById('adminPass').addEventListener('keypress', e => { if(e.key==='Enter') doLogin(); });
+document.getElementById('adminPass').addEventListener('keypress', e => {
+  if (e.key === 'Enter') doLogin();
+});
 
 async function doLogin() {
   const pass = document.getElementById('adminPass').value.trim();
@@ -412,90 +447,125 @@ async function doLogin() {
   const btn = document.getElementById('loginBtn');
   btn.disabled = true;
   btn.innerHTML = 'جاري التحقق... <span class="spinner"></span>';
+  document.getElementById('loginError').style.display = 'none';
   try {
-    const res = await fetch(`${SCRIPT_URL}?action=checkPassword&pass=${encodeURIComponent(pass)}`);
-    const data = await res.json();
+    const data = await gGet({ action: 'checkPassword', pass });
     if (data.success) {
-      sessionStorage.setItem('aw_admin','1');
-      document.getElementById('loginPage').style.display = 'none';
-      document.getElementById('adminPanel').style.display = 'block';
-      loadAllData();
+      // نخزن token عشوائي بييجي من السيرفر لو متاح، وإلا نعمل واحد محلي
+      const token = data.token || Math.random().toString(36).slice(2);
+      sessionStorage.setItem('aw_admin', token);
+      showAdminPanel();
     } else {
       document.getElementById('loginError').style.display = 'block';
-      btn.disabled = false; btn.innerHTML = 'دخول';
+      btn.disabled = false;
+      btn.innerHTML = 'دخول';
       document.getElementById('adminPass').value = '';
     }
   } catch(e) {
-    showToast('❌ فشل الاتصال');
-    btn.disabled = false; btn.innerHTML = 'دخول';
+    showToast('❌ فشل الاتصال بالسيرفر');
+    btn.disabled = false;
+    btn.innerHTML = 'دخول';
   }
 }
 
-function logout() { sessionStorage.removeItem('aw_admin'); location.reload(); }
+function showAdminPanel() {
+  document.getElementById('loginPage').style.display = 'none';
+  document.getElementById('adminPanel').style.display = 'block';
+  loadAllData();
+}
+
+function logout() {
+  sessionStorage.removeItem('aw_admin');
+  location.reload();
+}
 
 window.addEventListener('DOMContentLoaded', () => {
-  if (sessionStorage.getItem('aw_admin') === '1') {
-    document.getElementById('loginPage').style.display = 'none';
-    document.getElementById('adminPanel').style.display = 'block';
-    loadAllData();
+  if (sessionStorage.getItem('aw_admin')) {
+    showAdminPanel();
   }
 });
 
 // ══ TABS ══
 function switchTab(name) {
   ['dashboard','orders','packages'].forEach(t => {
-    document.getElementById('tab-'+t).style.display = t===name ? 'block' : 'none';
-    document.getElementById('nav-'+t)?.classList.toggle('active', t===name);
-    document.getElementById('mnav-'+t)?.classList.toggle('active', t===name);
+    document.getElementById('tab-'+t).style.display = t === name ? 'block' : 'none';
+    document.getElementById('nav-'+t)?.classList.toggle('active', t === name);
+    document.getElementById('mnav-'+t)?.classList.toggle('active', t === name);
   });
+}
+
+// ══ SKELETON ROWS ══
+function skeletonRows(cols, count = 5) {
+  return Array.from({length: count}, () =>
+    `<tr class="skeleton-row">${
+      Array.from({length: cols}, () =>
+        `<td><div class="skeleton skeleton-cell" style="width:${60+Math.random()*30}%"></div></td>`
+      ).join('')
+    }</tr>`
+  ).join('');
 }
 
 // ══ LOAD DATA ══
 async function loadAllData() {
+  // عرض skeleton أثناء التحميل
+  document.getElementById('latestOrdersBody').innerHTML = skeletonRows(6);
+  document.getElementById('allOrdersBody').innerHTML    = skeletonRows(11);
+
   try {
-    const [sR,oR,pR] = await Promise.all([
-      fetch(`${SCRIPT_URL}?action=stats`),
-      fetch(`${SCRIPT_URL}?action=orders`),
-      fetch(`${SCRIPT_URL}?action=packages`)
+    const [statsData, ordersData, pkgsData] = await Promise.all([
+      gGet({ action: 'stats' }),
+      gGet({ action: 'orders' }),
+      gGet({ action: 'packages' })
     ]);
-    const stats = await sR.json();
-    allOrders   = await oR.json();
-    allPkgs     = await pR.json();
 
-    document.getElementById('s-total').textContent   = stats.total   || 0;
-    document.getElementById('s-pending').textContent = stats.pending || 0;
-    document.getElementById('s-active').textContent  = stats.active  || 0;
-    document.getElementById('s-revenue').textContent = (stats.revenue||0) + ' ج';
+    allOrders = Array.isArray(ordersData) ? ordersData : [];
+    allPkgs   = Array.isArray(pkgsData)   ? pkgsData   : [];
 
-    renderLatestOrders(); renderAllOrders(); renderPackages();
+    document.getElementById('s-total').textContent   = statsData.total   || 0;
+    document.getElementById('s-pending').textContent = statsData.pending || 0;
+    document.getElementById('s-active').textContent  = statsData.active  || 0;
+    document.getElementById('s-revenue').textContent = (statsData.revenue || 0) + ' ج';
+
+    renderLatestOrders();
+    renderAllOrders();
+    renderPackages();
+
     document.getElementById('lastUpdate').textContent =
       'آخر تحديث: ' + new Date().toLocaleTimeString('ar-EG');
     showToast('✅ تم تحديث البيانات');
-  } catch(e) { showToast('❌ فشل تحميل البيانات'); }
+  } catch(e) {
+    showToast('❌ فشل تحميل البيانات');
+    document.getElementById('latestOrdersBody').innerHTML =
+      '<tr><td colspan="6" class="empty-state"><div>⚠️</div>فشل تحميل البيانات</td></tr>';
+    document.getElementById('allOrdersBody').innerHTML =
+      '<tr><td colspan="11" class="empty-state"><div>⚠️</div>فشل تحميل البيانات</td></tr>';
+  }
 }
 
 // ══ ORDERS ══
 function statusBadge(s) {
-  s = String(s||'معلق');
-  if (s.includes('تم')||s.includes('مفعل')) return `<span class="badge badge-done">✅ ${s}</span>`;
-  if (s.includes('ملغ'))                    return `<span class="badge badge-cancel">❌ ${s}</span>`;
-  return `<span class="badge badge-pending">⏳ ${s}</span>`;
+  s = String(s || 'معلق');
+  if (s.includes('تم') || s.includes('مفعل'))
+    return `<span class="badge badge-done">✅ ${esc(s)}</span>`;
+  if (s.includes('ملغ'))
+    return `<span class="badge badge-cancel">❌ ${esc(s)}</span>`;
+  return `<span class="badge badge-pending">⏳ ${esc(s)}</span>`;
 }
 
 function renderLatestOrders() {
-  const tbody = document.getElementById('latestOrdersBody');
-  const latest = [...allOrders].reverse().slice(0,5);
+  const tbody  = document.getElementById('latestOrdersBody');
+  const latest = [...allOrders].reverse().slice(0, 5);
   if (!latest.length) {
     tbody.innerHTML = '<tr><td colspan="6" class="empty-state"><div>📭</div>لا يوجد طلبات بعد</td></tr>';
     return;
   }
   tbody.innerHTML = latest.map(o => `
     <tr>
-      <td style="font-size:.78rem;color:var(--muted);">${o.orderId||'-'}</td>
-      <td><strong>${o.customerName||'-'}</strong></td>
-      <td>${o.company||'-'}</td>
-      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;">${o.package||'-'}</td>
-      <td style="color:var(--green);font-weight:700;">${o.price||0} ج</td>
+      <td style="font-size:.78rem;color:var(--muted);">${esc(o.orderId)||'-'}</td>
+      <td><strong>${esc(o.customerName)||'-'}</strong></td>
+      <td>${esc(o.company)||'-'}</td>
+      <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;">${esc(o.package)||'-'}</td>
+      <td style="color:var(--green);font-weight:700;">${esc(o.price)||0} ج</td>
       <td>${statusBadge(o.status)}</td>
     </tr>`).join('');
 }
@@ -507,20 +577,35 @@ function renderAllOrders(data) {
     tbody.innerHTML = '<tr><td colspan="11" class="empty-state"><div>📭</div>لا يوجد طلبات</td></tr>';
     return;
   }
-  tbody.innerHTML = [...orders].reverse().map(o => `
+  tbody.innerHTML = [...orders].reverse().map(o => {
+    const phone = esc(o.phone || '');
+    const actPhone = esc(o.activationPhone || o.phone || '-');
+    const proofCell = o.proofImage
+      ? `<a class="proof-link" href="${esc(o.proofImage)}" target="_blank" rel="noopener noreferrer">🧾 فتح</a>`
+      : '<span style="color:var(--muted)">—</span>';
+    // نخزن الـ orderId في data-attribute بدل string concatenation في onclick
+    return `
     <tr>
-      <td style="font-size:.75rem;color:var(--muted);">${o.orderId||'-'}</td>
-      <td><strong>${o.customerName||'-'}</strong></td>
-      <td><a class="phone-link" href="https://wa.me/2${o.phone||''}" target="_blank">📱 ${o.phone||'-'}</a></td>
-      <td><span style="direction:ltr;display:inline-block;">${o.activationPhone||o.phone||'-'}</span></td>
-      <td>${o.company||'-'}</td>
-      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;" title="${o.package||''}">${o.package||'-'}</td>
-      <td style="color:var(--green);font-weight:700;">${o.price||0} ج</td>
-      <td>${o.payment||'-'}</td>
+      <td style="font-size:.75rem;color:var(--muted);">${esc(o.orderId)||'-'}</td>
+      <td><strong>${esc(o.customerName)||'-'}</strong></td>
+      <td><a class="phone-link" href="https://wa.me/2${phone}" target="_blank" rel="noopener noreferrer">📱 ${phone||'-'}</a></td>
+      <td><span style="direction:ltr;display:inline-block;">${actPhone}</span></td>
+      <td>${esc(o.company)||'-'}</td>
+      <td style="max-width:140px;overflow:hidden;text-overflow:ellipsis;" title="${esc(o.package)||''}">${esc(o.package)||'-'}</td>
+      <td style="color:var(--green);font-weight:700;">${esc(o.price)||0} ج</td>
+      <td>${esc(o.payment)||'-'}</td>
       <td>${statusBadge(o.status)}</td>
-      <td>${o.proofImage?`<a class="proof-link" href="${o.proofImage}" target="_blank">🧾 فتح</a>`:'<span style="color:var(--muted)">—</span>'}</td>
-      <td><button class="btn btn-ghost btn-sm" onclick="openOrderStatus('${o.orderId}','${String(o.status||'').replace(/'/g,"\\'")}')">✏️ حالة</button></td>
-    </tr>`).join('');
+      <td>${proofCell}</td>
+      <td>
+        <button class="btn btn-ghost btn-sm"
+          data-order-id="${esc(o.orderId)}"
+          data-order-status="${esc(o.status||'')}"
+          onclick="openOrderStatus(this.dataset.orderId, this.dataset.orderStatus)">
+          ✏️ حالة
+        </button>
+      </td>
+    </tr>`;
+  }).join('');
 }
 
 function filterOrders() {
@@ -528,21 +613,21 @@ function filterOrders() {
   const st = document.getElementById('statusFilter').value;
   renderAllOrders(allOrders.filter(o => {
     const mQ = !q
-      || (o.customerName||'').toLowerCase().includes(q)
-      || (o.phone||'').includes(q)
-      || (o.orderId||'').toLowerCase().includes(q)
-      || (o.company||'').toLowerCase().includes(q);
-    const mS = !st || String(o.status||'').includes(st);
+      || (o.customerName || '').toLowerCase().includes(q)
+      || (o.phone        || '').includes(q)
+      || (o.orderId      || '').toLowerCase().includes(q)
+      || (o.company      || '').toLowerCase().includes(q);
+    const mS = !st || String(o.status || '').includes(st);
     return mQ && mS;
   }));
 }
 
 // ══ ORDER STATUS MODAL ══
 function openOrderStatus(orderId, currentStatus) {
-  currentOrderId   = orderId;
+  currentOrderId    = orderId;
   selectedNewStatus = null;
   document.getElementById('osOrderId').textContent       = orderId;
-  document.getElementById('osCurrentStatus').textContent = 'الحالة الحالية: ' + (currentStatus||'معلق');
+  document.getElementById('osCurrentStatus').textContent = 'الحالة الحالية: ' + (currentStatus || 'معلق');
   document.getElementById('osNote').value = '';
   document.querySelectorAll('.status-opt').forEach(b => b.classList.remove('selected'));
   document.getElementById('orderStatusModal').classList.add('show');
@@ -551,8 +636,8 @@ function openOrderStatus(orderId, currentStatus) {
 function selectStatus(s) {
   selectedNewStatus = s;
   document.querySelectorAll('.status-opt').forEach(b => b.classList.remove('selected'));
-  const map = {'معلق':'pending','تم التفعيل':'done','ملغي':'cancel'};
-  document.querySelector('.opt-'+map[s])?.classList.add('selected');
+  const map = { 'معلق': 'pending', 'تم التفعيل': 'done', 'ملغي': 'cancel' };
+  document.querySelector('.opt-' + map[s])?.classList.add('selected');
 }
 
 async function saveOrderStatus() {
@@ -561,24 +646,25 @@ async function saveOrderStatus() {
   btn.disabled = true;
   btn.innerHTML = 'جاري الحفظ... <span class="spinner"></span>';
   try {
-    const res = await fetch(SCRIPT_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        action:'updateOrderStatus',
-        orderId: currentOrderId,
-        status:  selectedNewStatus,
-        note:    document.getElementById('osNote').value
-      })
+    const data = await gPost({
+      action:  'updateOrderStatus',
+      orderId: currentOrderId,
+      status:  selectedNewStatus,
+      note:    document.getElementById('osNote').value
     });
-    const data = await res.json();
     if (data.success) {
       closeModal('orderStatusModal');
       showToast('✅ تم تحديث الحالة');
       await loadAllData();
-    } else { showToast('❌ فشل التحديث'); }
-  } catch(e) { showToast('❌ خطأ في الاتصال'); }
-  finally { btn.disabled=false; btn.innerHTML='✅ حفظ الحالة'; }
+    } else {
+      showToast('❌ فشل التحديث: ' + (data.message || ''));
+    }
+  } catch(e) {
+    showToast('❌ خطأ في الاتصال');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '✅ حفظ الحالة';
+  }
 }
 
 // ══ PACKAGES ══
@@ -587,13 +673,14 @@ function renderPackages() { filterPkgs(currentPkgFilter); }
 function filterPkgs(co) {
   currentPkgFilter = co;
   document.querySelectorAll('.filter-chip').forEach(b =>
-    b.classList.toggle('active', b.dataset.co===co)
+    b.classList.toggle('active', b.dataset.co === co)
   );
-  const pkgs = co==='all' ? allPkgs
-    : allPkgs.filter(p => (p.company||'').includes(co));
+  const pkgs = co === 'all'
+    ? allPkgs
+    : allPkgs.filter(p => (p.company || '').includes(co));
 
   document.getElementById('pkgCount').textContent =
-    pkgs.length + ' باقة' + (co==='all' ? '' : ' في ' + co);
+    pkgs.length + ' باقة' + (co === 'all' ? '' : ' في ' + co);
 
   const grid = document.getElementById('pkgGrid');
   if (!pkgs.length) {
@@ -601,20 +688,25 @@ function filterPkgs(co) {
     return;
   }
   grid.innerHTML = pkgs.map(p => `
-    <div class="pkg-card ${p.status==='مخفي'?'hidden-pkg':''}">
+    <div class="pkg-card ${p.status === 'مخفي' ? 'hidden-pkg' : ''}">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px;">
-        <div class="pkg-company">${p.company||''}</div>
-        <span class="badge ${p.status==='مخفي'?'badge-hidden':'badge-avail'}" style="font-size:.7rem;">
-          ${p.status==='مخفي'?'🔒 مخفي':'✅ متاح'}
+        <div class="pkg-company">${esc(p.company)||''}</div>
+        <span class="badge ${p.status === 'مخفي' ? 'badge-hidden' : 'badge-avail'}" style="font-size:.7rem;">
+          ${p.status === 'مخفي' ? '🔒 مخفي' : '✅ متاح'}
         </span>
       </div>
-      <div class="pkg-name">${p.name||''}</div>
-      <div class="pkg-price">${p.price||0} جنيه</div>
-      ${p.type?`<span class="pkg-type">${p.type}</span>`:''}
-      ${p.notes?`<div class="pkg-notes">📝 ${p.notes}</div>`:''}
+      <div class="pkg-name">${esc(p.name)||''}</div>
+      <div class="pkg-price">${esc(p.price)||0} جنيه</div>
+      ${p.type  ? `<span class="pkg-type">${esc(p.type)}</span>` : ''}
+      ${p.notes ? `<div class="pkg-notes">📝 ${esc(p.notes)}</div>` : ''}
       <div class="pkg-actions">
-        <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="openPkgModal(${p.rowIndex})">✏️ تعديل</button>
-        <button class="btn btn-danger btn-sm" onclick="confirmDelete(${p.rowIndex},'${String(p.name||'').replace(/'/g,"\\'")}')">🗑️</button>
+        <button class="btn btn-ghost btn-sm" style="flex:1;"
+          data-row="${p.rowIndex}"
+          onclick="openPkgModal(parseInt(this.dataset.row))">✏️ تعديل</button>
+        <button class="btn btn-danger btn-sm"
+          data-row="${p.rowIndex}"
+          data-name="${esc(p.name||'')}"
+          onclick="confirmDelete(parseInt(this.dataset.row), this.dataset.name)">🗑️</button>
       </div>
     </div>`).join('');
 }
@@ -648,9 +740,11 @@ async function savePackage() {
   const company = document.getElementById('pkgCompany').value.trim();
   const name    = document.getElementById('pkgName').value.trim();
   const price   = document.getElementById('pkgPrice').value.trim();
+
   if (!company) { showToast('⚠️ اختار الشركة'); return; }
   if (!name)    { showToast('⚠️ اكتب اسم الباقة'); return; }
   if (!price)   { showToast('⚠️ اكتب السعر'); return; }
+  if (isNaN(Number(price))) { showToast('⚠️ السعر لازم يكون رقم'); return; }
 
   const btn = document.getElementById('pkgSaveBtn');
   btn.disabled = true;
@@ -658,33 +752,39 @@ async function savePackage() {
 
   const rowIndex = document.getElementById('pkgRowIndex').value;
   try {
-    const res = await fetch(SCRIPT_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        action:   rowIndex ? 'updatePackage' : 'addPackage',
-        rowIndex: rowIndex ? parseInt(rowIndex) : null,
-        company, name, price,
-        type:   document.getElementById('pkgType').value,
-        status: document.getElementById('pkgStatus').value,
-        notes:  document.getElementById('pkgNotes').value
-      })
+    const data = await gPost({
+      action:   rowIndex ? 'updatePackage' : 'addPackage',
+      rowIndex: rowIndex ? parseInt(rowIndex) : null,
+      company,
+      name,
+      price,
+      type:   document.getElementById('pkgType').value,
+      status: document.getElementById('pkgStatus').value,
+      notes:  document.getElementById('pkgNotes').value
     });
-    const data = await res.json();
     if (data.success) {
       closeModal('pkgModal');
       showToast(rowIndex ? '✅ تم تعديل الباقة' : '✅ تمت إضافة الباقة');
       await loadAllData();
-    } else { showToast('❌ فشل الحفظ'); }
-  } catch(e) { showToast('❌ خطأ في الاتصال'); }
-  finally { btn.disabled=false; btn.innerHTML='💾 حفظ'; }
+    } else {
+      showToast('❌ فشل الحفظ: ' + (data.message || ''));
+    }
+  } catch(e) {
+    showToast('❌ خطأ في الاتصال');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '💾 حفظ';
+  }
 }
 
 function confirmDelete(rowIndex, name) {
   document.getElementById('confirmMsg').innerHTML =
-    `هل أنت متأكد من حذف الباقة؟<br><strong style="color:white;">${name}</strong><br>
+    `هل أنت متأكد من حذف الباقة؟<br><strong style="color:white;">${esc(name)}</strong><br>
      <span style="color:#f87171;font-size:.82rem;">هذا الإجراء لا يمكن التراجع عنه</span>`;
-  document.getElementById('confirmDeleteBtn').onclick = () => deletePackage(rowIndex);
+  // نحفظ rowIndex في الزرار كـ data attribute بدل closure
+  const delBtn = document.getElementById('confirmDeleteBtn');
+  delBtn.dataset.rowIndex = rowIndex;
+  delBtn.onclick = () => deletePackage(parseInt(delBtn.dataset.rowIndex));
   document.getElementById('confirmModal').classList.add('show');
 }
 
@@ -693,30 +793,38 @@ async function deletePackage(rowIndex) {
   btn.disabled = true;
   btn.innerHTML = 'جاري الحذف... <span class="spinner"></span>';
   try {
-    const res = await fetch(SCRIPT_URL, {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ action:'deletePackage', rowIndex })
-    });
-    const data = await res.json();
+    const data = await gPost({ action: 'deletePackage', rowIndex });
     if (data.success) {
       closeModal('confirmModal');
       showToast('🗑️ تم حذف الباقة');
       await loadAllData();
-    } else { showToast('❌ فشل الحذف'); }
-  } catch(e) { showToast('❌ خطأ في الاتصال'); }
-  finally { btn.disabled=false; btn.innerHTML='🗑️ حذف'; }
+    } else {
+      showToast('❌ فشل الحذف: ' + (data.message || ''));
+    }
+  } catch(e) {
+    showToast('❌ خطأ في الاتصال');
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🗑️ حذف';
+  }
 }
 
 // ══ MODAL HELPERS ══
-function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+function closeModal(id) {
+  document.getElementById(id).classList.remove('show');
+}
+
 document.querySelectorAll('.modal-overlay').forEach(o =>
-  o.addEventListener('click', e => { if(e.target===o) o.classList.remove('show'); })
+  o.addEventListener('click', e => {
+    if (e.target === o) o.classList.remove('show');
+  })
 );
 
+// ══ TOAST ══
 function showToast(msg) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('show');
+  t.textContent = msg;
+  t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 </script>
