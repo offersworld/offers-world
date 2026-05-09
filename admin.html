@@ -172,13 +172,19 @@
             box-shadow: var(--glow), 0 40px 100px rgba(0, 0, 0, 0.7);
         }
         .login-logo {
-            font-size: 4rem;
-            margin-bottom: 8px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: center;
+        }
+        .login-logo-img {
+            width: 180px;
+            height: auto;
+            filter: drop-shadow(0 0 20px rgba(139, 60, 247, 0.4));
             animation: float 3s ease-in-out infinite;
         }
         @keyframes float {
             0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
+            50% { transform: translateY(-10px); }
         }
         .login-card h2 {
             font-size: 1.7rem;
@@ -275,21 +281,23 @@
         }
         .sidebar-logo {
             text-align: center;
-            padding: 8px 20px 24px;
+            padding: 20px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.06);
             margin-bottom: 16px;
         }
-        .sidebar-logo span {
-            font-size: 1.25rem;
-            font-weight: 900;
-            display: block;
+        .sidebar-logo-img {
+            width: 140px;
+            height: auto;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 4px 10px rgba(0,0,0,0.3));
         }
         .sidebar-logo small {
             display: block;
             color: var(--accent2);
-            font-weight: 600;
-            margin-top: 4px;
-            font-size: 0.8rem;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .nav-item {
             display: flex;
@@ -801,7 +809,9 @@
 <!-- LOGIN PAGE -->
 <div id="loginPage">
     <div class="login-card">
-        <div class="login-logo">🌟</div>
+        <div class="login-logo">
+            <img src="logo.png" alt="Logo" class="login-logo-img">
+        </div>
         <h2>لوحة التحكم</h2>
         <p>عالم العروض — دخول الأدمن فقط</p>
         <div class="input-wrap">
@@ -818,7 +828,10 @@
     <div class="layout">
         <!-- SIDEBAR -->
         <aside class="sidebar">
-            <div class="sidebar-logo"><span>🌟 عالم العروض</span><small>ADMIN v2.1</small></div>
+            <div class="sidebar-logo">
+                <img src="logo.png" alt="Logo" class="sidebar-logo-img">
+                <small>ADMIN v2.1</small>
+            </div>
             <nav>
                 <div class="nav-item active" onclick="switchTab('dashboard')" id="nav-dashboard">📊 الرئيسية</div>
                 <div class="nav-item" onclick="switchTab('orders')" id="nav-orders">📋 الطلبات <span class="badge-count" id="sidebarPending" style="display:none;">0</span></div>
