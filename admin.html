@@ -152,6 +152,29 @@
             font-size: 0.75rem;
             border-radius: 8px;
         }
+        .copy-btn {
+            background: rgba(139, 60, 247, 0.1);
+            border: 1px solid rgba(139, 60, 247, 0.2);
+            color: var(--accent2);
+            padding: 4px 6px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 5px;
+        }
+        .copy-btn:hover {
+            background: var(--accent);
+            color: #fff;
+            transform: scale(1.1);
+            border-color: var(--accent);
+        }
+        .copy-btn:active {
+            transform: scale(0.9);
+        }
         #loginPage {
             position: fixed;
             inset: 0;
@@ -1075,6 +1098,36 @@
         t._timeout = setTimeout(() => t.classList.remove('show'), duration);
     }
 
+    function copyToClipboard(text, label) {
+        if (!text) return;
+        const cleanText = String(text).replace(/\s/g, ''); // النسخ بدون مسافات
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(cleanText).then(() => {
+                showToast(`✅ تم نسخ ${label} بنجاح`);
+            }).catch(() => fallbackCopy(cleanText, label));
+        } else {
+            fallbackCopy(cleanText, label);
+        }
+    }
+
+    function fallbackCopy(text, label) {
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "0";
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            showToast(`✅ تم نسخ ${label} بنجاح`);
+        } catch (err) {
+            showToast('❌ فشل النسخ');
+        }
+        document.body.removeChild(textArea);
+    }
+
     function resetLogoutTimer() {
         clearTimeout(logoutTimer);
         logoutTimer = setTimeout(() => {
@@ -1568,7 +1621,12 @@
 
             return `<tr>
                 <td><strong>${customerName}</strong></td>
-                <td><a href="https://wa.me/${cleanPhone}" target="_blank" style="color:var(--green2);text-decoration:none;font-weight:600;direction:ltr;display:inline-block;">📱 +${cleanPhone}</a></td>
+                <td>
+                    <div style="display:flex;align-items:center;justify-content:center;gap:4px;">
+                        <a href="https://wa.me/${cleanPhone}" target="_blank" title="فتح واتساب" style="color:var(--green2);text-decoration:none;font-weight:600;direction:ltr;display:inline-block;">📱 +${cleanPhone}</a>
+                        <button class="copy-btn" onclick="copyToClipboard('${phone}', 'الرقم')" title="نسخ الرقم">📋</button>
+                    </div>
+                </td>
                 <td>${company}</td>
                 <td>${pkg}</td>
                 <td style="color:var(--green2);font-weight:700;">${price} ج</td>
