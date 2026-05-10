@@ -1042,6 +1042,28 @@
     // ==================== CONFIGURATION ====================
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxn_LO918rPaWEOh0VFc6lY4TiGIeDW1UwqtmuOX294UEfgiCoBOm64CpfdoUN8tw4E/exec';
 
+    // 🔐 SHA-256 hash لكلمة المرور — لا حاجة لـ network call في الـ login
+    // لتغيير كلمة المرور: شغّل generatePassHash() في الـ console وانسخ الناتج هنا
+    const ADMIN_PASS_HASH = 'fd9ea7578e688d9c1d227777e6bd6c7200d8626db91bdb550dee79c0ab7985b5';
+
+    // دالة مساعدة: تحويل أي نص لـ SHA-256 hash
+    async function sha256(text) {
+        const encoded = new TextEncoder().encode(text);
+        const buf = await crypto.subtle.digest('SHA-256', encoded);
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    // 🛠️ لتغيير كلمة المرور: اكتب في الـ console هذا:
+    // generatePassHash('كلمة_المرور_الجديدة')
+    // ثم انسخ الناتج وضعه في ADMIN_PASS_HASH أعلاه
+    async function generatePassHash(pass) {
+        const h = await sha256(pass);
+        console.log('%c🔐 Hash الجديد:', 'color:#a560f7;font-weight:bold;font-size:14px');
+        console.log('%c' + h, 'color:#22c55e;font-size:13px;font-family:monospace');
+        console.log('📋 انسخ الـ hash وضعه في ADMIN_PASS_HASH في admin.html');
+        return h;
+    }
+
     // Mapping of Arabic column names to our internal keys
     const ORDER_FIELDS = {
         orderId: 'orderId',
@@ -1200,7 +1222,7 @@
         inp.type = (inp.type === 'password' ? 'text' : 'password');
     }
 
-       async function doLogin() {
+        async function doLogin() {
         const pass = document.getElementById('adminPass').value.trim();
         if (!pass) return showToast('⚠️ أدخل كلمة المرور');
         const btn = document.getElementById('loginBtn');
@@ -1210,12 +1232,10 @@
         errEl.style.display = 'none';
 
         try {
-            // نستخدم gPost للتحقق
-            const data = await gPost({ action: 'checkPassword', pass: pass });
-            
-            // ملاحظة هامة: إذا كانت كلمة المرور في السكريبت هي 01225949346
-            // والسكريبت يرجع success: true
-            if (data && data.success) {
+            // ✅ التحقق يتم محلياً بالكامل — لا يحتاج network أو Google Apps Script
+            const enteredHash = await sha256(pass);
+
+            if (enteredHash === ADMIN_PASS_HASH) {
                 sessionStorage.setItem('aw_admin', 'true');
                 sessionStorage.setItem('aw_login_time', Date.now());
                 document.getElementById('loginPage').style.display = 'none';
@@ -1224,13 +1244,12 @@
                 await loadAllData();
             } else {
                 errEl.style.display = 'block';
-                errEl.textContent = '❌ ' + (data.message || 'كلمة المرور غير صحيحة');
+                errEl.textContent = '❌ كلمة المرور غير صحيحة';
             }
         } catch (e) {
-            console.error("Login Error:", e);
-            // في حالة فشل الـ fetch تماماً بسبب CORS، يمكننا تجربة حل بديل هنا
+            console.error('Login Error:', e);
             errEl.style.display = 'block';
-            errEl.textContent = '❌ فشل الاتصال بالسيرفر، تأكد من إعدادات CORS';
+            errEl.textContent = '❌ خطأ غير متوقع، حاول مرة أخرى';
         } finally {
             btn.disabled = false;
             btn.textContent = '🔐 دخول';
