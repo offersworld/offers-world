@@ -1613,26 +1613,26 @@
                 paymentProof = `<a href="${paymentProofRaw}" target="_blank" style="color:var(--accent2);text-decoration:underline;font-weight:700;">🧾 عرض الإيصال</a>`;
             }
             const status = String(o[ORDER_FIELDS.status] || 'معلق').trim();
-            const notes = esc(String(o[ORDER_FIELDS.notes] || '-'));
+            const notesRaw = String(o[ORDER_FIELDS.notes] || '').replace('[اتصالات - ينتظر الكود]', '').trim() || '-';
+            const notes = esc(notesRaw);
             const statusBadgeHtml = statusBadge(status);
             const vodafonePass = String(o[ORDER_FIELDS.vodafonePassword] || '').trim();
-            const activationPhone = esc(String(o['activationPhone'] || '').trim());
+            const activationPhone = String(o['activationPhone'] || '').trim();
 
-            // Special badge for Vodafone password
-            let vodaPassHtml = '';
-            if (vodafonePass) {
-                vodaPassHtml = `<div style="margin-top:4px;background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.4);border-radius:8px;padding:4px 8px;display:inline-flex;align-items:center;gap:6px;">
-                    <span style="color:#f87171;font-size:0.75rem;font-weight:700;">🔑 باسورد:</span>
-                    <code style="color:#fca5a5;font-size:0.85rem;font-weight:700;">${esc(vodafonePass)}</code>
-                    <button class="copy-btn" onclick="copyToClipboard('${esc(vodafonePass)}', 'الباسورد')" title="نسخ الباسورد" style="font-size:0.7rem;">نسخ</button>
-                </div>`;
-            }
+            // Vodafone password — compact inline pill in notes cell
+            const vodaPassPill = vodafonePass
+                ? `<span style="display:inline-flex;align-items:center;gap:4px;background:rgba(220,38,38,0.12);border:1px solid rgba(220,38,38,0.35);border-radius:6px;padding:2px 7px;font-size:0.75rem;cursor:pointer;" onclick="copyToClipboard('${esc(vodafonePass)}','الباسورد')" title="اضغط لنسخ الباسورد">🔑 <code style="color:#fca5a5;font-weight:700;">${esc(vodafonePass)}</code></span>`
+                : '';
 
-            // Activation phone badge
-            let actPhoneHtml = '';
-            if (activationPhone && activationPhone !== phone) {
-                actPhoneHtml = `<div style="font-size:0.75rem;color:var(--muted);margin-top:2px;">📡 ${activationPhone}</div>`;
-            }
+            // Activation phone — only if different from main phone
+            const actPhonePill = (activationPhone && activationPhone !== phone)
+                ? `<span style="display:inline-flex;align-items:center;gap:3px;color:var(--muted);font-size:0.75rem;">📡 ${esc(activationPhone)}</span>`
+                : '';
+
+            const extraInfo = [vodaPassPill, actPhonePill].filter(Boolean).join(' ');
+            const notesCellContent = extraInfo
+                ? `${notes !== '-' ? notes + '<br>' : ''}${extraInfo}`
+                : notes;
 
             // Formatting the phone number correctly for WhatsApp API
             let cleanPhone = phone.replace(/[^0-9]/g, '');
@@ -1640,22 +1640,17 @@
             if (!cleanPhone.startsWith('20')) cleanPhone = '20' + cleanPhone;
 
             return `<tr>
-                <td><strong>${customerName}</strong>${vodaPassHtml}</td>
-                <td>
-                    <div style="display:flex;align-items:center;justify-content:center;gap:4px;flex-direction:column;">
-                        <div style="display:flex;align-items:center;gap:4px;">
-                            <a href="https://wa.me/${cleanPhone}" target="_blank" title="فتح واتساب" style="color:var(--green2);text-decoration:none;font-weight:600;direction:ltr;display:inline-block;">📱 +${cleanPhone}</a>
-                            <button class="copy-btn" onclick="copyToClipboard('${phone}', 'الرقم')" title="نسخ الرقم">نسخ الرقم</button>
-                        </div>
-                        ${actPhoneHtml}
-                    </div>
+                <td><strong>${customerName}</strong></td>
+                <td style="white-space:nowrap;">
+                    <a href="https://wa.me/${cleanPhone}" target="_blank" style="color:var(--green2);text-decoration:none;font-weight:600;direction:ltr;display:inline-block;margin-left:4px;">📱 ${phone}</a>
+                    <button class="copy-btn" onclick="copyToClipboard('${phone}','الرقم')" title="نسخ">نسخ</button>
                 </td>
                 <td>${company}</td>
                 <td>${pkg}</td>
-                <td style="color:var(--green2);font-weight:700;">${price} ج</td>
+                <td style="color:var(--green2);font-weight:700;white-space:nowrap;">${price} ج</td>
                 <td>${paymentProof}</td>
                 <td>${statusBadgeHtml}</td>
-                <td>${notes}</td>
+                <td>${notesCellContent}</td>
                 <td><button class="btn btn-ghost btn-xs" onclick="openStatusModal('${esc(orderId)}','${esc(status)}')">✏️ تعديل</button></td>
             </tr>`;
         }).join('');
