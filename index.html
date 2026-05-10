@@ -146,6 +146,19 @@
     }
     .why-item .wi-icon { font-size: 1.6rem; margin-bottom: 6px; display: block; }
     .why-item .wi-text { font-size: 0.82rem; color: #ddd; font-weight: 600; line-height: 1.4; }
+    .why-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 30px;
+      padding: 7px 14px;
+      font-size: 0.86rem;
+      font-weight: 700;
+      color: #ddd;
+      white-space: nowrap;
+    }
 
     .contact-row {
       display: flex;
@@ -546,21 +559,19 @@
 
   <div class="why-us-strip">
     <div class="why-us-title">✨ ليه تختارنا؟</div>
-    <div class="why-us-grid">
-      <div class="why-item"><span class="wi-icon">💕</span><div class="wi-text">خدمة كل الشركات<br>أورنج · وي · اتصالات · فودافون</div></div>
-      <div class="why-item"><span class="wi-icon">⚡</span><div class="wi-text">تفعيل سريع<br>في أقل وقت ممكن</div></div>
-      <div class="why-item"><span class="wi-icon">🔒</span><div class="wi-text">ضمان على كل طلب<br>أمان 100%</div></div>
-      <div class="why-item"><span class="wi-icon">🙋‍♂️</span><div class="wi-text">دعم فوري<br>ردّ في أي وقت</div></div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:14px;">
+      <span class="why-badge">💕 كل الشركات</span>
+      <span class="why-badge">⚡ تفعيل سريع</span>
+      <span class="why-badge">🔒 أمان 100%</span>
+      <span class="why-badge">🙋‍♂️ دعم فوري</span>
     </div>
     <div class="contact-row">
       <a class="contact-btn" href="https://wa.me/201555435556" target="_blank">📞 رحمه: 01555435556</a>
       <a class="contact-btn" href="https://wa.me/201208666900" target="_blank">📞 رجب: 01208666900</a>
     </div>
-    <div class="contact-row">
-      <a class="contact-btn whatsapp-group" href="https://chat.whatsapp.com/JEqN0H09qFZBn9XSEMTKGB?mode=ac_t" target="_blank">🔥 انضم لجروب العروض على واتساب</a>
-    </div>
-    <div style="text-align:center;margin-top:10px;">
-      <a href="https://www.facebook.com/share/p/17p4v3smpQ/" target="_blank" style="font-size:0.78rem;color:var(--muted);text-decoration:none;">📋 بوست الضمان ← اضغط هنا</a>
+    <div class="contact-row" style="margin-top:8px;">
+      <a class="contact-btn whatsapp-group" href="https://chat.whatsapp.com/JEqN0H09qFZBn9XSEMTKGB?mode=ac_t" target="_blank">🔥 جروب العروض على واتساب</a>
+      <a class="contact-btn" href="https://www.facebook.com/share/p/17p4v3smpQ/" target="_blank" style="background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.15);color:var(--muted);flex:0 0 auto;">📋 الضمان</a>
     </div>
   </div>
 
