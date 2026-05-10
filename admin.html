@@ -1040,7 +1040,7 @@
 
 <script>
     // ==================== CONFIGURATION ====================
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbziEyZ54YvHCwOpO7vPZ1HFKPipQAATCrn7KtmjtGSzXYeyr9ulUytGfeasrWJoqmii/exec';
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzb9sR-sGfTJW9pi0ajS8Wc-Sh4PpM6IvFPZ1Sba6SEg6RltJBLNaxJunsxljnveEek/exec';
 
     // Mapping of Arabic column names to our internal keys
     const ORDER_FIELDS = {
@@ -1056,7 +1056,9 @@
         status: 'status',
         activationDate: 'activationDate',
         notes: 'notes',
-        date: 'date'
+        date: 'date',
+        activationPhone: 'activationPhone',
+        vodafonePassword: 'vodafonePassword'   // 🔑 باسورد فودافون
     };
 
     const PKG_FIELDS = {
@@ -1613,18 +1615,39 @@
             const status = String(o[ORDER_FIELDS.status] || 'معلق').trim();
             const notes = esc(String(o[ORDER_FIELDS.notes] || '-'));
             const statusBadgeHtml = statusBadge(status);
+            const vodafonePass = String(o[ORDER_FIELDS.vodafonePassword] || '').trim();
+            const activationPhone = esc(String(o['activationPhone'] || '').trim());
+
+            // Special badge for Vodafone password
+            let vodaPassHtml = '';
+            if (vodafonePass) {
+                vodaPassHtml = `<div style="margin-top:4px;background:rgba(220,38,38,0.15);border:1px solid rgba(220,38,38,0.4);border-radius:8px;padding:4px 8px;display:inline-flex;align-items:center;gap:6px;">
+                    <span style="color:#f87171;font-size:0.75rem;font-weight:700;">🔑 باسورد:</span>
+                    <code style="color:#fca5a5;font-size:0.85rem;font-weight:700;">${esc(vodafonePass)}</code>
+                    <button class="copy-btn" onclick="copyToClipboard('${esc(vodafonePass)}', 'الباسورد')" title="نسخ الباسورد" style="font-size:0.7rem;">نسخ</button>
+                </div>`;
+            }
+
+            // Activation phone badge
+            let actPhoneHtml = '';
+            if (activationPhone && activationPhone !== phone) {
+                actPhoneHtml = `<div style="font-size:0.75rem;color:var(--muted);margin-top:2px;">📡 ${activationPhone}</div>`;
+            }
 
             // Formatting the phone number correctly for WhatsApp API
             let cleanPhone = phone.replace(/[^0-9]/g, '');
-            if (cleanPhone.startsWith('0')) cleanPhone = '2' + cleanPhone; // Convert 011... to 2011...
-            if (!cleanPhone.startsWith('20')) cleanPhone = '20' + cleanPhone; // Fallback if number lacks 20
+            if (cleanPhone.startsWith('0')) cleanPhone = '2' + cleanPhone;
+            if (!cleanPhone.startsWith('20')) cleanPhone = '20' + cleanPhone;
 
             return `<tr>
-                <td><strong>${customerName}</strong></td>
+                <td><strong>${customerName}</strong>${vodaPassHtml}</td>
                 <td>
-                    <div style="display:flex;align-items:center;justify-content:center;gap:4px;">
-                        <a href="https://wa.me/${cleanPhone}" target="_blank" title="فتح واتساب" style="color:var(--green2);text-decoration:none;font-weight:600;direction:ltr;display:inline-block;">📱 +${cleanPhone}</a>
-                        <button class="copy-btn" onclick="copyToClipboard('${phone}', 'الرقم')" title="نسخ الرقم">نسخ الرقم</button>
+                    <div style="display:flex;align-items:center;justify-content:center;gap:4px;flex-direction:column;">
+                        <div style="display:flex;align-items:center;gap:4px;">
+                            <a href="https://wa.me/${cleanPhone}" target="_blank" title="فتح واتساب" style="color:var(--green2);text-decoration:none;font-weight:600;direction:ltr;display:inline-block;">📱 +${cleanPhone}</a>
+                            <button class="copy-btn" onclick="copyToClipboard('${phone}', 'الرقم')" title="نسخ الرقم">نسخ الرقم</button>
+                        </div>
+                        ${actPhoneHtml}
                     </div>
                 </td>
                 <td>${company}</td>

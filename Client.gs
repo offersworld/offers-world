@@ -203,20 +203,21 @@ function getAllOrders() {
   var result = [];
   for (var i = 2; i < data.length; i++) {
     result.push({
-      orderId:         data[i][0],
-      date:            data[i][1],
-      customerName:    data[i][2],
-      phone:           data[i][3],
-      company:         data[i][4],
-      package:         data[i][5],
-      price:           data[i][6],
-      transferRef:     data[i][7],
-      payment:         data[i][8],
-      status:          data[i][9],
-      activationDate:  data[i][10] || '',
-      notes:           data[i][11],
-      proofImage:      data[i][12],
-      activationPhone: data[i][13] || ''
+      orderId:          data[i][0],
+      date:             data[i][1],
+      customerName:     data[i][2],
+      phone:            data[i][3],
+      company:          data[i][4],
+      package:          data[i][5],
+      price:            data[i][6],
+      transferRef:      data[i][7],
+      payment:          data[i][8],
+      status:           data[i][9],
+      activationDate:   data[i][10] || '',
+      notes:            data[i][11],
+      proofImage:       data[i][12],
+      activationPhone:  data[i][13] || '',
+      vodafonePassword: data[i][14] || ''   // 🔑 باسورد أنا فودافون
     });
   }
   return result;
