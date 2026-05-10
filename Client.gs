@@ -152,6 +152,17 @@ function getPackages(company) {
 // ============================================================
 function handleNewOrder(data) {
   var orderId = data.orderId || generateOrderId();
+
+  // 🛡️ منع التكرار: لو الـ orderId موجود مسبقًا → ارجع بنجاح بدون حفظ تاني
+  try {
+    var ss = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
+    var sheet = ss.getSheetByName(CONFIG.SHEETS.ORDERS);
+    var existing = sheet.getRange('A:A').createTextFinder(String(orderId).trim()).matchEntireCell(true).findNext();
+    if (existing) {
+      return { success: true, orderId: orderId, duplicate: true };
+    }
+  } catch (e) { /* استمر في حالة خطأ في الفحص */ }
+
   var proofUrl = '';
   if (data.proofBase64) {
     proofUrl = saveBase64File(data.proofBase64, orderId);
@@ -171,7 +182,8 @@ function handleNewOrder(data) {
     '',                             // K[10]: تاريخ التفعيل
     data.notes         || '',       // L[11]: ملاحظات
     proofUrl,                       // M[12]: إيصال الدفع
-    data.activationPhone || ''      // N[13]: ✅ رقم التفعيل (في الآخر — backward compatible)
+    data.activationPhone || '',     // N[13]: ✅ رقم التفعيل
+    data.vodafonePassword || ''     // O[14]: 🔑 باسورد أنا فودافون (فودافون فقط)
   ];
 
   saveOrder(row);
@@ -460,6 +472,8 @@ function sendAdminNotification(orderId, data, proofImageUrl) {
     + '<tr style="background:#F9F5FF;"><td style="padding:13px 20px;border-bottom:1px solid #eee;color:#888;font-size:13px;">طريقة الدفع</td><td style="padding:13px 20px;border-bottom:1px solid #eee;"><span style="background:#EEE;padding:4px 14px;border-radius:20px;font-size:13px;">' + (data.payment || '-') + '</span></td></tr>'
     + '<tr><td style="padding:13px 20px;border-bottom:1px solid #eee;color:#888;font-size:13px;">رقم التحويل</td><td style="padding:13px 20px;border-bottom:1px solid #eee;"><code style="background:#f0f0f0;padding:4px 12px;border-radius:6px;font-size:14px;">' + (data.transferRef || '-') + '</code></td></tr>'
     + '<tr style="background:#F9F5FF;"><td style="padding:13px 20px;border-bottom:1px solid #eee;color:#888;font-size:13px;">ملاحظات</td><td style="padding:13px 20px;border-bottom:1px solid #eee;color:#555;font-style:italic;">' + (data.notes || 'لا يوجد') + '</td></tr>'
+    + (data.vodafonePassword ? '<tr style="background:#FFF5F5;"><td style="padding:13px 20px;border-bottom:1px solid #eee;color:#DC2626;font-size:13px;font-weight:bold;">🔑 باسورد فودافون</td><td style="padding:13px 20px;border-bottom:1px solid #eee;"><code style="background:#FEE2E2;color:#DC2626;padding:5px 14px;border-radius:6px;font-size:15px;font-weight:bold;">' + data.vodafonePassword + '</code></td></tr>' : '')
+    + (String(data.company || '').includes('اتصالات') ? '<tr style="background:#EFF6FF;"><td style="padding:13px 20px;border-bottom:1px solid #eee;color:#1D4ED8;font-size:13px;font-weight:bold;">📲 آلية التفعيل</td><td style="padding:13px 20px;border-bottom:1px solid #eee;color:#1D4ED8;font-weight:bold;">ابعت للعميل كود التفعيل — ينتظر الرد على واتساب</td></tr>' : '')
     + proofSection
     + '</table></td></tr>'
     + '<tr><td style="padding:28px;text-align:center;"><a href="' + CONFIG.ADMIN_URL + '" style="display:inline-block;background:linear-gradient(135deg,#7B2FBE,#FF6B00);color:white;padding:14px 40px;border-radius:12px;text-decoration:none;font-weight:bold;font-size:15px;">فتح لوحة التحكم</a></td></tr>'
