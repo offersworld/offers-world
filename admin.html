@@ -25,6 +25,7 @@
             --muted: #94a3b8;
             --border: rgba(139, 60, 247, 0.2);
             --glow: 0 0 30px rgba(139, 60, 247, 0.15);
+            --critical-glow: 0 0 20px rgba(239, 68, 68, 0.4);
             --radius: 18px;
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -824,6 +825,27 @@
         .comp-filter-btn[data-comp="أورانج"].active { background: rgba(255,107,43,0.15); border-color: #FF6B2B; box-shadow: 0 0 20px rgba(255,107,43,0.2); }
         .comp-filter-btn[data-comp="وي"].active { background: rgba(139,0,255,0.15); border-color: #8B00FF; box-shadow: 0 0 20px rgba(139,0,255,0.2); }
         .comp-filter-btn[data-comp="اتصالات"].active { background: rgba(0,166,81,0.15); border-color: #00A651; box-shadow: 0 0 20px rgba(0,166,81,0.2); }
+        
+        .health-alert {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+            border: 2px solid var(--red);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+            display: none;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--critical-glow);
+            animation: pulse-border 2s infinite;
+        }
+        @keyframes pulse-border {
+            0% { border-color: rgba(239, 68, 68, 0.5); }
+            50% { border-color: rgba(239, 68, 68, 1); }
+            100% { border-color: rgba(239, 68, 68, 0.5); }
+        }
+        .health-alert-icon { font-size: 2rem; }
+        .health-alert-content h4 { color: #fff; margin-bottom: 4px; font-weight: 800; }
+        .health-alert-content p { color: var(--red2); font-size: 0.9rem; margin-bottom: 10px; }
     </style>
 </head>
 <body>
@@ -892,6 +914,16 @@
 
         <!-- MAIN CONTENT -->
         <main class="main">
+            <!-- HEALTH ALERT BANNER -->
+            <div id="healthAlert" class="health-alert">
+                <div class="health-alert-icon">⚠️</div>
+                <div class="health-alert-content">
+                    <h4>تنبيه أمني: توقف صلاحيات السيرفر</h4>
+                    <p id="healthMessage">جوجل يرفض الوصول (Error 403). غالباً بسبب تغيير باسورد الجيميل أو انتهاء صلاحية النشر.</p>
+                    <a href="https://script.google.com/home" target="_blank" class="btn btn-danger btn-xs">فتح Google Script لإعادة التفويض</a>
+                </div>
+            </div>
+
             <div class="topbar">
                 <div class="page-title" id="pageTitle">📊 الرئيسية</div>
                 <div class="topbar-actions">
@@ -1192,10 +1224,18 @@
                 headers: { 'Accept': 'application/json' },
                 signal: AbortSignal.timeout(15000)
             });
+            if (res.status === 403) {
+                showHealthCriticalAlert('Error 403: تم رفض الوصول. يرجى إعادة نشر (Deploy) السكربت والتأكد من الصلاحيات.');
+                throw new Error('Forbidden: 403');
+            }
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            hideHealthAlert();
             return await res.json();
         } catch (e) {
             console.error(e);
+            if (e.message.includes('403') || e.message.includes('Forbidden')) {
+                showHealthCriticalAlert('السيرفر يحتاج إعادة تفويض (403). تأكد من إعدادات النشر في Google Script.');
+            }
             return { success: false, error: e.message };
         }
     }
@@ -1208,12 +1248,31 @@
                 body: JSON.stringify(payload),
                 signal: AbortSignal.timeout(20000)
             });
+            if (res.status === 403) {
+                showHealthCriticalAlert('Error 403: تم رفض الوصول أثناء محاولة حفظ البيانات.');
+                throw new Error('Forbidden: 403');
+            }
             if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            hideHealthAlert();
             return await res.json();
         } catch (e) {
             console.error(e);
+            if (e.message.includes('403')) showHealthCriticalAlert();
             return { success: false, error: e.message };
         }
+    }
+
+    function showHealthCriticalAlert(msg) {
+        const el = document.getElementById('healthAlert');
+        if (el) {
+            el.style.display = 'flex';
+            if (msg) document.getElementById('healthMessage').textContent = msg;
+        }
+    }
+
+    function hideHealthAlert() {
+        const el = document.getElementById('healthAlert');
+        if (el) el.style.display = 'none';
     }
 
     // ==================== AUTHENTICATION ====================

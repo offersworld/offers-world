@@ -703,29 +703,65 @@
 
     async loadPackages() {
       const loadingEl = document.getElementById('loading');
-      try {
+      const getCache = () => {
         const cachedData = localStorage.getItem('packages_cache_v2');
+        return cachedData ? JSON.parse(cachedData) : null;
+      };
+
+      try {
         const cachedTime = localStorage.getItem('packages_cache_time_v2');
         const CACHE_DURATION = 30 * 60 * 1000;
-        if (cachedData && cachedTime && (Date.now() - cachedTime < CACHE_DURATION)) {
-          this.allPackages = JSON.parse(cachedData);
-          this.preparePackagesMap();
-          loadingEl.style.display = 'none';
-          this.showStep(1);
-          this.createCompanyCards();
-          return;
+        
+        // 1. استخدام الكاش السريع إذا كان مازال صالحاً
+        if (cachedTime && (Date.now() - cachedTime < CACHE_DURATION)) {
+          const data = getCache();
+          if (data) {
+            this.allPackages = data;
+            this.preparePackagesMap();
+            loadingEl.style.display = 'none';
+            this.showStep(1);
+            this.createCompanyCards();
+            return;
+          }
         }
+
+        // 2. محاولة جلب بيانات جديدة
         const res = await fetch(`${SCRIPT_URL}?action=packages`);
-        if (!res.ok) throw new Error('فشل الاتصال بالخادم');
+        
+        if (res.status === 403) {
+          throw new Error('SERVER_FORBIDDEN');
+        }
+        
+        if (!res.ok) throw new Error('فشل الاتصال');
+
         this.allPackages = await res.json();
         localStorage.setItem('packages_cache_v2', JSON.stringify(this.allPackages));
         localStorage.setItem('packages_cache_time_v2', Date.now());
+        
         this.preparePackagesMap();
         loadingEl.style.display = 'none';
         this.showStep(1);
         this.createCompanyCards();
+
       } catch(e) {
-        loadingEl.innerHTML = '<div style="text-align:center;color:#f87171;padding:40px;">❌ فشل تحميل الباقات</div>';
+        console.error('Load Packages Error:', e);
+        
+        // 3. المحاولة الأخيرة: استخدام أي كاش متاح حتى لو قديم جداً
+        const emergencyCache = getCache();
+        if (emergencyCache) {
+          this.allPackages = emergencyCache;
+          this.preparePackagesMap();
+          loadingEl.style.display = 'none';
+          this.showStep(1);
+          this.createCompanyCards();
+          console.warn('استخدام الكاش الطارئ بسبب مشكلة في السيرفر');
+        } else {
+          let msg = '❌ فشل تحميل الباقات. يرجى المحاولة لاحقاً.';
+          if (e.message === 'SERVER_FORBIDDEN') {
+            msg = '⚙️ السيرفر قيد الصيانة حالياً. يرجى العودة بعد قليل.';
+          }
+          loadingEl.innerHTML = `<div style="text-align:center;color:#f87171;padding:40px;">${msg}</div>`;
+        }
       }
     }
 
@@ -973,13 +1009,18 @@
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(formData)
         });
+        
+        if (res.status === 403) {
+           throw new Error('SERVER_FORBIDDEN');
+        }
+
         const data = await res.json();
         document.getElementById('sendingOverlay').classList.remove('show');
         if (data.success) {
           document.getElementById('orderIdDisplay').textContent = `رقم طلبك: ${data.orderId || localOrderId}`;
           this.showStep(4);
         } else {
-          sessionStorage.removeItem(submittedKey); // إعادة السماح لو فشل الإرسال
+          sessionStorage.removeItem(submittedKey); 
           this.showError(data.error || 'فشل إرسال الطلب، حاول مرة أخرى.');
           this.isSubmitting = false;
           if (confirmBtn) confirmBtn.disabled = false;
@@ -987,7 +1028,9 @@
       } catch (e) {
         sessionStorage.removeItem(submittedKey);
         document.getElementById('sendingOverlay').classList.remove('show');
-        this.showError('حدث خطأ في الاتصال بالخادم');
+        let msg = 'حدث خطأ في الاتصال بالخادم';
+        if (e.message === 'SERVER_FORBIDDEN') msg = 'عذراً، السيرفر قيد التحديث حالياً، يرجى المحاولة بعد قليل.';
+        this.showError(msg);
         this.isSubmitting = false;
         if (confirmBtn) confirmBtn.disabled = false;
       }
