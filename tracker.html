@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تسجيل الباقات — عبير</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <style>
+        :root {
+            --bg: #07070f;
+            --card: #111122;
+            --card2: #18182f;
+            --card3: #1e1e38;
+            --accent: #8b3cf7;
+            --accent2: #a560f7;
+            --green: #22c55e;
+            --red: #ef4444;
+            --yellow: #f59e0b;
+            --text: #e2e2f0;
+            --muted: #94a3b8;
+            --border: rgba(139, 60, 247, 0.2);
+            --glow: 0 0 20px rgba(139, 60, 247, 0.15);
+            --radius: 16px;
+            --transition: 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Cairo', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 70px;
+            /* للنافبار السفلي */
+        }
+
+        /* شاشة تسجيل الدخول */
+        #loginPage {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: var(--card);
+            padding: 30px 20px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: var(--glow);
+        }
+
+        .login-box h2 {
+            margin-bottom: 20px;
+            color: var(--accent2);
+        }
+
+        .input-text {
+            width: 100%;
+            padding: 14px;
+            background: var(--card2);
+            border: 1px solid #2a2a45;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            font-size: 16px;
+            /* لمنع الزووم في iOS */
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .input-text:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, var(--accent), #a855f7);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            font-family: 'Cairo', sans-serif;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(139, 60, 247, 0.3);
+        }
+
+        /* الـ Header */
+        header {
+            padding: 15px 20px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .user-badge {
+            background: rgba(139, 60, 247, 0.2);
+            color: var(--accent2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* المحتوى الأساسي */
+        .container {
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* الشاشات (Tabs) */
+        /* 1. نموذج التسجيل */
+        .section-label {
+            display: block;
+            margin: 20px 0 10px;
+            font-weight: 700;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .options-grid.cols-3 {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+
+        .btn-option {
+            background: var(--card2);
+            border: 2px solid transparent;
+            color: var(--text);
+            padding: 12px 10px;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .btn-option.selected {
+            background: rgba(139, 60, 247, 0.15);
+            border-color: var(--accent);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(139, 60, 247, 0.2);
+        }
+
+        .btn-option.status-done.selected {
+            border-color: var(--green);
+            background: rgba(34, 197, 94, 0.15);
+        }
+
+        .btn-option.status-cancel.selected {
+            border-color: var(--red);
+            background: rgba(239, 68, 68, 0.15);
+        }
+
+        .packages-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .pkg-item {
+            background: var(--card2);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .pkg-item.selected {
+            border-color: var(--accent);
+            background: rgba(139, 60, 247, 0.1);
+        }
+
+        .pkg-name {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .pkg-price {
+            color: var(--green);
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        /* الشريط السفلي */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(17, 17, 34, 0.95);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border);
+            display: flex;
+            padding: 10px 0;
+            padding-bottom: env(safe-area-inset-bottom, 10px);
+            z-index: 100;
+        }
+
+        .nav-item {
+            flex: 1;
+            text-align: center;
+            color: var(--muted);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .nav-item.active {
+            color: var(--accent2);
+        }
+
+        .nav-icon {
+            font-size: 1.3rem;
+            margin-bottom: 2px;
+        }
+
+        /* الإحصائيات */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: var(--card2);
+            padding: 15px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            margin: 5px 0;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        /* كشوفات العجز / القوة */
+        .insight-card {
+            background: var(--card2);
+            border-radius: var(--radius);
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .insight-icon {
+            font-size: 2rem;
+        }
+
+        .insight-details h4 {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .insight-details p {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        .insight-green border-left {
+            border-left: 4px solid var(--green);
+        }
+
+        .insight-red border-left {
+            border-left: 4px solid var(--red);
+        }
+
+        /* سجل العمليات */
+        .log-item {
+            background: var(--card2);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-right: 4px solid var(--accent);
+        }
+
+        .log-item.status-مشكلة {
+            border-right-color: var(--yellow);
+        }
+
+        .log-item.status-ملغي {
+            border-right-color: var(--red);
+            opacity: 0.7;
+        }
+
+        .log-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .log-body {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .log-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .log-client {
+            display: inline-block;
+            background: var(--card3);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            margin-top: 5px;
+        }
+
+        /* التوست (الإشعارات) */
+        #toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-50px);
+            background: var(--green);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-weight: 700;
+            opacity: 0;
+            transition: 0.3s;
+            z-index: 2000;
+            pointer-events: none;
+        }
+
+        #toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: var(--accent2);
+        }
+
+        canvas {
+            background: var(--card2);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- التوست -->
+    <div id="toast">تم الحفظ بنجاح!</div>
+
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginPage">
+        <div class="login-box">
+            <h2>تسجيل الدخول</h2>
+            <p style="color: var(--muted); margin-bottom: 20px; font-size: 0.9rem;">نظام متابعة العمليات اليدوية</p>
+            <input type="password" id="passInput" class="input-text" placeholder="كلمة المرور">
+            <button class="btn-primary" onclick="login()">دخول</button>
+            <div id="loginError" style="color: var(--red); margin-top: 10px; display: none; font-size: 0.85rem;">كلمة
+                المرور غير صحيحة</div>
+        </div>
+    </div>
+
+    <!-- الهيدر -->
+    <header>
+        <div class="header-title">تسجيل الباقات</div>
+        <div class="user-badge">عبير</div>
+    </header>
+
+    <!-- المحتوى -->
+    <div class="container">
+
+        <!-- Tab 1: نموذج التسجيل -->
+        <div id="tab-add" class="tab-content active">
+
+            <div
+                style="background: rgba(139, 60, 247, 0.1); border: 1px solid var(--accent); padding: 12px; border-radius: 12px; margin-bottom: 20px;">
+                <p style="margin: 0; font-size: 0.9rem;">
+                    <strong>مرحباً بكِ.</strong> اختاري الشركة، ثم الباقة، وتُحفظ تلقائياً دون الحاجة لكتابة اسم وتفاصيل
+                    الباقة.
+                </p>
+            </div>
+
+            <label class="section-label">1. اختاري الشركة</label>
+            <div class="options-grid" id="companiesGrid">
+                <!-- يُملأ برمجياً بناءً على Master Data -->
+                <button class="btn-option" onclick="selectCompany('اتصالات')">اتصالات</button>
+                <button class="btn-option" onclick="selectCompany('فودافون')">فودافون</button>
+                <button class="btn-option" onclick="selectCompany('أورانج')">أورانج</button>
+                <button class="btn-option" onclick="selectCompany('WE')">WE</button>
+            </div>
+
+            <div id="packagesSection" style="display: none;">
+                <label class="section-label">2. اختاري الباقة</label>
+                <div class="packages-list" id="packagesList">
+                    <!-- سيتم عرض الباقات التابعة للشركة المختارة هنا -->
+                </div>
+            </div>
+
+            <label class="section-label">3. مصدر العملية (من أين جاء العميل؟)</label>
+            <div class="options-grid cols-3" id="sourceGrid">
+                <button class="btn-option selected" onclick="selectOpt(this, 'source')">واتساب</button>
+                <button class="btn-option" onclick="selectOpt(this, 'source')">اتصال</button>
+                <button class="btn-option" onclick="selectOpt(this, 'source')">فيسبوك</button>
+                <button class="btn-option" onclick="selectOpt(this, 'source')">تيليجرام</button>
+            </div>
+
+            <label class="section-label">4. الحالة</label>
+            <div class="options-grid cols-3" id="statusGrid">
+                <button class="btn-option status-done selected" onclick="selectOpt(this, 'status')">✅ تم</button>
+                <button class="btn-option status-cancel" onclick="selectOpt(this, 'status')">❌ ملغي</button>
+                <button class="btn-option" onclick="selectOpt(this, 'status')">⚠️ مشكلة</button>
+            </div>
+
+            <div id="reasonSection" style="display: none; margin-top: 15px;">
+                <label class="section-label" style="color: var(--red); margin-top: 0;">السبب / المشكلة <span style="color:var(--red);">*</span></label>
+                <input type="text" id="statusReason" class="input-text" placeholder="اكتب سبب الإلغاء أو المشكلة هنا..." style="border-color: var(--red);">
+            </div>
+
+            <label class="section-label">5. اسم/رقم العميل (اختياري - للمراجعة)</label>
+            <input type="text" id="clientRef" class="input-text" placeholder="مثال: 0100000000 أو أحمد محمود">
+
+            <label class="section-label">6. ملاحظات (اختياري)</label>
+            <input type="text" id="notes" class="input-text" placeholder="أي ملاحظات إضافية...">
+
+            <button class="btn-primary" id="saveBtn" onclick="saveRecord()"
+                style="margin-top: 20px; padding: 18px; font-size: 1.1rem;">
+                💾 حفظ العملية
+            </button>
+        </div>
+
+        <!-- Tab 2: ملخص اليوم -->
+        <div id="tab-today" class="tab-content">
+            <h3 style="margin-bottom: 15px;">ملخص إنجاز اليوم</h3>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">إجمالي الباقات</div>
+                    <div class="stat-value" id="todayCount">0</div>
+                </div>
+                <div class="stat-card" style="background: rgba(34, 197, 94, 0.1); border-color: var(--green);">
+                    <div class="stat-label" style="color: var(--green);">إجمالي الإيراد</div>
+                    <div class="stat-value" style="color: var(--green);"><span id="todayRev">0</span> ج</div>
+                </div>
+            </div>
+
+            <h4 style="margin: 20px 0 10px; color: var(--muted);">المبيعات حسب الشركة (اليوم)</h4>
+            <div id="todayCompaniesList" class="packages-list">
+                <!-- يُملأ برمجياً -->
+            </div>
+        </div>
+
+        <!-- Tab 3: ملخص الشهر والمؤشرات (كشف العجز/القوة) -->
+        <div id="tab-month" class="tab-content">
+            <h3 style="margin-bottom: 15px;">المؤشرات العامة (الشهر الحالي)</h3>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">إجمالي الباقات</div>
+                    <div class="stat-value" id="monthCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">الإيراد الكلي</div>
+                    <div class="stat-value"><span id="monthRev">0</span> ج</div>
+                </div>
+            </div>
+
+            <h4 style="margin: 20px 0 15px; color: var(--yellow);">📊 المؤشرات الإدارية</h4>
+
+            <div class="insight-card" style="border-left: 4px solid var(--green);">
+                <div class="insight-icon">🏆</div>
+                <div class="insight-details">
+                    <h4>أعلى شركة مبيعاً</h4>
+                    <p id="topCompany">-</p>
+                </div>
+            </div>
+
+            <div class="insight-card" style="border-left: 4px solid var(--red);">
+                <div class="insight-icon">⚠️</div>
+                <div class="insight-details">
+                    <h4>أضعف شركة (تحتاج تنشيط)</h4>
+                    <p id="bottomCompany">-</p>
+                </div>
+            </div>
+
+            <h4 style="margin: 20px 0 10px; color: var(--muted);">توزيع مصادر العملاء</h4>
+            <canvas id="sourceChart" height="200"></canvas>
+
+            <h4 style="margin: 20px 0 10px; color: var(--muted);">مقارنة الشركات</h4>
+            <canvas id="companyChart" height="200"></canvas>
+        </div>
+
+        <!-- Tab 4: السجل -->
+        <div id="tab-history" class="tab-content">
+            <h3 style="margin-bottom: 15px;">سجل العمليات</h3>
+
+            <input type="text" id="searchClient" class="input-text" placeholder="🔍 ابحث برقم أو اسم العميل..."
+                onkeyup="searchLogs()">
+
+            <div id="logsLoader" class="loader">جاري تحميل السجل...</div>
+            <div id="logsContainer" style="margin-top: 15px;">
+                <!-- يُملأ برمجياً -->
+            </div>
+        </div>
+
+    </div>
+
+    <!-- النافبار السفلي -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('add', this)">
+            <div class="nav-icon">➕</div>
+            تسجيل
+        </div>
+        <div class="nav-item" onclick="switchTab('today', this)">
+            <div class="nav-icon">📅</div>
+            اليوم
+        </div>
+        <div class="nav-item" onclick="switchTab('month', this)">
+            <div class="nav-icon">📊</div>
+            المؤشرات
+        </div>
+        <div class="nav-item" onclick="switchTab('history', this)">
+            <div class="nav-icon">📋</div>
+            السجل
+        </div>
+    </nav>
+
+    <script>
+        // CONFIG MUST MATCH Client.gs doGet URL
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzB57Mux7NY6mZP_AOAJesK9GnVhCi669LNlIs3CYltnzJpDM4eT9ZQeA49EqLROrQQ/exec';
+
+        let ALL_PACKAGES = {};
+        let SELECTED_DATA = {
+            company: null,
+            packageId: null,
+            packageName: null,
+            price: 0
+        };
+
+        // --- التبديل بين الشاشات ---
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            el.classList.add('active');
+
+            if (tabId === 'today' || tabId === 'month') loadSummary();
+            if (tabId === 'history') loadLogs();
+        }
+
+        // --- تحديد أزرار Options ---
+        function selectOpt(btn, groupClass) {
+            document.querySelectorAll(`#${groupClass}Grid .btn-option`).forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            // إظهار حقل السبب إذا كانت الحالة ملغي أو مشكلة
+            if (groupClass === 'status') {
+                const isIssue = btn.innerText.includes('ملغي') || btn.innerText.includes('مشكلة');
+                document.getElementById('reasonSection').style.display = isIssue ? 'block' : 'none';
+            }
+        }
+
+        function getSelectedOptText(groupClass) {
+            const btn = document.querySelector(`#${groupClass}Grid .btn-option.selected`);
+            if (!btn) return '';
+            let text = btn.innerText;
+            if (text.includes('تم')) return 'تم';
+            if (text.includes('ملغي')) return 'ملغي';
+            if (text.includes('مشكلة')) return 'مشكلة';
+            return text;
+        }
+
+        // --- تحميل الـ Master Data ---
+        async function loadPackagesMaster() {
+            try {
+                const res = await fetch(`${API_URL}?action=trackerPackages`);
+                const json = await res.json();
+                if (json.success) {
+                    ALL_PACKAGES = json.data;
+                    renderCompanies();
+                } else {
+                    alert('حدث خطأ أثناء تحميل الباقات');
+                }
+            } catch (err) {
+                console.error(err);
+                alert('فشل الاتصال بالخادم');
+            }
+        }
+
+        function renderCompanies() {
+            const grid = document.getElementById('companiesGrid');
+            grid.innerHTML = '';
+            Object.keys(ALL_PACKAGES).forEach(co => {
+                const btn = document.createElement('button');
+                btn.className = 'btn-option';
+                btn.innerText = co;
+                btn.onclick = () => selectCompany(co, btn);
+                grid.appendChild(btn);
+            });
+        }
+
+        function selectCompany(company, btnEl) {
+            SELECTED_DATA.company = company;
+            SELECTED_DATA.packageId = null;
+
+            document.querySelectorAll('#companiesGrid .btn-option').forEach(b => b.classList.remove('selected'));
+            if (btnEl) btnEl.classList.add('selected');
+
+            const pkgs = ALL_PACKAGES[company] || [];
+            const list = document.getElementById('packagesList');
+            list.innerHTML = '';
+
+            pkgs.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'pkg-item';
+                div.innerHTML = `
+                    <span class="pkg-name">${p.name}</span>
+                    <span class="pkg-price">${p.price} ج</span>
+                `;
+                div.onclick = () => selectPackage(p, div);
+                list.appendChild(div);
+            });
+
+            document.getElementById('packagesSection').style.display = 'block';
+        }
+
+        function selectPackage(pkg, divEl) {
+            SELECTED_DATA.packageId = pkg.id;
+            SELECTED_DATA.packageName = pkg.name;
+            SELECTED_DATA.price = pkg.price;
+
+            document.querySelectorAll('.pkg-item').forEach(d => d.classList.remove('selected'));
+            divEl.classList.add('selected');
+        }
+
+        // --- حفظ العملية ---
+        async function saveRecord() {
+            if (!SELECTED_DATA.company || !SELECTED_DATA.packageId) {
+                alert('الرجاء اختيار الشركة والباقة أولاً');
+                return;
+            }
+
+            const statusOpt = getSelectedOptText('status');
+            let customNotes = document.getElementById('notes').value;
+
+            // التحقق من سبب الإلغاء / المشكلة
+            if (statusOpt !== 'تم') {
+                const reason = document.getElementById('statusReason').value.trim();
+                if (!reason) {
+                    alert('الرجاء كتابة سبب الإلغاء أو تفاصيل المشكلة!');
+                    return;
+                }
+                customNotes = `[السبب: ${reason}] ` + customNotes;
+            }
+
+            const btn = document.getElementById('saveBtn');
+            btn.innerHTML = '⏳ جاري الحفظ...';
+            btn.disabled = true;
+
+            const payload = {
+                action: 'addTrackerLog',
+                date: new Date().toLocaleDateString('en-GB'),
+                company: SELECTED_DATA.company,
+                packageId: SELECTED_DATA.packageId,
+                packageName: SELECTED_DATA.packageName,
+                price: SELECTED_DATA.price,
+                source: getSelectedOptText('source'),
+                status: statusOpt,
+                clientRef: document.getElementById('clientRef').value,
+                notes: customNotes
+            };
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+
+                if (json.success) {
+                    showToast();
+                    resetForm();
+                } else {
+                    alert('فشل الحفظ: ' + json.error);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('حدث خطأ أثناء الحفظ');
+            } finally {
+                btn.innerHTML = '💾 حفظ العملية';
+                btn.disabled = false;
+            }
+        }
+
+        function resetForm() {
+            SELECTED_DATA.company = null;
+            SELECTED_DATA.packageId = null;
+            document.querySelectorAll('.btn-option').forEach(b => b.classList.remove('selected'));
+            document.querySelectorAll('.pkg-item').forEach(b => b.classList.remove('selected'));
+            document.getElementById('packagesSection').style.display = 'none';
+            document.getElementById('clientRef').value = '';
+            document.getElementById('notes').value = '';
+            document.getElementById('statusReason').value = '';
+            document.getElementById('reasonSection').style.display = 'none';
+
+            // Default selections
+            document.querySelector('#sourceGrid .btn-option').classList.add('selected');
+            document.querySelector('#statusGrid .btn-option').classList.add('selected');
+        }
+
+        function showToast() {
+            const t = document.getElementById('toast');
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2500);
+        }
+
+        // --- تسجيل الدخول ---
+        async function login() {
+            const pass = document.getElementById('passInput').value;
+            const btn = document.querySelector('.login-box .btn-primary');
+            btn.innerHTML = '⏳ جاري التحقق...';
+            btn.disabled = true;
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'checkTrackerPass', pass: pass })
+                });
+                const json = await res.json();
+
+                if (json.success) {
+                    document.getElementById('loginPage').style.display = 'none';
+                    loadPackagesMaster();
+                    loadSummary(); // تحميل بيانات الخلفية
+                } else {
+                    document.getElementById('loginError').style.display = 'block';
+                }
+            } catch (err) {
+                console.error(err);
+                alert('فشل الاتصال بالخادم');
+            } finally {
+                btn.innerHTML = 'دخول';
+                btn.disabled = false;
+            }
+        }
+
+        // --- تحميل الملخص ---
+        async function loadSummary() {
+            try {
+                const res = await fetch(`${API_URL}?action=trackerSummary`);
+                const json = await res.json();
+
+                if (json.success) {
+                    // بيانات اليوم
+                    document.getElementById('todayCount').innerText = json.today.count;
+                    document.getElementById('todayRev').innerText = json.today.revenue;
+                    renderTodayCompanies(json.today.byCompany);
+
+                    // بيانات الشهر
+                    document.getElementById('monthCount').innerText = json.monthly.count;
+                    document.getElementById('monthRev').innerText = json.monthly.revenue;
+
+                    document.getElementById('topCompany').innerText =
+                        json.monthly.topCompany.name ? `${json.monthly.topCompany.name} (${json.monthly.topCompany.count} عملية)` : '-';
+                    document.getElementById('bottomCompany').innerText =
+                        json.monthly.bottomCompany.name ? `${json.monthly.bottomCompany.name} (${json.monthly.bottomCompany.count} عملية)` : '-';
+
+                    initCharts(json.monthly.bySource, json.monthly.byCompany);
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        function renderTodayCompanies(companiesObj) {
+            const list = document.getElementById('todayCompaniesList');
+            list.innerHTML = '';
+            let hasItems = false;
+            for (const [company, count] of Object.entries(companiesObj)) {
+                hasItems = true;
+                list.innerHTML += `
+                    <div class="pkg-item" style="cursor: default;">
+                        <span class="pkg-name">${company}</span>
+                        <span class="pkg-price" style="color:var(--text); font-size:1rem;">${count} عملية</span>
+                    </div>
+                `;
+            }
+            if (!hasItems) {
+                list.innerHTML = '<p style="color:var(--muted); text-align:center;">لا توجد عمليات اليوم</p>';
+            }
+        }
+
+        // --- تحميل السجل ---
+        let ALL_LOGS = [];
+        async function loadLogs() {
+            const loader = document.getElementById('logsLoader');
+            const container = document.getElementById('logsContainer');
+            loader.style.display = 'block';
+            container.innerHTML = '';
+
+            try {
+                const res = await fetch(`${API_URL}?action=trackerLogs`);
+                const json = await res.json();
+
+                if (json.success) {
+                    ALL_LOGS = json.data;
+                    renderLogs(ALL_LOGS);
+                }
+            } catch (err) {
+                console.error(err);
+                container.innerHTML = '<div style="text-align:center;color:var(--red);">فشل تحميل السجل</div>';
+            } finally {
+                loader.style.display = 'none';
+            }
+        }
+
+        function renderLogs(logs) {
+            const container = document.getElementById('logsContainer');
+            container.innerHTML = '';
+
+            if (logs.length === 0) {
+                container.innerHTML = '<p style="color:var(--muted); text-align:center;">لا توجد عمليات</p>';
+                return;
+            }
+
+            logs.forEach(log => {
+                const statusCls = `status-${log.status}`;
+                container.innerHTML += `
+                    <div class="log-item ${statusCls}">
+                        <div class="log-header">
+                            <span>${log.date} - ${log.createdAt.split(' ')[1] || ''}</span>
+                            <span>${log.source}</span>
+                        </div>
+                        <div class="log-body">
+                            <div>
+                                <div class="log-title">${log.company} - ${log.packageName}</div>
+                                ${log.clientRef ? `<div class="log-client">${log.clientRef}</div>` : ''}
+                                ${log.notes ? `<div style="font-size:0.8rem; color:var(--muted); margin-top:5px;">${log.notes}</div>` : ''}
+                            </div>
+                            <div style="text-align:left;">
+                                <div style="font-weight:800; color:var(--green); font-size:1.1rem;">${log.price} ج</div>
+                                <div style="font-size:0.8rem; color:var(--muted); margin-top:3px;">${log.status}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function searchLogs() {
+            const term = document.getElementById('searchClient').value.toLowerCase();
+            if (!term) {
+                renderLogs(ALL_LOGS);
+                return;
+            }
+            const filtered = ALL_LOGS.filter(l =>
+                (l.clientRef && l.clientRef.toLowerCase().includes(term)) ||
+                (l.notes && l.notes.toLowerCase().includes(term)) ||
+                (l.company && l.company.toLowerCase().includes(term))
+            );
+            renderLogs(filtered);
+        }
+
+        // --- المخططات ---
+        let sourceChartInst = null;
+        let companyChartInst = null;
+        function initCharts(sourceData, companyData) {
+            if (!sourceData) sourceData = {};
+            if (!companyData) companyData = {};
+
+            const sourceLabels = Object.keys(sourceData);
+            const sourceValues = Object.values(sourceData);
+            const companyLabels = Object.keys(companyData);
+            const companyValues = Object.values(companyData);
+
+            const colors = ['#22c55e', '#8b3cf7', '#3b82f6', '#f59e0b', '#ef4444', '#14b8a6'];
+
+            if (sourceChartInst) sourceChartInst.destroy();
+            sourceChartInst = new Chart(document.getElementById('sourceChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: sourceLabels.length ? sourceLabels : ['لا بيانات'],
+                    datasets: [{
+                        data: sourceValues.length ? sourceValues : [1],
+                        backgroundColor: sourceLabels.length ? colors.slice(0, sourceLabels.length) : ['#333'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { plugins: { legend: { position: 'right', labels: { color: '#fff', font: { family: 'Cairo' } } } } }
+            });
+
+            if (companyChartInst) companyChartInst.destroy();
+            companyChartInst = new Chart(document.getElementById('companyChart'), {
+                type: 'bar',
+                data: {
+                    labels: companyLabels.length ? companyLabels : ['لا بيانات'],
+                    datasets: [{
+                        label: 'عدد العمليات',
+                        data: companyValues.length ? companyValues : [0],
+                        backgroundColor: '#8b3cf7',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true },
+                        x: { ticks: { color: '#fff', font: { family: 'Cairo' } }, grid: { display: false } }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

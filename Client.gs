@@ -33,6 +33,13 @@ function doGet(e) {
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
   }
 
+  if (page === 'tracker') {
+    return HtmlService
+      .createHtmlOutputFromFile('tracker')
+      .setTitle('متابعة الباقات — عالم العروض')
+      .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  }
+
   if (action === 'checkPassword') {
     var password = e.parameter.pass;
     return respond({ success: password === ADMIN_PASSWORD });
@@ -52,6 +59,18 @@ function doGet(e) {
 
   if (action === 'activity') {
     return respond(getActivityLog());
+  }
+
+  if (action === 'trackerPackages') {
+    return respond(getTrackerPackages());
+  }
+
+  if (action === 'trackerLogs') {
+    return respond(getTrackerLogs(e.parameter));
+  }
+
+  if (action === 'trackerSummary') {
+    return respond(getTrackerSummary(e.parameter.period, e.parameter.month, e.parameter.year));
   }
 
   return respond({ status: 'ok', system: CONFIG.SYSTEM_NAME });
@@ -91,6 +110,22 @@ function doPost(e) {
 
     if (action === 'deletePackage') {
       return respond(deletePackage(data.packageId));
+    }
+
+    if (action === 'addTrackerLog') {
+      return respond(addTrackerLog(data));
+    }
+
+    if (action === 'updateTrackerLog') {
+      return respond(updateTrackerLog(data));
+    }
+
+    if (action === 'deleteTrackerLog') {
+      return respond(deleteTrackerLog(data.logId));
+    }
+
+    if (action === 'checkTrackerPass') {
+      return respond({ success: data.pass === (PropertiesService.getScriptProperties().getProperty('TRACKER_PASSWORD') || 'abeer123') });
     }
 
     return respond({ success: false, message: 'إجراء غير معروف' });
