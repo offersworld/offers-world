@@ -460,14 +460,6 @@
         <!-- Tab 1: نموذج التسجيل -->
         <div id="tab-add" class="tab-content active">
 
-            <div
-                style="background: rgba(139, 60, 247, 0.1); border: 1px solid var(--accent); padding: 12px; border-radius: 12px; margin-bottom: 20px;">
-                <p style="margin: 0; font-size: 0.9rem;">
-                    <strong>مرحباً بكِ.</strong> اختاري الشركة، ثم الباقة، وتُحفظ تلقائياً دون الحاجة لكتابة اسم وتفاصيل
-                    الباقة.
-                </p>
-            </div>
-
             <label class="section-label">1. اختاري الشركة</label>
             <div class="options-grid" id="companiesGrid">
                 <!-- يُملأ برمجياً بناءً على Master Data -->
@@ -492,22 +484,10 @@
                 <button class="btn-option" onclick="selectOpt(this, 'source')">تيليجرام</button>
             </div>
 
-            <label class="section-label">4. الحالة</label>
-            <div class="options-grid cols-3" id="statusGrid">
-                <button class="btn-option status-done selected" onclick="selectOpt(this, 'status')">✅ تم</button>
-                <button class="btn-option status-cancel" onclick="selectOpt(this, 'status')">❌ ملغي</button>
-                <button class="btn-option" onclick="selectOpt(this, 'status')">⚠️ مشكلة</button>
-            </div>
-
-            <div id="reasonSection" style="display: none; margin-top: 15px;">
-                <label class="section-label" style="color: var(--red); margin-top: 0;">السبب / المشكلة <span style="color:var(--red);">*</span></label>
-                <input type="text" id="statusReason" class="input-text" placeholder="اكتب سبب الإلغاء أو المشكلة هنا..." style="border-color: var(--red);">
-            </div>
-
-            <label class="section-label">5. اسم/رقم العميل (اختياري - للمراجعة)</label>
+            <label class="section-label">4. اسم/رقم العميل (اختياري - للمراجعة)</label>
             <input type="text" id="clientRef" class="input-text" placeholder="مثال: 0100000000 أو أحمد محمود">
 
-            <label class="section-label">6. ملاحظات (اختياري)</label>
+            <label class="section-label">5. ملاحظات (اختياري)</label>
             <input type="text" id="notes" class="input-text" placeholder="أي ملاحظات إضافية...">
 
             <button class="btn-primary" id="saveBtn" onclick="saveRecord()"
@@ -640,22 +620,12 @@
         function selectOpt(btn, groupClass) {
             document.querySelectorAll(`#${groupClass}Grid .btn-option`).forEach(b => b.classList.remove('selected'));
             btn.classList.add('selected');
-
-            // إظهار حقل السبب إذا كانت الحالة ملغي أو مشكلة
-            if (groupClass === 'status') {
-                const isIssue = btn.innerText.includes('ملغي') || btn.innerText.includes('مشكلة');
-                document.getElementById('reasonSection').style.display = isIssue ? 'block' : 'none';
-            }
         }
 
         function getSelectedOptText(groupClass) {
             const btn = document.querySelector(`#${groupClass}Grid .btn-option.selected`);
             if (!btn) return '';
-            let text = btn.innerText;
-            if (text.includes('تم')) return 'تم';
-            if (text.includes('ملغي')) return 'ملغي';
-            if (text.includes('مشكلة')) return 'مشكلة';
-            return text;
+            return btn.innerText.trim();
         }
 
         // --- تحميل الـ Master Data ---
@@ -728,19 +698,6 @@
                 return;
             }
 
-            const statusOpt = getSelectedOptText('status');
-            let customNotes = document.getElementById('notes').value;
-
-            // التحقق من سبب الإلغاء / المشكلة
-            if (statusOpt !== 'تم') {
-                const reason = document.getElementById('statusReason').value.trim();
-                if (!reason) {
-                    alert('الرجاء كتابة سبب الإلغاء أو تفاصيل المشكلة!');
-                    return;
-                }
-                customNotes = `[السبب: ${reason}] ` + customNotes;
-            }
-
             const btn = document.getElementById('saveBtn');
             btn.innerHTML = '⏳ جاري الحفظ...';
             btn.disabled = true;
@@ -753,9 +710,9 @@
                 packageName: SELECTED_DATA.packageName,
                 price: SELECTED_DATA.price,
                 source: getSelectedOptText('source'),
-                status: statusOpt,
+                status: 'تم', // تفترض دائماً أن العملية تمت بنجاح
                 clientRef: document.getElementById('clientRef').value,
-                notes: customNotes
+                notes: document.getElementById('notes').value
             };
 
             try {
@@ -789,12 +746,9 @@
             document.getElementById('packagesSection').style.display = 'none';
             document.getElementById('clientRef').value = '';
             document.getElementById('notes').value = '';
-            document.getElementById('statusReason').value = '';
-            document.getElementById('reasonSection').style.display = 'none';
 
             // Default selections
             document.querySelector('#sourceGrid .btn-option').classList.add('selected');
-            document.querySelector('#statusGrid .btn-option').classList.add('selected');
         }
 
         function showToast() {
