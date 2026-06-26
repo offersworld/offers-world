@@ -428,6 +428,181 @@
             margin-bottom: 20px;
             border: 1px solid var(--border);
         }
+
+        /* أزرار التعديل/الحذف على بطاقة السجل */
+        .log-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-log-action {
+            padding: 6px 14px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Cairo', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-edit-log {
+            background: rgba(139, 60, 247, 0.18);
+            color: var(--accent2);
+            border: 1px solid rgba(139, 60, 247, 0.35);
+        }
+
+        .btn-edit-log:hover { background: rgba(139, 60, 247, 0.35); }
+
+        .btn-delete-log {
+            background: rgba(239, 68, 68, 0.12);
+            color: var(--red);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-delete-log:hover { background: rgba(239, 68, 68, 0.28); }
+
+        /* Overlay خلفية المودال */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.65);
+            backdrop-filter: blur(4px);
+            z-index: 500;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Bottom-sheet المودال */
+        .modal-sheet {
+            background: var(--card);
+            border-radius: 24px 24px 0 0;
+            border-top: 1px solid var(--border);
+            padding: 24px 20px 40px;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: translateY(100%);
+            transition: transform 0.38s cubic-bezier(.4,0,.2,1);
+        }
+
+        .modal-overlay.open .modal-sheet {
+            transform: translateY(0);
+        }
+
+        .modal-handle {
+            width: 40px;
+            height: 4px;
+            background: var(--border);
+            border-radius: 4px;
+            margin: 0 auto 20px;
+        }
+
+        .modal-title {
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--accent2);
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .modal-field-label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--muted);
+            font-weight: 700;
+            margin: 14px 0 6px;
+        }
+
+        /* مودال التأكيد (الحذف) */
+        .confirm-sheet {
+            background: var(--card);
+            border-radius: 24px 24px 0 0;
+            border-top: 1px solid rgba(239,68,68,0.4);
+            padding: 30px 24px 40px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            transform: translateY(100%);
+            transition: transform 0.38s cubic-bezier(.4,0,.2,1);
+        }
+
+        .modal-overlay.open .confirm-sheet {
+            transform: translateY(0);
+        }
+
+        .confirm-icon { font-size: 3rem; margin-bottom: 12px; }
+        .confirm-title { font-size: 1.2rem; font-weight: 800; margin-bottom: 6px; color: var(--red); }
+        .confirm-sub { font-size: 0.9rem; color: var(--muted); margin-bottom: 24px; }
+
+        .confirm-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .btn-cancel-modal {
+            padding: 13px;
+            background: var(--card2);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .btn-confirm-delete {
+            padding: 13px;
+            background: var(--red);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(239,68,68,0.35);
+        }
+
+        /* مؤشر التحميل داخل زر */
+        .btn-saving { opacity: 0.6; pointer-events: none; }
+
+        /* select مخصص */
+        .input-select {
+            width: 100%;
+            padding: 12px 14px;
+            background: var(--card2);
+            border: 1px solid #2a2a45;
+            border-radius: 12px;
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            font-size: 15px;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238b3cf7' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 14px center;
+        }
+
+        .input-select:focus { outline: none; border-color: var(--accent); }
+        .input-select option { background: var(--card2); }
     </style>
 </head>
 
@@ -568,6 +743,57 @@
             <div id="logsLoader" class="loader">جاري تحميل السجل...</div>
             <div id="logsContainer" style="margin-top: 15px;">
                 <!-- يُملأ برمجياً -->
+            </div>
+        </div>
+
+        <!-- =====  مودال التعديل  ===== -->
+        <div id="editOverlay" class="modal-overlay" onclick="closeEditModal(event)">
+            <div class="modal-sheet" onclick="event.stopPropagation()">
+                <div class="modal-handle"></div>
+                <div class="modal-title">✏️ تعديل العملية</div>
+
+                <input type="hidden" id="editRowId">
+
+                <label class="modal-field-label">الشركة</label>
+                <select id="editCompany" class="input-select" onchange="loadEditPackages()"></select>
+
+                <label class="modal-field-label">الباقة</label>
+                <select id="editPackage" class="input-select" onchange="syncEditPrice()"></select>
+
+                <label class="modal-field-label">المصدر</label>
+                <select id="editSource" class="input-select">
+                    <option>واتساب</option>
+                    <option>اتصال</option>
+                    <option>فيسبوك</option>
+                    <option>تيليجرام</option>
+                    <option>فورم</option>
+                </select>
+
+                <label class="modal-field-label">السعر (ج) — يُحسب تلقائياً أو عدّله يدوياً</label>
+                <input type="number" id="editPrice" class="input-text" placeholder="السعر بالجنيه" min="0" step="0.01" style="margin-bottom:0;">
+
+                <label class="modal-field-label">اسم / رقم العميل</label>
+                <input type="text" id="editClientRef" class="input-text" placeholder="اسم أو رقم العميل" style="margin-bottom:0;">
+
+                <label class="modal-field-label">ملاحظات</label>
+                <input type="text" id="editNotes" class="input-text" placeholder="ملاحظات..." style="margin-bottom:0;">
+
+                <button id="editSaveBtn" class="btn-primary" style="margin-top:20px;" onclick="saveEdit()">💾 حفظ التعديلات</button>
+            </div>
+        </div>
+
+        <!-- =====  مودال تأكيد الحذف  ===== -->
+        <div id="deleteOverlay" class="modal-overlay" onclick="closeDeleteModal(event)">
+            <div class="confirm-sheet" onclick="event.stopPropagation()">
+                <div class="modal-handle"></div>
+                <div class="confirm-icon">🗑️</div>
+                <div class="confirm-title">تأكيد الحذف</div>
+                <div class="confirm-sub" id="deleteDesc">هل أنت متأكد من حذف هذه العملية؟ لا يمكن التراجع.</div>
+                <input type="hidden" id="deleteRowId">
+                <div class="confirm-btns">
+                    <button class="btn-cancel-modal" onclick="closeDeleteModal()">إلغاء</button>
+                    <button id="deleteConfirmBtn" class="btn-confirm-delete" onclick="confirmDelete()">نعم، احذف</button>
+                </div>
             </div>
         </div>
 
@@ -752,8 +978,9 @@
             document.querySelector('#sourceGrid .btn-option').classList.add('selected');
         }
 
-        function showToast() {
+        function showToast(msg) {
             const t = document.getElementById('toast');
+            t.innerText = msg || 'تم الحفظ بنجاح!';
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 2500);
         }
@@ -870,25 +1097,30 @@
 
             logs.forEach(log => {
                 const statusCls = `status-${log.status}`;
-                container.innerHTML += `
-                    <div class="log-item ${statusCls}">
-                        <div class="log-header">
-                            <span>${log.date} - ${log.createdAt.split(' ')[1] || ''}</span>
-                            <span>${log.source}</span>
+                const div = document.createElement('div');
+                div.className = `log-item ${statusCls}`;
+                div.innerHTML = `
+                    <div class="log-header">
+                        <span>${log.date} - ${(log.createdAt || '').split(' ')[1] || ''}</span>
+                        <span>${log.source || ''}</span>
+                    </div>
+                    <div class="log-body">
+                        <div>
+                            <div class="log-title">${log.company} - ${log.packageName}</div>
+                            ${log.clientRef ? `<div class="log-client">${log.clientRef}</div>` : ''}
+                            ${log.notes ? `<div style="font-size:0.8rem; color:var(--muted); margin-top:5px;">${log.notes}</div>` : ''}
                         </div>
-                        <div class="log-body">
-                            <div>
-                                <div class="log-title">${log.company} - ${log.packageName}</div>
-                                ${log.clientRef ? `<div class="log-client">${log.clientRef}</div>` : ''}
-                                ${log.notes ? `<div style="font-size:0.8rem; color:var(--muted); margin-top:5px;">${log.notes}</div>` : ''}
-                            </div>
-                            <div style="text-align:left;">
-                                <div style="font-weight:800; color:var(--green); font-size:1.1rem;">${log.price} ج</div>
-                                <div style="font-size:0.8rem; color:var(--muted); margin-top:3px;">${log.status}</div>
-                            </div>
+                        <div style="text-align:left;">
+                            <div style="font-weight:800; color:var(--green); font-size:1.1rem;">${log.price} ج</div>
+                            <div style="font-size:0.8rem; color:var(--muted); margin-top:3px;">${log.status}</div>
                         </div>
                     </div>
+                    <div class="log-actions">
+                        <button class="btn-log-action btn-edit-log" onclick="openEditModal('${log.rowId}')" title="تعديل">✏️ تعديل</button>
+                        <button class="btn-log-action btn-delete-log" onclick="openDeleteModal('${log.rowId}', '${(log.company||'').replace(/'/g,"'")} - ${(log.packageName||'').replace(/'/g,"'")}')" title="حذف">🗑️ حذف</button>
+                    </div>
                 `;
+                container.appendChild(div);
             });
         }
 
@@ -904,6 +1136,155 @@
                 (l.company && l.company.toLowerCase().includes(term))
             );
             renderLogs(filtered);
+        }
+
+        // ============================================================
+        //  تعديل العملية
+        // ============================================================
+        let EDIT_LOG = null; // السجل الحالي المفتوح للتعديل
+
+        function openEditModal(rowId) {
+            EDIT_LOG = ALL_LOGS.find(l => String(l.rowId) === String(rowId));
+            if (!EDIT_LOG) return;
+
+            document.getElementById('editRowId').value = rowId;
+
+            // ملء قائمة الشركات
+            const coSel = document.getElementById('editCompany');
+            coSel.innerHTML = Object.keys(ALL_PACKAGES).map(c =>
+                `<option value="${c}" ${c === EDIT_LOG.company ? 'selected' : ''}>${c}</option>`
+            ).join('');
+
+            // ملء باقات الشركة المختارة
+            loadEditPackages(EDIT_LOG.packageId || EDIT_LOG.packageName);
+
+            // باقي الحقول
+            document.getElementById('editSource').value = EDIT_LOG.source || 'واتساب';
+            document.getElementById('editPrice').value = EDIT_LOG.price || '';
+            document.getElementById('editClientRef').value = EDIT_LOG.clientRef || '';
+            document.getElementById('editNotes').value = EDIT_LOG.notes || '';
+
+            document.getElementById('editOverlay').classList.add('open');
+        }
+
+        function loadEditPackages(selectId) {
+            const co = document.getElementById('editCompany').value;
+            const pkgs = ALL_PACKAGES[co] || [];
+            const pkgSel = document.getElementById('editPackage');
+            pkgSel.innerHTML = pkgs.map(p =>
+                `<option value="${p.id}" data-price="${p.price}" ${
+                    (selectId && (String(p.id) === String(selectId) || p.name === selectId)) ? 'selected' : ''
+                }>${p.name} — ${p.price} ج</option>`
+            ).join('');
+            // تزامن السعر عند تغيير الشركة
+            syncEditPrice();
+        }
+
+        function syncEditPrice() {
+            const pkgSel = document.getElementById('editPackage');
+            const opt = pkgSel.options[pkgSel.selectedIndex];
+            if (opt) {
+                document.getElementById('editPrice').value = opt.dataset.price || '';
+            }
+        }
+
+        function closeEditModal(event) {
+            if (!event || event.target === document.getElementById('editOverlay')) {
+                document.getElementById('editOverlay').classList.remove('open');
+            }
+        }
+
+        async function saveEdit() {
+            const rowId = document.getElementById('editRowId').value;
+            const pkgSel = document.getElementById('editPackage');
+            const selectedOpt = pkgSel.options[pkgSel.selectedIndex];
+
+            if (!selectedOpt) { alert('الرجاء اختيار الباقة'); return; }
+
+            const payload = {
+                action: 'editTrackerLog',
+                rowId: rowId,
+                company: document.getElementById('editCompany').value,
+                packageId: selectedOpt.value,
+                packageName: selectedOpt.text.split(' — ')[0].trim(),
+                price: parseFloat(document.getElementById('editPrice').value) || 0,
+                source: document.getElementById('editSource').value,
+                clientRef: document.getElementById('editClientRef').value,
+                notes: document.getElementById('editNotes').value
+            };
+
+            const btn = document.getElementById('editSaveBtn');
+            btn.innerHTML = '⏳ جاري الحفظ...';
+            btn.classList.add('btn-saving');
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify(payload)
+                });
+                const json = await res.json();
+                if (json.success) {
+                    document.getElementById('editOverlay').classList.remove('open');
+                    showToast('✅ تم التعديل بنجاح');
+                    await loadLogs();
+                    loadSummary();
+                } else {
+                    alert('فشل التعديل: ' + (json.error || 'خطأ غير معروف'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('حدث خطأ أثناء التعديل');
+            } finally {
+                btn.innerHTML = '💾 حفظ التعديلات';
+                btn.classList.remove('btn-saving');
+            }
+        }
+
+        // ============================================================
+        //  حذف العملية
+        // ============================================================
+        function openDeleteModal(rowId, label) {
+            document.getElementById('deleteRowId').value = rowId;
+            document.getElementById('deleteDesc').innerText =
+                `هل أنت متأكد من حذف العملية "${label}"؟ لا يمكن التراجع عن هذا الإجراء.`;
+            document.getElementById('deleteOverlay').classList.add('open');
+        }
+
+        function closeDeleteModal(event) {
+            if (!event || event.target === document.getElementById('deleteOverlay')) {
+                document.getElementById('deleteOverlay').classList.remove('open');
+            }
+        }
+
+        async function confirmDelete() {
+            const rowId = document.getElementById('deleteRowId').value;
+            const btn = document.getElementById('deleteConfirmBtn');
+            btn.innerHTML = '⏳ جاري الحذف...';
+            btn.classList.add('btn-saving');
+
+            try {
+                const res = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'deleteTrackerLog', rowId: rowId })
+                });
+                const json = await res.json();
+                if (json.success) {
+                    document.getElementById('deleteOverlay').classList.remove('open');
+                    showToast('🗑️ تم الحذف');
+                    await loadLogs();
+                    loadSummary();
+                } else {
+                    alert('فشل الحذف: ' + (json.error || 'خطأ غير معروف'));
+                }
+            } catch (err) {
+                console.error(err);
+                alert('حدث خطأ أثناء الحذف');
+            } finally {
+                btn.innerHTML = 'نعم، احذف';
+                btn.classList.remove('btn-saving');
+            }
         }
 
         // --- المخططات ---
