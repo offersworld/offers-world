@@ -109,45 +109,74 @@ function addTrackerLog(data) {
 }
 
 // ============================================================
-// تعديل عملية موجودة
+// تعديل عملية موجودة — بحث بالصف المباشر (rowId)
 // ============================================================
-function updateTrackerLog(data) {
+function editTrackerLog(data) {
   try {
     var ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     var sheet = getOrCreateTrackerSheet(ss);
-    var found = sheet.getRange('A:A').createTextFinder(String(data.logId).trim()).matchEntireCell(true).findNext();
-    if (!found) return { success: false, message: 'العملية غير موجودة' };
 
-    var row = found.getRow();
-    sheet.getRange(row, 2).setValue(data.date        || '');
-    sheet.getRange(row, 3).setValue(data.company     || '');
-    sheet.getRange(row, 4).setValue(data.packageId   || '');
-    sheet.getRange(row, 5).setValue(data.packageName || '');
-    sheet.getRange(row, 6).setValue(Number(data.price) || 0);
-    sheet.getRange(row, 7).setValue(data.source      || '');
-    sheet.getRange(row, 8).setValue(data.clientRef   || '');
-    sheet.getRange(row, 9).setValue(data.status      || 'تم');
-    sheet.getRange(row, 10).setValue(data.notes      || '');
+    var row;
+    var rowId = parseInt(data.rowId, 10);
 
-    addLog('تعديل باقة يدوي', data.logId, data.packageName);
+    if (!isNaN(rowId) && rowId > 1) {
+      // استخدام رقم الصف مباشرةً (أسرع)
+      row = rowId;
+    } else {
+      // fallback: بحث نصي بالـ logId
+      var found = sheet.getRange('A:A').createTextFinder(String(data.logId || '').trim()).matchEntireCell(true).findNext();
+      if (!found) return { success: false, error: 'العملية غير موجودة' };
+      row = found.getRow();
+    }
+
+    // التحديث الدفعي في خطوة واحدة (أسرع من استدعاءات متعددة)
+    sheet.getRange(row, 3, 1, 8).setValues([[
+      data.company     || '',
+      data.packageId   || '',
+      data.packageName || '',
+      Number(data.price) || 0,
+      data.source      || '',
+      data.clientRef   || '',
+      data.status      || 'تم',
+      data.notes       || ''
+    ]]);
+
+    addLog('تعديل باقة يدوي', data.logId || ('row#' + row), data.packageName);
     return { success: true };
   } catch (err) {
-    logError('updateTrackerLog', err.toString());
+    logError('editTrackerLog', err.toString());
     return { success: false, error: err.toString() };
   }
 }
 
+// للتوافق مع النظام القديم
+function updateTrackerLog(data) {
+  return editTrackerLog(data);
+}
+
 // ============================================================
-// حذف عملية
+// حذف عملية — بحث بالصف المباشر (rowId)
 // ============================================================
-function deleteTrackerLog(logId) {
+function deleteTrackerLog(data) {
   try {
     var ss    = SpreadsheetApp.openById(CONFIG.SPREADSHEET_ID);
     var sheet = getOrCreateTrackerSheet(ss);
-    var found = sheet.getRange('A:A').createTextFinder(String(logId).trim()).matchEntireCell(true).findNext();
-    if (!found) return { success: false, message: 'العملية غير موجودة' };
-    sheet.deleteRow(found.getRow());
-    addLog('حذف باقة يدوي', logId, '');
+
+    var rowToDelete;
+    // data قد تكون كائناً { rowId, logId } أو مجرد string (النمط القديم)
+    var rowId  = parseInt(typeof data === 'object' ? data.rowId  : null, 10);
+    var logId  = typeof data === 'object' ? (data.logId || '') : String(data || '');
+
+    if (!isNaN(rowId) && rowId > 1) {
+      rowToDelete = rowId;
+    } else {
+      var found = sheet.getRange('A:A').createTextFinder(logId.trim()).matchEntireCell(true).findNext();
+      if (!found) return { success: false, error: 'العملية غير موجودة' };
+      rowToDelete = found.getRow();
+    }
+
+    sheet.deleteRow(rowToDelete);
+    addLog('حذف باقة يدوي', logId || ('row#' + rowToDelete), '');
     return { success: true };
   } catch (err) {
     logError('deleteTrackerLog', err.toString());
@@ -167,8 +196,6 @@ function getTrackerLogs(params) {
 
     var filterCompany = params.company   || '';
     var filterStatus  = params.status    || '';
-    var filterFrom    = params.from      || '';
-    var filterTo      = params.to        || '';
     var filterClient  = params.client    || '';
 
     for (var i = 1; i < data.length; i++) {
@@ -176,6 +203,7 @@ function getTrackerLogs(params) {
       if (!row[0]) continue;
 
       var log = {
+        rowId:       i + 1,                    // رقم الصف الفعلي في الشيت (1-indexed)
         logId:       String(row[0] || ''),
         date:        String(row[1] || ''),
         company:     String(row[2] || ''),

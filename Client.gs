@@ -116,12 +116,12 @@ function doPost(e) {
       return respond(addTrackerLog(data));
     }
 
-    if (action === 'updateTrackerLog') {
-      return respond(updateTrackerLog(data));
+    if (action === 'editTrackerLog' || action === 'updateTrackerLog') {
+      return respond(editTrackerLog(data));
     }
 
     if (action === 'deleteTrackerLog') {
-      return respond(deleteTrackerLog(data.logId));
+      return respond(deleteTrackerLog(data)); // نمرر الكائن كاملاً ليصل rowId
     }
 
     if (action === 'checkTrackerPass') {
