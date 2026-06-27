@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>البوابة المركزية | عالم العروض</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #07070f;
+            --card: rgba(17, 17, 34, 0.55);
+            --card-hover: rgba(28, 28, 55, 0.95);
+            --accent: #8b3cf7;
+            --text: #e2e2f0;
+            --muted: #94a3b8;
+            --border: rgba(139, 60, 247, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin: 0;
+        }
+
+        /* Animated Glowing Blobs */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.45;
+            animation: float 25s infinite alternate;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .blob-1 {
+            width: 450px;
+            height: 450px;
+            background: #8b3cf7;
+            /* Purple */
+            top: -150px;
+            right: -100px;
+        }
+
+        .blob-2 {
+            width: 550px;
+            height: 550px;
+            background: #22c55e;
+            /* Green */
+            bottom: -200px;
+            left: -150px;
+            animation-delay: -7s;
+        }
+
+        .blob-3 {
+            width: 350px;
+            height: 350px;
+            background: #3b82f6;
+            /* Blue */
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -15s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            33% {
+                transform: translate(40px, -50px) scale(1.1);
+            }
+
+            66% {
+                transform: translate(-30px, 40px) scale(0.9);
+            }
+
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1150px;
+            padding: 50px 20px;
+            z-index: 10;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 70px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 18px;
+            background: linear-gradient(to left, #ffffff, #d3b8fd);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(139, 60, 247, 0.2);
+        }
+
+        .header p {
+            font-size: 1.15rem;
+            color: var(--muted);
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 35px;
+            animation: fadeIn 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            background: var(--card);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px;
+            padding: 45px 35px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+        }
+
+        /* Glass reflection effect */
+        .card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            transition: 0.7s;
+        }
+
+        .card:hover::after {
+            left: 150%;
+        }
+
+        /* Top colored border line */
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: transparent;
+            transition: 0.5s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-12px);
+            background: var(--card-hover);
+        }
+
+        /* 1. Admin/Dashboard specific styles */
+        .card.admin:hover {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 25px 50px rgba(59, 130, 246, 0.15);
+        }
+
+        .card.admin::before {
+            background: linear-gradient(90deg, #1d4ed8, #60a5fa);
+            opacity: 0;
+        }
+
+        .card.admin:hover::before {
+            opacity: 1;
+        }
+
+        .card.admin .icon-wrap {
+            background: rgba(59, 130, 246, 0.12);
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        /* 2. Tracker specific styles */
+        .card.tracker:hover {
+            border-color: rgba(34, 197, 94, 0.5);
+            box-shadow: 0 25px 50px rgba(34, 197, 94, 0.15);
+        }
+
+        .card.tracker::before {
+            background: linear-gradient(90deg, #15803d, #4ade80);
+            opacity: 0;
+        }
+
+        .card.tracker:hover::before {
+            opacity: 1;
+        }
+
+        .card.tracker .icon-wrap {
+            background: rgba(34, 197, 94, 0.12);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+        }
+
+        /* 3. Client App specific styles */
+        .card.client:hover {
+            border-color: rgba(245, 158, 11, 0.5);
+            box-shadow: 0 25px 50px rgba(245, 158, 11, 0.15);
+        }
+
+        .card.client::before {
+            background: linear-gradient(90deg, #b45309, #fbbf24);
+            opacity: 0;
+        }
+
+        .card.client:hover::before {
+            opacity: 1;
+        }
+
+        .card.client .icon-wrap {
+            background: rgba(245, 158, 11, 0.12);
+            color: #fbbf24;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .icon-wrap {
+            width: 85px;
+            height: 85px;
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            transition: 0.5s;
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .card:hover .icon-wrap {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .card h2 {
+            font-size: 1.7rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        .card p {
+            font-size: 1.05rem;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .btn-open {
+            margin-top: 30px;
+            padding: 14px 10px;
+            width: 100%;
+            border-radius: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #fff;
+            transition: 0.4s;
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .card:hover .btn-open {
+            color: #fff;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card.admin:hover .btn-open {
+            background: #2563eb;
+            border-color: #3b82f6;
+        }
+
+        .card.tracker:hover .btn-open {
+            background: #16a34a;
+            border-color: #22c55e;
+        }
+
+        .card.client:hover .btn-open {
+            background: #d97706;
+            border-color: #f59e0b;
+        }
+
+        .btn-arrow {
+            transition: transform 0.3s;
+        }
+
+        .card:hover .btn-arrow {
+            transform: translateX(-5px);
+            /* Move left in RTL */
+        }
+
+        @media(max-width: 768px) {
+            .header {
+                margin-bottom: 50px;
+            }
+
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .header p {
+                font-size: 1rem;
+                padding: 0 10px;
+            }
+
+            .card {
+                padding: 35px 25px;
+            }
+
+            .grid {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Background Animated Elements -->
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+
+    <div class="container">
+        <div class="header">
+            <h1>عالم العروض — صفحتك الرئيسية</h1>
+            <p>أهلاً بيك! جمعنالك كل لينكاتك وأدواتك في صفحة واحدة عشان تنجز شغلك أسرع وتوصل لأي حاجة بضغطة زرار.</p>
+        </div>
+
+        <div class="grid">
+            <!-- 1. Admin Dashboard -->
+            <a href="admin.html" class="card admin">
+                <div class="icon-wrap">📊</div>
+                <h2>لوحة التحكم (الإدارة)</h2>
+                <p>من هنا تقدر تتابع وتدير كل الطلبات اللي بتيجي، وتشوف الإحصائيات الشاملة، وتعدّل أو تضيف باقات جديدة
+                    براحتك.</p>
+                <div class="btn-open">
+                    افتح لوحة التحكم
+                    <span class="btn-arrow">←</span>
+                </div>
+            </a>
+
+            <!-- 2. Tracker -->
+            <a href="tracker.html" class="card tracker">
+                <div class="icon-wrap">📋</div>
+                <h2>نظام التتبع </h2>
+                <p>سجل عملياتك اليدوية في السريع، وتابع مبيعاتك وإيراداتك اليومية والشهرية، واعرف إيه اللي بيخسر وإيه
+                    اللي بيكسب.</p>
+                <div class="btn-open">
+                    افتح نظام التتبع
+                    <span class="btn-arrow">←</span>
+                </div>
+            </a>
+
+            <!-- 3. Client Form / Index -->
+            <a href="index.html" class="card client">
+                <div class="icon-wrap">🌐</div>
+                <h2>صفحة العملاء</h2>
+                <p>دي الصفحة اللي بتبعتها للعميل عشان يشوف الباقات ويختار منها، ويسجل بياناته ويرفع صورة إثبات الدفع
+                    بسهولة.</p>
+                <div class="btn-open">
+                    افتح صفحة العملاء
+                    <span class="btn-arrow">←</span>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
