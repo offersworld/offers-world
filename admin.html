@@ -1185,12 +1185,7 @@
     }
 
     function resetLogoutTimer() {
-        clearTimeout(logoutTimer);
-        logoutTimer = setTimeout(() => {
-            sessionStorage.removeItem('aw_admin');
-            sessionStorage.removeItem('aw_login_time');
-            location.reload();
-        }, SESSION_DURATION);
+        // Disabled since password validation is removed
     }
 
     function parseDate(rawDate) {
@@ -2145,21 +2140,9 @@
 
     // ==================== INITIALIZATION ====================
     window.addEventListener('DOMContentLoaded', () => {
-        const isLoggedIn = sessionStorage.getItem('aw_admin');
-        const loginTime = sessionStorage.getItem('aw_login_time');
-
-        if (isLoggedIn && loginTime && (Date.now() - parseInt(loginTime)) < SESSION_DURATION) {
-            document.getElementById('loginPage').style.display = 'none';
-            document.getElementById('adminPanel').style.display = 'block';
-            resetLogoutTimer();
-            loadAllData();
-        } else {
-            sessionStorage.removeItem('aw_admin');
-            sessionStorage.removeItem('aw_login_time');
-            document.getElementById('loginPage').style.display = 'flex';
-            document.getElementById('adminPanel').style.display = 'none';
-            document.getElementById('adminPass').focus();
-        }
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        loadAllData();
     });
 
     let resizeDebounce;

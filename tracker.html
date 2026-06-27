@@ -612,16 +612,7 @@
     <div id="toast">تم الحفظ بنجاح!</div>
 
     <!-- شاشة تسجيل الدخول -->
-    <div id="loginPage">
-        <div class="login-box">
-            <h2>تسجيل الدخول</h2>
-            <p style="color: var(--muted); margin-bottom: 20px; font-size: 0.9rem;">نظام متابعة العمليات اليدوية</p>
-            <input type="password" id="passInput" class="input-text" placeholder="كلمة المرور">
-            <button class="btn-primary" onclick="login()">دخول</button>
-            <div id="loginError" style="color: var(--red); margin-top: 10px; display: none; font-size: 0.85rem;">كلمة
-                المرور غير صحيحة</div>
-        </div>
-    </div>
+    <div id="loginPage" style="display: none;"></div>
 
     <!-- الهيدر -->
     <header>
@@ -1336,6 +1327,10 @@
                 }
             });
         }
+        window.addEventListener('DOMContentLoaded', () => {
+            loadPackagesMaster();
+            loadSummary();
+        });
     </script>
 </body>
 
