@@ -33,8 +33,9 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden; 
             margin: 0;
+            padding: 40px 0;
         }
 
         /* Animated Glowing Blobs */
@@ -353,25 +354,33 @@
         }
 
         @media(max-width: 768px) {
+            body {
+                align-items: flex-start;
+                padding-top: 30px;
+                padding-bottom: 30px;
+            }
             .header {
-                margin-bottom: 50px;
+                margin-bottom: 40px;
             }
-
             .header h1 {
-                font-size: 2.2rem;
+                font-size: 2rem;
             }
-
             .header p {
-                font-size: 1rem;
+                font-size: 0.95rem;
                 padding: 0 10px;
             }
-
             .card {
-                padding: 35px 25px;
+                padding: 30px 20px;
             }
-
             .grid {
+                grid-template-columns: 1fr;
                 gap: 20px;
+            }
+            .icon-wrap {
+                width: 70px;
+                height: 70px;
+                font-size: 2rem;
+                margin-bottom: 20px;
             }
         }
     </style>
